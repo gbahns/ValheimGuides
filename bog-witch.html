@@ -37,12 +37,6 @@
             font-size: 0.85rem;
         }
         .price-tag::before { content: "🪙"; }
-        .stub-note {
-            background: #FFF4D6;
-            border-left: 4px solid #E0B040;
-            padding: 0.75rem 1rem;
-            border-radius: 0.25rem;
-        }
         th, td { padding: 0.5rem 0.75rem; }
     </style>
 </head>
@@ -54,15 +48,9 @@
             <p class="text-lg mt-2 text-stone-700">Everything she sells — and what it unlocks.</p>
         </header>
 
-        <section class="card rounded-lg p-4 mb-6 stub-note">
-            <strong>⚠️ Stub page.</strong> Items below need confirmation against the current Bog Witch update.
-            Edit the <code>STOCK</code> array in this file's <code>&lt;script&gt;</code> block to add or correct entries.
-            Each row: <code>{ name, price, category, summary, unlocks }</code>.
-        </section>
-
         <section class="card rounded-lg p-4 mb-6">
             <h2 class="valheim-title text-xl mb-2">Where to find her</h2>
-            <p class="text-stone-700">The Bog Witch lives in a hut in the Swamp biome. Locate her by finding a Witch Stone (a special structure type that spawns in Swamp), or by exploring Swamps after the Bog Witch update is active. She sells goods for <strong>Coins</strong>, accepts certain items in trade, and unlocks new recipes once you've purchased the relevant items.</p>
+            <p class="text-stone-700">The Bog Witch was added in patch 0.219.13. She spawns in a hut marked by a <strong>Witch Stone</strong> — look for a cauldron icon on the map once you're close. Up to 10 possible locations are picked per world during generation, always in <strong>Swamp</strong> biomes, at least 1000m apart from each other, and between roughly <strong>3000–8000m</strong> from the world center. She sells everything for <strong>Coins</strong> only — no trade-in items or bartering. Several of her wares stay locked until you defeat the boss noted in the "Unlocks / Enables" column below.</p>
         </section>
 
         <section class="card rounded-lg overflow-x-auto">
@@ -81,22 +69,33 @@
         </section>
 
         <footer class="text-center text-sm text-stone-600 mt-8 pb-4">
-            Coin prices reflect retail at the Bog Witch. Trade-in offers (giving her certain items in exchange) are not yet listed.
+            Coin prices reflect retail at the Bog Witch. She does not accept trade-ins — coins only.
         </footer>
 
     </main>
 
     <script>
-        // ── TODO: fill in real prices and any missing items ──────────────
-        // Categories used below: Seed | Recipe | Consumable | Trophy-trade | Other
+        // Categories: Ingredient | Seed | Consumable | Feast Spice | Tool
+        // Sourced from patch 0.219.13 (Bog Witch update) trader data — verify against
+        // current game version if prices seem off after a balance patch.
         const STOCK = [
-            { name: "Hen",                    price: null, category: "Consumable",  summary: "Female chicken — pair with rooster to start a flock for eggs and chicken meat.", unlocks: "Chicken farming loop." },
-            { name: "Jotun puffs seeds",      price: null, category: "Seed",        summary: "Plantable Mistlands mushroom seeds.",                                            unlocks: "Farming Jotun puffs in any biome." },
-            { name: "Magecap seeds",          price: null, category: "Seed",        summary: "Plantable Mistlands mushroom seeds.",                                            unlocks: "Farming Magecap." },
-            // ── add more rows below as you confirm them ──────────────────
-            // { name: "Bog Witch's brew", price: 100, category: "Consumable",
-            //   summary: "Short-duration potion that …",
-            //   unlocks: "After buying once, recipe unlocks at Cauldron." },
+            { name: "Candle Wick",                  price: 100, category: "Tool",        summary: "Crafting material for the new wax candles (a light source/decoration).", unlocks: "Craft candles for lighting and base decor." },
+            { name: "Cured Squirrel Hamstring ×5",  price: 80,  category: "Ingredient",  summary: "Fermenter ingredient.", unlocks: "Brews into Tonic of Ratatosk (+15% run speed, +7.5% swim speed) at the Fermenter." },
+            { name: "Fresh Seaweed ×5",              price: 75,  category: "Ingredient",  summary: "Fermenter ingredient.", unlocks: "Brews into Draught of Vananidir (−50% stamina use while swimming) at the Fermenter." },
+            { name: "Ivy Seed ×3",                   price: 65,  category: "Seed",        summary: "Plantable decorative vine.", unlocks: "Grow climbing Ivy for base decoration." },
+            { name: "Love Potion ×5",                price: 110, category: "Consumable",  summary: "Drink to lure trouble your way — no known brewing recipe, must be bought.", unlocks: "Greatly increases nearby Troll spawn rate and strength, and pulls their aggro to you." },
+            { name: "Powdered Dragon Eggshell ×5",   price: 120, category: "Ingredient",  summary: "Fermenter ingredient.", unlocks: "Brews into Mead of Troll Endurance (+250 carry weight for 5 min) at the Fermenter." },
+            { name: "Pungent Pebbles ×5",             price: 125, category: "Ingredient",  summary: "Fermenter ingredient.", unlocks: "Brews into Brew of Animal Whispers (2× taming speed for nearby animals) at the Fermenter." },
+            { name: "Serving Tray",                  price: 140, category: "Tool",        summary: "Placeable build piece that holds prepared food.", unlocks: "Required to prepare and eat Feasts." },
+            { name: "Woodland Herb Blend ×5",        price: 120, category: "Feast Spice", summary: "Feast seasoning.", unlocks: "Unlocked after defeating The Elder. Required spice for a new Feast recipe at the Cauldron." },
+            { name: "Fragrant Bundle ×5",            price: 140, category: "Feast Spice", summary: "Feast seasoning.", unlocks: "Unlocked after defeating Moder. Required spice for a new Feast recipe at the Cauldron." },
+            { name: "Mountain Peak Pepper Powder ×5",price: 140, category: "Feast Spice", summary: "Feast seasoning.", unlocks: "Unlocked after defeating Moder. Required spice for a new Feast recipe at the Cauldron." },
+            { name: "Toadstool",                     price: 85,  category: "Ingredient",  summary: "Magical mushroom used as a potion/food ingredient.", unlocks: "Unlocked after defeating Moder." },
+            { name: "Scythe Handle",                 price: 200, category: "Tool",        summary: "Crafting component for the Scythe (fast crop-harvesting tool).", unlocks: "Unlocked after defeating Moder. Craft a Scythe at a level 2 Forge with 6 Silver + this handle." },
+            { name: "Grasslands Herbalist Harvest ×5", price: 160, category: "Feast Spice", summary: "Feast seasoning.", unlocks: "Unlocked after defeating Yagluth. Required spice for a new Feast recipe at the Cauldron." },
+            { name: "Herbs of the Hidden Hills ×5",  price: 180, category: "Feast Spice", summary: "Feast seasoning.", unlocks: "Unlocked after defeating The Queen. Required spice for a new Feast recipe at the Cauldron." },
+            { name: "Fiery Spice Powder ×5",         price: 200, category: "Feast Spice", summary: "Feast seasoning.", unlocks: "Unlocked after defeating Fader. Required spice for a new Feast recipe at the Cauldron." },
+            { name: "Seafarer's Herbs ×5",           price: 130, category: "Feast Spice", summary: "Feast seasoning.", unlocks: "Unlocked after killing a Serpent. Required spice for a new Feast recipe at the Cauldron." },
         ];
 
         const tbody = document.getElementById('stockTbody');
