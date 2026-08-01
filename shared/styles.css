@@ -13,9 +13,12 @@
 
 /* ── Top navigation bar (injected by chrome.js) ────────────────── */
 .kb-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
     background: var(--kb-stone);
     color: var(--kb-parchment);
-    padding: 0.75rem 1rem;
+    padding: 0.35rem 1rem;
     border-bottom: 3px solid var(--kb-tan);
     font-family: var(--kb-serif);
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
@@ -45,7 +48,7 @@
 .kb-links a {
     color: var(--kb-parchment);
     text-decoration: none;
-    padding: 0.4rem 0.85rem;
+    padding: 0.25rem 0.85rem;
     border-radius: 0.25rem;
     transition: background 0.15s, color 0.15s;
     font-size: 1.05rem;
