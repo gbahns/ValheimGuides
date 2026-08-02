@@ -1,0 +1,8 @@
+{
+  "name": "valheimguides-dev-tools",
+  "private": true,
+  "description": "Local-only dev tooling for visually verifying page changes. Not part of the site.",
+  "dependencies": {
+    "playwright": "^1.48.0"
+  }
+}

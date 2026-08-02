@@ -1,7 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx --yes playwright screenshot:*)"
+      "Bash(node .claude/tools/screenshot.js *)"
     ]
   }
 }
