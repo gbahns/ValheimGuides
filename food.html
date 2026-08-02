@@ -91,13 +91,55 @@
             background-color: #4A3F35; /* matches thead's bg-[#4A3F35]; inherit only reaches the <tr>, not thead */
             z-index: 10;
         }
-        /* Unlock note shown under a food name */
-        .food-note {
-            display: block;
-            font-size: 0.72rem;
-            font-style: italic;
-            color: #6B5D4F;
-            margin-top: 1px;
+        /* Custom tooltip for boss-gated ingredient notes (replaces native title="") */
+        .note-trigger {
+            position: relative;
+            display: inline-block;
+            margin-left: 0.35rem;
+            cursor: help;
+        }
+        .note-icon {
+            font-size: 0.8rem;
+            color: #C45A11;
+            vertical-align: middle;
+        }
+        .note-tip {
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            transform: translate(-50%, 4px) scale(0.96);
+            background: #2E2620;
+            color: #FAF3E0;
+            font-size: 0.78rem;
+            font-weight: 400;
+            font-style: normal;
+            line-height: 1.35;
+            padding: 0.5rem 0.65rem;
+            border-radius: 0.4rem;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.28);
+            white-space: normal;
+            width: max-content;
+            max-width: 260px;
+            text-align: left;
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.12s ease, transform 0.12s ease;
+        }
+        .note-tip::before {
+            content: "";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-bottom-color: #2E2620;
+        }
+        .note-trigger:hover .note-tip,
+        .note-trigger:focus .note-tip {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate(-50%, 8px) scale(1);
         }
     </style>
 </head>
@@ -136,7 +178,7 @@
         </section>
 
         <footer class="text-center text-xs text-stone-600 mt-3 pb-3">
-            Blank duration/healing = value unset in source (most Ashlands foods). Biome tier 1 Meadows → 7 Ashlands. <em class="font-semibold">Italic notes</em> under a food name flag boss-gated ingredients sold by the Bog Witch.
+            Blank duration/healing = value unset in source (most Ashlands foods). Biome tier 1 Meadows → 7 Ashlands. The <span class="fork-label" style="color:#C45A11">ⓘ</span> next to a food name flags boss-gated ingredients sold by the Bog Witch — hover or focus it for details.
         </footer>
 
     </main>
@@ -383,7 +425,7 @@
             const tbody = document.getElementById('foodTbody');
             tbody.innerHTML = rows.map(f => `
                 <tr class="food-row row-${f.fork} border-t border-stone-300">
-                    <td class="font-semibold">${f.name}${f.note ? `<span class="food-note">↳ ${f.note}</span>` : ''}</td>
+                    <td class="font-semibold">${f.name}${f.note ? `<span class="note-trigger" tabindex="0" aria-label="${f.note}"><span class="note-icon" aria-hidden="true">ⓘ</span><span class="note-tip" aria-hidden="true">${f.note}</span></span>` : ''}</td>
                     <td class="text-center"><span class="fork-label fork-${f.fork}">${FORK_LABELS[f.fork]}</span></td>
                     <td class="text-right">${f.hp}</td>
                     <td class="text-right">${f.st}</td>
