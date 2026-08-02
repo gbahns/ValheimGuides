@@ -208,12 +208,31 @@
         const FORKS = ["All", "White", "Red", "Yellow", "Blue"];
         const FORK_LABELS = { White: "Balanced", Red: "Health", Yellow: "Stamina", Blue: "Eitr" };
 
+        // ── Persisted filter/sort state ──────────────────────────────────────
+        const STORAGE_KEY = 'vkb-food-filters';
+        function loadState() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+            } catch {
+                return {};
+            }
+        }
+        function saveState() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                biomes: [...activeBiomes],
+                fork: activeFork,
+                sortKey,
+                sortDir,
+            }));
+        }
+        const saved = loadState();
+
         // Biome filter is multi-select: an empty Set means "show all".
         // Clicking "All" clears the Set; clicking an individual tier toggles its membership.
-        const activeBiomes = new Set();
-        let activeFork  = "All";
-        let sortKey     = "total";
-        let sortDir     = -1; // -1 desc, 1 asc
+        const activeBiomes = new Set(saved.biomes || []);
+        let activeFork  = saved.fork   ?? "All";
+        let sortKey     = saved.sortKey ?? "total";
+        let sortDir     = saved.sortDir ?? -1; // -1 desc, 1 asc
 
         // ── Render filter buttons ────────────────────────────────────────────
         const biomeRow = document.getElementById('biomeFilters');
@@ -230,6 +249,7 @@
                     activeBiomes.add(b.tier);
                 }
                 refreshFilters();
+                saveState();
                 render();
             };
             biomeRow.appendChild(btn);
@@ -241,7 +261,7 @@
             btn.className = 'filter-btn px-3 py-1 rounded text-sm';
             btn.textContent = f === "All" ? f : FORK_LABELS[f];
             if (f === activeFork) btn.classList.add('active');
-            btn.onclick = () => { activeFork = f; refreshFilters(); render(); };
+            btn.onclick = () => { activeFork = f; refreshFilters(); saveState(); render(); };
             forkRow.appendChild(btn);
         });
 
@@ -264,6 +284,7 @@
                 const key = th.dataset.key;
                 if (key === sortKey) sortDir = -sortDir;
                 else { sortKey = key; sortDir = (typeof FOODS[0][key] === 'number') ? -1 : 1; }
+                saveState();
                 render();
             };
         });
