@@ -46,7 +46,7 @@ function parseArgs(argv) {
         process.exit(1);
     }
 
-    const repoRoot = path.resolve(__dirname, '..', '..');
+    const repoRoot = path.resolve(__dirname, '..');
     const pagePath = path.isAbsolute(args.page) ? args.page : path.join(repoRoot, args.page);
     const outDir = path.join(__dirname, 'output');
     fs.mkdirSync(outDir, { recursive: true });

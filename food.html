@@ -286,6 +286,7 @@
         const FORK_LABELS = { White: "Balanced", Red: "Health", Yellow: "Stamina", Blue: "Eitr" };
         // A Feast is any dish cooked at the Food preparation table (long duration, boss-gated spice).
         const isFeast = f => f.station === "Food preparation table";
+        const FEAST_STATES = ["Include Feasts", "Exclude Feasts", "Only Feasts"];
 
         // ── Persisted filter/sort state ──────────────────────────────────────
         const STORAGE_KEY = 'vkb-food-filters';
@@ -300,8 +301,7 @@
             localStorage.setItem(STORAGE_KEY, JSON.stringify({
                 biomes: [...activeBiomes],
                 forks: [...activeForks],
-                includeFeasts,
-                onlyFeasts,
+                feastState,
                 sortKey,
                 sortDir,
             }));
@@ -312,10 +312,8 @@
         // Clicking "All" clears the Set; clicking an individual value toggles its membership.
         const activeBiomes = new Set(saved.biomes || []);
         const activeForks  = new Set(saved.forks || []);
-        // Feast filter is two independent toggles, kept mutually consistent:
-        // turning Only on forces Include on; turning Include off forces Only off.
-        let includeFeasts = saved.includeFeasts ?? true;
-        let onlyFeasts    = saved.onlyFeasts ?? false;
+        // Feast filter is a single tri-state button that cycles through FEAST_STATES on click.
+        let feastState  = FEAST_STATES.includes(saved.feastState) ? saved.feastState : "Include Feasts";
         let sortKey     = saved.sortKey ?? "total";
         let sortDir     = saved.sortDir ?? -1; // -1 desc, 1 asc
 
@@ -361,29 +359,22 @@
         });
 
         const feastRow = document.getElementById('feastFilters');
-        const includeFeastsBtn = document.createElement('button');
-        includeFeastsBtn.className = 'filter-btn px-3 py-1 rounded';
-        includeFeastsBtn.textContent = 'Include Feasts';
-        includeFeastsBtn.onclick = () => {
-            includeFeasts = !includeFeasts;
-            if (!includeFeasts) onlyFeasts = false; // "only feasts" is meaningless without Include
+        const feastBtn = document.createElement('button');
+        feastBtn.className = 'filter-btn px-3 py-1 rounded active';
+        feastBtn.onclick = () => {
+            feastState = FEAST_STATES[(FEAST_STATES.indexOf(feastState) + 1) % FEAST_STATES.length];
             refreshFilters();
             saveState();
             render();
         };
-        feastRow.appendChild(includeFeastsBtn);
-
-        const onlyFeastsBtn = document.createElement('button');
-        onlyFeastsBtn.className = 'filter-btn px-3 py-1 rounded';
-        onlyFeastsBtn.textContent = 'Only Feasts';
-        onlyFeastsBtn.onclick = () => {
-            onlyFeasts = !onlyFeasts;
-            if (onlyFeasts) includeFeasts = true; // "only feasts" implies feasts are included
-            refreshFilters();
-            saveState();
-            render();
-        };
-        feastRow.appendChild(onlyFeastsBtn);
+        feastRow.appendChild(feastBtn);
+        // Fix the button's width to its longest label so it doesn't resize as it cycles.
+        let feastBtnMaxWidth = 0;
+        FEAST_STATES.forEach(label => {
+            feastBtn.textContent = label;
+            feastBtnMaxWidth = Math.max(feastBtnMaxWidth, feastBtn.offsetWidth);
+        });
+        feastBtn.style.minWidth = feastBtnMaxWidth + 'px';
 
         function refreshFilters() {
             [...biomeRow.children].forEach((b, i) => {
@@ -396,8 +387,7 @@
                 const isActive = f === "All" ? activeForks.size === 0 : activeForks.has(f);
                 b.classList.toggle('active', isActive);
             });
-            includeFeastsBtn.classList.toggle('active', includeFeasts);
-            onlyFeastsBtn.classList.toggle('active', onlyFeasts);
+            feastBtn.textContent = feastState;
         }
 
         // Initial highlight: "All" is the default active state.
@@ -448,7 +438,7 @@
             let rows = FOODS.filter(f =>
                 (activeBiomes.size === 0 || activeBiomes.has(f.tier)) &&
                 (activeForks.size === 0 || activeForks.has(f.fork)) &&
-                (onlyFeasts ? isFeast(f) : (includeFeasts || !isFeast(f)))
+                (feastState === "Include Feasts" || (feastState === "Only Feasts") === isFeast(f))
             );
 
             rows.sort((a, b) => {
