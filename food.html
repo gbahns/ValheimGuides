@@ -603,8 +603,9 @@
         // conditional-format color scale) ─────────────────────────────────────
         // Recomputed against whatever rows are currently visible (post-filter), so
         // it always reflects "best/worst among what I'm looking at right now"
-        // rather than the full 71-food dataset. Text color, not cell background —
-        // cell backgrounds are already used for the Fork row tint.
+        // rather than the full 71-food dataset. Cell background — this overrides
+        // the Fork row tint for these specific cells, showing through on the rest
+        // of the row (name, fork, stack, biome, source, ingredients).
         const COLOR_COLUMNS = {
             hp:       { invert: false },
             st:       { invert: false },
@@ -629,7 +630,7 @@
             let t = (value - range.min) / (range.max - range.min);
             if (COLOR_COLUMNS[key].invert) t = 1 - t;
             const hue = Math.max(0, Math.min(1, t)) * 120; // 0=red, 60=yellow, 120=green
-            return ` style="color:hsl(${hue.toFixed(0)},65%,32%)"`;
+            return ` style="background-color:hsl(${hue.toFixed(0)},70%,88%)"`;
         }
 
         // ── Cell formatting helpers ──────────────────────────────────────────
