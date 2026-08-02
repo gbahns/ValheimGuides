@@ -45,6 +45,7 @@
         }
         thead.valheim-title { font-family: 'Inter', sans-serif; font-weight: 700; }
         .col-small { font-size: 0.867rem; } /* table's 0.95rem, 1pt smaller */
+        .col-num { text-align: center; padding-left: 0.35rem; padding-right: 0.35rem; }
         .filter-btn {
             background-color: #D2B48C;
             color: #4A3F35;
@@ -240,15 +241,15 @@
                     <tr>
                         <th class="sortable text-left" data-key="name">Food <span class="sort-indicator">↕</span></th>
                         <th class="sortable text-center" data-key="fork">Fork <span class="sort-indicator">↕</span></th>
-                        <th class="sortable text-right" data-key="hp">HP <span class="sort-indicator">↕</span></th>
-                        <th class="sortable text-right" data-key="st">Stam <span class="sort-indicator">↕</span></th>
-                        <th class="sortable text-right" data-key="ei">Eitr <span class="sort-indicator">↕</span></th>
-                        <th class="sortable text-right" data-key="total">Total <span class="sort-indicator">↕</span></th>
-                        <th class="sortable text-right" data-key="heal">Heal <span class="sort-indicator">↕</span></th>
-                        <th class="sortable text-right" data-key="score">Score <span class="sort-indicator">↕</span></th>
-                        <th class="sortable text-right" data-key="duration">Dur <span class="sort-indicator">↕</span></th>
-                        <th class="sortable text-right" data-key="weight">Wt <span class="sort-indicator">↕</span></th>
-                        <th class="sortable text-right" data-key="stack">Stack <span class="sort-indicator">↕</span></th>
+                        <th class="sortable col-num" data-key="hp">HP <span class="sort-indicator">↕</span></th>
+                        <th class="sortable col-num" data-key="st">Stam <span class="sort-indicator">↕</span></th>
+                        <th class="sortable col-num" data-key="ei">Eitr <span class="sort-indicator">↕</span></th>
+                        <th class="sortable col-num" data-key="total">Total <span class="sort-indicator">↕</span></th>
+                        <th class="sortable col-num" data-key="heal">Heal <span class="sort-indicator">↕</span></th>
+                        <th class="sortable col-num" data-key="score">Score <span class="sort-indicator">↕</span></th>
+                        <th class="sortable col-num" data-key="duration">Dur <span class="sort-indicator">↕</span></th>
+                        <th class="sortable col-num" data-key="weight">Wt <span class="sort-indicator">↕</span></th>
+                        <th class="sortable col-num" data-key="stack">Stack <span class="sort-indicator">↕</span></th>
                         <th class="sortable col-small" data-key="tier">Biome <span class="sort-indicator">↕</span></th>
                         <th class="col-small">Source</th>
                         <th class="text-left">Ingredients</th>
@@ -695,15 +696,15 @@
                 <tr class="food-row row-${f.fork} border-t border-stone-300${isHidden ? ' is-hidden' : ''}" data-name="${f.name}">
                     <td class="font-semibold">${f.name}${flagLabel}</td>
                     <td class="text-center"><span class="fork-label fork-${f.fork}">${FORK_LABELS[f.fork]}</span></td>
-                    <td class="text-right"${statStyle(colorRanges, 'hp', f.hp)}>${f.hp}</td>
-                    <td class="text-right"${statStyle(colorRanges, 'st', f.st)}>${f.st}</td>
-                    <td class="text-right"${statStyle(colorRanges, 'ei', f.ei)}>${f.ei || ''}</td>
-                    <td class="text-right"${statStyle(colorRanges, 'total', f.total)}>${f.total}</td>
-                    <td class="text-right"${statStyle(colorRanges, 'heal', f.heal)}>${f.heal || ''}</td>
-                    <td class="text-right font-bold"${statStyle(colorRanges, 'score', f.score)}>${f.score}</td>
-                    <td class="text-right"${statStyle(colorRanges, 'duration', f.duration)}>${f.duration ?? ''}</td>
-                    <td class="text-right"${statStyle(colorRanges, 'weight', f.weight)}>${f.weight}</td>
-                    <td class="text-right">${f.stack}</td>
+                    <td class="col-num"${statStyle(colorRanges, 'hp', f.hp)}>${f.hp}</td>
+                    <td class="col-num"${statStyle(colorRanges, 'st', f.st)}>${f.st}</td>
+                    <td class="col-num"${statStyle(colorRanges, 'ei', f.ei)}>${f.ei || ''}</td>
+                    <td class="col-num"${statStyle(colorRanges, 'total', f.total)}>${f.total}</td>
+                    <td class="col-num"${statStyle(colorRanges, 'heal', f.heal)}>${f.heal || ''}</td>
+                    <td class="col-num font-bold"${statStyle(colorRanges, 'score', f.score)}>${f.score}</td>
+                    <td class="col-num"${statStyle(colorRanges, 'duration', f.duration)}>${f.duration ?? ''}</td>
+                    <td class="col-num"${statStyle(colorRanges, 'weight', f.weight)}>${f.weight.toFixed(1)}</td>
+                    <td class="col-num">${f.stack}</td>
                     <td class="col-small">${f.biome}</td>
                     <td class="col-small">${formatSource(f.station)}</td>
                     <td class="text-xs text-stone-700 ingredients-cell"><span class="ingredients-text" tabindex="0">${ingredientsText}</span><span class="ingredients-tip" aria-hidden="true">${ingredientsText}</span>${noteHtml}</td>
