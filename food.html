@@ -200,6 +200,7 @@
                         <th class="sortable text-right" data-key="ei">Eitr <span class="sort-indicator">↕</span></th>
                         <th class="sortable text-right" data-key="total">Total <span class="sort-indicator">↕</span></th>
                         <th class="sortable text-right" data-key="heal">Heal <span class="sort-indicator">↕</span></th>
+                        <th class="sortable text-right" data-key="score">Score <span class="sort-indicator">↕</span></th>
                         <th class="sortable text-right" data-key="duration">Dur <span class="sort-indicator">↕</span></th>
                         <th class="sortable text-right" data-key="weight">Wt <span class="sort-indicator">↕</span></th>
                         <th class="sortable text-right" data-key="stack">Stack <span class="sort-indicator">↕</span></th>
@@ -302,6 +303,12 @@
             { name: "Raspberries",                hp:7,  st:20, ei:0,  total:27,  fork:"Yellow", heal:1, duration:600,  weight:0.1, stack:50, tier:1, biome:"Meadows",       station:"(Foraged in Meadows)",    ingredients:"" },
         ];
 
+        // Score: Total plus a straight, unweighted addition of Heal (health regen
+        // per 8s tick). Heal's own values (1-6) are already small relative to Total
+        // (27-188), so this gives it a real but modest nudge without inventing an
+        // arbitrary conversion factor between "regen rate" and "resource pool".
+        FOODS.forEach(f => { f.score = f.total + f.heal; });
+
         const BIOMES = [
             { tier:0, label:"All"          },
             { tier:1, label:"Meadows"      },
@@ -344,7 +351,7 @@
         const activeForks  = new Set(saved.forks || []);
         // Feast filter is a single tri-state button that cycles through FEAST_STATES on click.
         let feastState  = FEAST_STATES.includes(saved.feastState) ? saved.feastState : "Include Feasts";
-        let sortKey     = saved.sortKey ?? "total";
+        let sortKey     = saved.sortKey ?? "score";
         let sortDir     = saved.sortDir ?? -1; // -1 desc, 1 asc
 
         // ── Render filter buttons ────────────────────────────────────────────
@@ -500,8 +507,9 @@
                     <td class="text-right">${f.hp}</td>
                     <td class="text-right">${f.st}</td>
                     <td class="text-right">${f.ei || ''}</td>
-                    <td class="text-right font-bold">${f.total}</td>
+                    <td class="text-right">${f.total}</td>
                     <td class="text-right">${f.heal || ''}</td>
+                    <td class="text-right font-bold">${f.score}</td>
                     <td class="text-right">${f.duration ?? ''}</td>
                     <td class="text-right">${f.weight}</td>
                     <td class="text-right">${f.stack}</td>
