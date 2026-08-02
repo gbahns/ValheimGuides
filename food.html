@@ -303,11 +303,12 @@
             { name: "Raspberries",                hp:7,  st:20, ei:0,  total:27,  fork:"Yellow", heal:1, duration:600,  weight:0.1, stack:50, tier:1, biome:"Meadows",       station:"(Foraged in Meadows)",    ingredients:"" },
         ];
 
-        // Score: Total plus a straight, unweighted addition of Heal (health regen
-        // per 8s tick). Heal's own values (1-6) are already small relative to Total
-        // (27-188), so this gives it a real but modest nudge without inventing an
-        // arbitrary conversion factor between "regen rate" and "resource pool".
-        FOODS.forEach(f => { f.score = f.total + f.heal; });
+        // Score: Total plus Heal (health regen per 8s tick) scaled by 3, i.e. the
+        // healing you'd actually receive over a ~24s fight — long enough that
+        // sustained survivability matters, short enough that Heal stays a
+        // tiebreaker among close-Total foods rather than dominating the ranking.
+        const HEAL_TICKS = 3;
+        FOODS.forEach(f => { f.score = f.total + f.heal * HEAL_TICKS; });
 
         const BIOMES = [
             { tier:0, label:"All"          },
