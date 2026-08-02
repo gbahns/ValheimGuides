@@ -599,6 +599,39 @@
             };
         });
 
+        // ── Stat color scale (red -> yellow -> green, like a spreadsheet
+        // conditional-format color scale) ─────────────────────────────────────
+        // Recomputed against whatever rows are currently visible (post-filter), so
+        // it always reflects "best/worst among what I'm looking at right now"
+        // rather than the full 71-food dataset. Text color, not cell background —
+        // cell backgrounds are already used for the Fork row tint.
+        const COLOR_COLUMNS = {
+            hp:       { invert: false },
+            st:       { invert: false },
+            ei:       { invert: false },
+            total:    { invert: false },
+            heal:     { invert: false },
+            score:    { invert: false },
+            duration: { invert: false },
+            weight:   { invert: true }, // lighter is better
+        };
+        function computeColorRanges(rows) {
+            const ranges = {};
+            for (const key in COLOR_COLUMNS) {
+                const vals = rows.map(f => f[key]).filter(v => v != null);
+                ranges[key] = vals.length ? { min: Math.min(...vals), max: Math.max(...vals) } : null;
+            }
+            return ranges;
+        }
+        function statStyle(ranges, key, value) {
+            const range = ranges[key];
+            if (!range || value == null || range.max === range.min) return '';
+            let t = (value - range.min) / (range.max - range.min);
+            if (COLOR_COLUMNS[key].invert) t = 1 - t;
+            const hue = Math.max(0, Math.min(1, t)) * 120; // 0=red, 60=yellow, 120=green
+            return ` style="color:hsl(${hue.toFixed(0)},65%,32%)"`;
+        }
+
         // ── Cell formatting helpers ──────────────────────────────────────────
         // "(Foraged in Mistlands)" -> "Mistlands"; otherwise just drop the parens.
         function formatSource(s) {
@@ -646,6 +679,8 @@
             document.getElementById('resultCount').textContent =
                 `Showing ${rows.length} of ${FOODS.length} foods`;
 
+            const colorRanges = computeColorRanges(rows);
+
             const tbody = document.getElementById('foodTbody');
             tbody.innerHTML = rows.map(f => {
                 const noteHtml = f.note ? `<span class="note-trigger" tabindex="0" aria-label="${f.note}"><span class="note-icon" aria-hidden="true">ⓘ</span><span class="note-tip" aria-hidden="true">${f.note}</span></span>` : '';
@@ -659,14 +694,14 @@
                 <tr class="food-row row-${f.fork} border-t border-stone-300${isHidden ? ' is-hidden' : ''}" data-name="${f.name}">
                     <td class="font-semibold">${f.name}${flagLabel}</td>
                     <td class="text-center"><span class="fork-label fork-${f.fork}">${FORK_LABELS[f.fork]}</span></td>
-                    <td class="text-right">${f.hp}</td>
-                    <td class="text-right">${f.st}</td>
-                    <td class="text-right">${f.ei || ''}</td>
-                    <td class="text-right">${f.total}</td>
-                    <td class="text-right">${f.heal || ''}</td>
-                    <td class="text-right font-bold">${f.score}</td>
-                    <td class="text-right">${f.duration ?? ''}</td>
-                    <td class="text-right">${f.weight}</td>
+                    <td class="text-right"${statStyle(colorRanges, 'hp', f.hp)}>${f.hp}</td>
+                    <td class="text-right"${statStyle(colorRanges, 'st', f.st)}>${f.st}</td>
+                    <td class="text-right"${statStyle(colorRanges, 'ei', f.ei)}>${f.ei || ''}</td>
+                    <td class="text-right"${statStyle(colorRanges, 'total', f.total)}>${f.total}</td>
+                    <td class="text-right"${statStyle(colorRanges, 'heal', f.heal)}>${f.heal || ''}</td>
+                    <td class="text-right font-bold"${statStyle(colorRanges, 'score', f.score)}>${f.score}</td>
+                    <td class="text-right"${statStyle(colorRanges, 'duration', f.duration)}>${f.duration ?? ''}</td>
+                    <td class="text-right"${statStyle(colorRanges, 'weight', f.weight)}>${f.weight}</td>
                     <td class="text-right">${f.stack}</td>
                     <td class="col-small">${f.biome}</td>
                     <td class="col-small">${formatSource(f.station)}</td>
