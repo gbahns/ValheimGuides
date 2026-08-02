@@ -189,6 +189,14 @@
                 .filter(t => t != null);
             return tiers.length ? Math.max(...tiers) : 0;
         }
+        // "Wood: 20; Resin: 6" -> "20 Wood, Resin" (qty dropped when it's 1)
+        function formatRecipe(recipe) {
+            return recipe.split(';').map(part => {
+                const [name, qty] = part.split(':').map(s => s.trim());
+                if (!qty || qty === '1') return name;
+                return `${qty} ${name}`;
+            }).join(', ');
+        }
         const activeTiers = new Set(); // empty = show all
 
         const processShipData = (data) => {
@@ -295,7 +303,7 @@
                     <td class="px-1 py-2 text-center">${ship.topSpeed.toFixed(1)}</td>
                     <td class="px-1 py-2 text-center">${ship.cargoSlots}</td>
                     <td class="px-1 py-2 text-center">${ship.cargoThroughput.toFixed(1)}</td>
-                    <td class="px-1 py-2 text-sm">${ship.recipe.replace(/; /g, ', ')}</td>
+                    <td class="px-1 py-2 text-sm">${formatRecipe(ship.recipe)}</td>
                 `;
                 shipTableBody.appendChild(row);
             });
