@@ -52,6 +52,7 @@
         }
         table {
             font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
         }
         thead.valheim-title {
             font-family: 'Inter', sans-serif;
@@ -91,7 +92,7 @@
 
         <main class="card p-2 rounded-lg shadow-md overflow-x-auto">
              <table id="ship-table" class="w-full text-left">
-                <thead class="valheim-title text-lg border-b-2 border-[#4A3F35]">
+                <thead class="valheim-title border-b-2 border-[#4A3F35]">
                     <tr>
                         <th class="px-1 py-2" data-sort="name">Name</th>
                         <th class="px-1 py-2 text-center" data-sort="category">Category</th>
@@ -296,7 +297,7 @@
 
             sortedData.forEach(ship => {
                 const row = document.createElement('tr');
-                row.className = 'border-b border-stone-300/50 hover:bg-amber-50/50 transition-colors text-base';
+                row.className = 'border-b border-stone-300/50 hover:bg-amber-50/50 transition-colors';
                 row.innerHTML = `
                     <td class="px-1 py-2 font-bold">${ship.name}</td>
                     <td class="px-1 py-2 text-center">${ship.category}</td>
