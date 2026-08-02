@@ -376,6 +376,15 @@
         });
         feastBtn.style.minWidth = feastBtnMaxWidth + 'px';
 
+        // Fix the result-count width too, so its changing digit count doesn't
+        // reflow/shift the filter buttons in this space-between row. The widest
+        // it can ever render is "Showing <total> of <total> foods" (filtered
+        // counts have equal-or-fewer digits than the total).
+        const resultCountEl = document.getElementById('resultCount');
+        resultCountEl.style.textAlign = 'right';
+        resultCountEl.textContent = `Showing ${FOODS.length} of ${FOODS.length} foods`;
+        resultCountEl.style.minWidth = resultCountEl.offsetWidth + 'px';
+
         function refreshFilters() {
             [...biomeRow.children].forEach((b, i) => {
                 const tier = BIOMES[i].tier;
