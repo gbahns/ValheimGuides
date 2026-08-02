@@ -101,10 +101,14 @@
             vertical-align: middle;
         }
         .note-tip {
+            display: none; /* not opacity:0 — an invisible but laid-out absolute-
+                               positioned element still counts toward its scrolling
+                               ancestor's scrollWidth, which was stretching #tableWrap's
+                               horizontal scroll range well past the visible table */
             position: absolute;
             left: 50%;
             top: 100%;
-            transform: translate(-50%, 4px) scale(0.96);
+            transform: translate(-50%, 8px);
             background: #2E2620;
             color: #FAF3E0;
             font-size: 0.78rem;
@@ -119,9 +123,6 @@
             max-width: 260px;
             text-align: left;
             z-index: 50;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.12s ease, transform 0.12s ease;
         }
         .note-tip::before {
             content: "";
@@ -134,9 +135,45 @@
         }
         .note-trigger:hover .note-tip,
         .note-trigger:focus .note-tip {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translate(-50%, 8px) scale(1);
+            display: block;
+        }
+        /* Ingredients cell: truncate with ellipsis and reveal the full list via a
+           tooltip, so a long recipe can't force the table into horizontal scroll. */
+        td.ingredients-cell {
+            position: relative;
+        }
+        .ingredients-text {
+            display: inline-block;
+            max-width: var(--ingredients-max-width, none);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            vertical-align: middle;
+            cursor: help;
+        }
+        .ingredients-tip {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 4px;
+            background: #2E2620;
+            color: #FAF3E0;
+            font-size: 0.78rem;
+            font-weight: 400;
+            line-height: 1.35;
+            padding: 0.5rem 0.65rem;
+            border-radius: 0.4rem;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.28);
+            white-space: normal;
+            width: max-content;
+            max-width: 320px;
+            text-align: left;
+            z-index: 50;
+        }
+        .ingredients-text:hover ~ .ingredients-tip,
+        .ingredients-text:focus ~ .ingredients-tip {
+            display: block;
         }
     </style>
 </head>
@@ -416,9 +453,7 @@
         }
 
         // "Blueberries x1, Cooked deer meat x2" -> "Blueberry, 2 Cooked deer meat"
-        // noteHtml (if given) is attached to the LAST ingredient — that's always
-        // the Bog Witch-gated one in this dataset's boss-locked feast recipes.
-        function formatIngredients(str, noteHtml) {
+        function formatIngredients(str) {
             if (!str) return '';
             const parts = str.split(',').map(part => {
                 const s = part.trim();
@@ -431,7 +466,6 @@
                 const labeled = isOne ? name : `${qty} ${name}`;
                 return rest ? `${labeled} ${rest}` : labeled;
             });
-            if (noteHtml && parts.length) parts[parts.length - 1] += noteHtml;
             return parts.join(', ');
         }
 
@@ -458,6 +492,7 @@
             const tbody = document.getElementById('foodTbody');
             tbody.innerHTML = rows.map(f => {
                 const noteHtml = f.note ? `<span class="note-trigger" tabindex="0" aria-label="${f.note}"><span class="note-icon" aria-hidden="true">ⓘ</span><span class="note-tip" aria-hidden="true">${f.note}</span></span>` : '';
+                const ingredientsText = formatIngredients(f.ingredients);
                 return `
                 <tr class="food-row row-${f.fork} border-t border-stone-300">
                     <td class="font-semibold">${f.name}</td>
@@ -472,7 +507,7 @@
                     <td class="text-right">${f.stack}</td>
                     <td class="col-small">${f.biome}</td>
                     <td class="col-small">${formatSource(f.station)}</td>
-                    <td class="text-xs text-stone-700">${formatIngredients(f.ingredients, noteHtml)}</td>
+                    <td class="text-xs text-stone-700 ingredients-cell"><span class="ingredients-text" tabindex="0">${ingredientsText}</span><span class="ingredients-tip" aria-hidden="true">${ingredientsText}</span>${noteHtml}</td>
                 </tr>
             `;
             }).join('');
@@ -481,9 +516,47 @@
             document.querySelectorAll('th.sortable .sort-indicator').forEach(s => s.textContent = '↕');
             const active = document.querySelector(`th[data-key="${sortKey}"] .sort-indicator`);
             if (active) active.textContent = sortDir > 0 ? '↑' : '↓';
+            adjustIngredientsWidth();
         }
 
+        // The Ingredients column should show its full text when there's room, and
+        // only truncate (with a hover/focus tooltip for the full value) by exactly
+        // as much as needed to keep the table from ever needing a horizontal
+        // scrollbar. Re-measured after every render() and on resize, since both
+        // the available width and the widest visible ingredient list can change.
+        function adjustIngredientsWidth() {
+            document.documentElement.style.removeProperty('--ingredients-max-width');
+            const table = document.querySelector('#tableWrap table');
+            const wrap = document.getElementById('tableWrap');
+            const spans = [...document.querySelectorAll('.ingredients-text')];
+            if (!spans.length) return;
+
+            // Column auto-layout redistributes non-linearly when a cell's content
+            // shrinks (and other columns/the boss-gate icon add their own overhead),
+            // so converge on a working cap iteratively against the real measured
+            // overflow each time, rather than trying to compute it in one shot.
+            let cap = Math.max(...spans.map(s => s.offsetWidth));
+            for (let i = 0; i < 20; i++) {
+                const overflow = table.scrollWidth - wrap.clientWidth;
+                if (overflow <= 0) return;
+                if (cap <= 60) return; // hit the floor, can't shrink further
+                cap = Math.max(60, cap - overflow - 4);
+                document.documentElement.style.setProperty('--ingredients-max-width', cap + 'px');
+            }
+        }
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(adjustIngredientsWidth, 120);
+        });
+
         render();
+        // The initial adjustIngredientsWidth() (inside render()) can run before the
+        // Inter web font finishes loading, measuring narrower fallback-font text and
+        // under-shrinking the column. Re-run once the real font is confirmed ready.
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(adjustIngredientsWidth);
+        }
     </script>
 </body>
 </html>

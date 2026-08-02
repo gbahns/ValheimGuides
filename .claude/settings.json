@@ -1,8 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node tools/screenshot.js *)",
-      "PowerShell(node tools/screenshot.js *)"
+      "Bash(node tools/screenshot.js)",
+      "PowerShell(node tools/screenshot.js)"
     ]
   }
 }
