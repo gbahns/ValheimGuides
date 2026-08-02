@@ -51,9 +51,7 @@
         th.sortable:hover { color: #C45A11; }
         th .sort-indicator { font-size: 0.75em; opacity: 0.6; margin-left: 0.25em; }
         tr.food-row:hover { background-color: rgba(210, 180, 140, 0.25); }
-        /* Tight default: every cell nowrap; opt back into wrapping with .wrap */
         td, th { padding: 0.25rem 0.55rem; white-space: nowrap; }
-        td.wrap, th.wrap { white-space: normal; }
         /* Unlock note shown under a food name */
         .food-note {
             display: block;
@@ -102,7 +100,7 @@
                         <th class="sortable text-right" data-key="stack">Stack <span class="sort-indicator">↕</span></th>
                         <th class="sortable" data-key="tier">Biome <span class="sort-indicator">↕</span></th>
                         <th>Station</th>
-                        <th class="wrap text-left">Ingredients</th>
+                        <th class="text-left">Ingredients</th>
                     </tr>
                 </thead>
                 <tbody id="foodTbody"></tbody>
@@ -309,7 +307,7 @@
                     <td class="text-right">${f.stack}</td>
                     <td>${f.tier}. ${f.biome}</td>
                     <td>${f.station}</td>
-                    <td class="wrap text-xs text-stone-700">${f.ingredients}</td>
+                    <td class="text-xs text-stone-700">${f.ingredients}</td>
                 </tr>
             `).join('');
 
