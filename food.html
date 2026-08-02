@@ -534,8 +534,8 @@
             menuTargetName = name;
             const current = flaggedFoods.get(name);
             const items = [
-                `<button type="button" role="menuitem" data-action="unavailable">${current === 'unavailable' ? '✓ ' : ''}Flag: Not Available</button>`,
-                `<button type="button" role="menuitem" data-action="suboptimal">${current === 'suboptimal' ? '✓ ' : ''}Flag: Not Optimal</button>`,
+                `<button type="button" role="menuitem" data-action="unavailable">${current === 'unavailable' ? '✓ ' : ''}Not Available</button>`,
+                `<button type="button" role="menuitem" data-action="suboptimal">${current === 'suboptimal' ? '✓ ' : ''}Not Optimal</button>`,
             ];
             if (current) {
                 items.push('<div class="menu-divider"></div>');
