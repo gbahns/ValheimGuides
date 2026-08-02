@@ -150,6 +150,7 @@
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                 <div id="biomeFilters" class="flex flex-wrap gap-1"></div>
                 <div id="forkFilters" class="flex flex-wrap gap-1"></div>
+                <div id="feastFilters" class="flex flex-wrap gap-1"></div>
                 <span id="resultCount" class="text-stone-700 text-sm"></span>
             </div>
         </section>
@@ -178,7 +179,7 @@
         </section>
 
         <footer class="text-center text-xs text-stone-600 mt-3 pb-3">
-            Blank duration/healing = value unset in source (most Ashlands foods). Biome tier 1 Meadows → 7 Ashlands. The <span class="fork-label" style="color:#C45A11">ⓘ</span> next to a food name flags boss-gated ingredients sold by the Bog Witch — hover or focus it for details.
+            Blank duration/healing = value unset in source (most Ashlands foods). Biome tier 1 Meadows → 7 Ashlands. The <span class="fork-label" style="color:#C45A11">ⓘ</span> next to an ingredient flags a Bog Witch boss-gated spice — hover or focus it for details.
         </footer>
 
     </main>
@@ -283,6 +284,9 @@
         ];
         const FORKS = ["All", "White", "Red", "Yellow", "Blue"];
         const FORK_LABELS = { White: "Balanced", Red: "Health", Yellow: "Stamina", Blue: "Eitr" };
+        // A Feast is any dish cooked at the Food preparation table (long duration, boss-gated spice).
+        const FEAST_MODES = ["All", "Exclude Feasts", "Only Feasts"];
+        const isFeast = f => f.station === "Food preparation table";
 
         // ── Persisted filter/sort state ──────────────────────────────────────
         const STORAGE_KEY = 'vkb-food-filters';
@@ -297,6 +301,7 @@
             localStorage.setItem(STORAGE_KEY, JSON.stringify({
                 biomes: [...activeBiomes],
                 forks: [...activeForks],
+                feastMode,
                 sortKey,
                 sortDir,
             }));
@@ -307,6 +312,8 @@
         // Clicking "All" clears the Set; clicking an individual value toggles its membership.
         const activeBiomes = new Set(saved.biomes || []);
         const activeForks  = new Set(saved.forks || []);
+        // Feast filter is single-select (All / Exclude Feasts / Only Feasts).
+        let feastMode   = FEAST_MODES.includes(saved.feastMode) ? saved.feastMode : "All";
         let sortKey     = saved.sortKey ?? "total";
         let sortDir     = saved.sortDir ?? -1; // -1 desc, 1 asc
 
@@ -351,6 +358,15 @@
             forkRow.appendChild(btn);
         });
 
+        const feastRow = document.getElementById('feastFilters');
+        FEAST_MODES.forEach(mode => {
+            const btn = document.createElement('button');
+            btn.className = 'filter-btn px-3 py-1 rounded';
+            btn.textContent = mode;
+            btn.onclick = () => { feastMode = mode; refreshFilters(); saveState(); render(); };
+            feastRow.appendChild(btn);
+        });
+
         function refreshFilters() {
             [...biomeRow.children].forEach((b, i) => {
                 const tier = BIOMES[i].tier;
@@ -362,6 +378,8 @@
                 const isActive = f === "All" ? activeForks.size === 0 : activeForks.has(f);
                 b.classList.toggle('active', isActive);
             });
+            [...feastRow.children].forEach((b, i) =>
+                b.classList.toggle('active', FEAST_MODES[i] === feastMode));
         }
 
         // Initial highlight: "All" is the default active state.
@@ -388,9 +406,11 @@
         }
 
         // "Blueberries x1, Cooked deer meat x2" -> "Blueberry, 2 Cooked deer meat"
-        function formatIngredients(str) {
+        // noteHtml (if given) is attached to the LAST ingredient — that's always
+        // the Bog Witch-gated one in this dataset's boss-locked feast recipes.
+        function formatIngredients(str, noteHtml) {
             if (!str) return '';
-            return str.split(',').map(part => {
+            const parts = str.split(',').map(part => {
                 const s = part.trim();
                 const m = s.match(/^(.+?)\s*x(\d+(?:\.\d+)?)\s*(.*)$/i);
                 if (!m) return s;
@@ -400,14 +420,17 @@
                 if (isOne && /ies$/i.test(name)) name = name.replace(/ies$/i, 'y');
                 const labeled = isOne ? name : `${qty} ${name}`;
                 return rest ? `${labeled} ${rest}` : labeled;
-            }).join(', ');
+            });
+            if (noteHtml && parts.length) parts[parts.length - 1] += noteHtml;
+            return parts.join(', ');
         }
 
         // ── Render rows ──────────────────────────────────────────────────────
         function render() {
             let rows = FOODS.filter(f =>
                 (activeBiomes.size === 0 || activeBiomes.has(f.tier)) &&
-                (activeForks.size === 0 || activeForks.has(f.fork))
+                (activeForks.size === 0 || activeForks.has(f.fork)) &&
+                (feastMode === "All" || (feastMode === "Only Feasts") === isFeast(f))
             );
 
             rows.sort((a, b) => {
@@ -423,9 +446,11 @@
                 `Showing ${rows.length} of ${FOODS.length} foods`;
 
             const tbody = document.getElementById('foodTbody');
-            tbody.innerHTML = rows.map(f => `
+            tbody.innerHTML = rows.map(f => {
+                const noteHtml = f.note ? `<span class="note-trigger" tabindex="0" aria-label="${f.note}"><span class="note-icon" aria-hidden="true">ⓘ</span><span class="note-tip" aria-hidden="true">${f.note}</span></span>` : '';
+                return `
                 <tr class="food-row row-${f.fork} border-t border-stone-300">
-                    <td class="font-semibold">${f.name}${f.note ? `<span class="note-trigger" tabindex="0" aria-label="${f.note}"><span class="note-icon" aria-hidden="true">ⓘ</span><span class="note-tip" aria-hidden="true">${f.note}</span></span>` : ''}</td>
+                    <td class="font-semibold">${f.name}</td>
                     <td class="text-center"><span class="fork-label fork-${f.fork}">${FORK_LABELS[f.fork]}</span></td>
                     <td class="text-right">${f.hp}</td>
                     <td class="text-right">${f.st}</td>
@@ -437,9 +462,10 @@
                     <td class="text-right">${f.stack}</td>
                     <td class="col-small">${f.biome}</td>
                     <td class="col-small">${formatSource(f.station)}</td>
-                    <td class="text-xs text-stone-700">${formatIngredients(f.ingredients)}</td>
+                    <td class="text-xs text-stone-700">${formatIngredients(f.ingredients, noteHtml)}</td>
                 </tr>
-            `).join('');
+            `;
+            }).join('');
 
             // Update sort indicators
             document.querySelectorAll('th.sortable .sort-indicator').forEach(s => s.textContent = '↕');
