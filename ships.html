@@ -70,7 +70,7 @@
             <p class="text-lg text-gray-600 mt-2">An interactive guide to the ships of the OdinShipPlus mod.</p>
         </header>
 
-        <div class="bg-white/50 backdrop-blur-sm p-4 rounded-lg shadow-md mb-8 sticky top-4 z-10">
+        <div class="bg-white/50 backdrop-blur-sm p-4 rounded-lg shadow-md mb-8 sticky top-4 z-10 space-y-3">
             <div id="category-filters" class="flex flex-wrap gap-2 justify-center">
                 <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold active" data-category="All">All</button>
                 <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="Vanilla">Vanilla</button>
@@ -79,6 +79,7 @@
                 <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="Fishing">Fishing</button>
                 <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="War">War</button>
             </div>
+            <div id="tier-filters" class="flex flex-wrap gap-2 justify-center"></div>
         </div>
 
         <main class="card p-2 rounded-lg shadow-md overflow-x-auto">
@@ -87,6 +88,7 @@
                     <tr>
                         <th class="px-1 py-2" data-sort="name">Name</th>
                         <th class="px-1 py-2 text-center" data-sort="category">Category</th>
+                        <th class="px-1 py-2 text-center" data-sort="tier"><span title="Highest-tier vanilla material required to build it">Tier</span></th>
                         <th class="px-1 py-2 text-center" data-sort="health">Health</th>
                         <th class="px-1 py-2 text-center" data-sort="mass">Mass</th>
                         <th class="px-1 py-2 text-center" data-sort="rudderSpeed">Rudder Speed</th>
@@ -158,6 +160,37 @@
         let currentFilter = 'All';
         let currentSort = { key: 'name', asc: true };
 
+        // Progression tier: the highest-tier vanilla material a ship's recipe
+        // requires. Not a strict biome mapping — Leather Scraps and Deer Hide are
+        // both Meadows drops, for instance, but hunting deer for them is a later
+        // step than just gathering Wood/Resin, so they get their own tier. The
+        // mod's own intermediate materials (Cloth Ship, Caulked Wood, Resin Wood,
+        // Ship Rope) aren't tier-mapped since their own crafting requirements
+        // aren't listed on this page — but every ship's recipe also includes at
+        // least one recognized vanilla material, so every ship still resolves.
+        const TIERS = [
+            { tier: 0, label: "All" },
+            { tier: 1, label: "Starter" },
+            { tier: 2, label: "Meadows" },
+            { tier: 3, label: "Black Forest" },
+            { tier: 4, label: "Swamp" },
+            { tier: 5, label: "Ashlands" },
+        ];
+        const MATERIAL_TIER = {
+            "Wood": 1, "Resin": 1,
+            "Leather Scraps": 2, "Deer Hide": 2,
+            "Bronze Nails": 3,
+            "Iron Nails": 4,
+            "Yggdrasil Wood": 5, "Ceramic Plate": 5,
+        };
+        function tierForRecipe(recipe) {
+            const tiers = recipe.split(';')
+                .map(part => MATERIAL_TIER[part.split(':')[0].trim()])
+                .filter(t => t != null);
+            return tiers.length ? Math.max(...tiers) : 0;
+        }
+        const activeTiers = new Set(); // empty = show all
+
         const processShipData = (data) => {
             const shipsWithSails = data.filter(s => s.sailForce > 0);
             const longship = data.find(s => s.name === "Longship");
@@ -182,6 +215,8 @@
                 }
                 ship.cargoThroughput = ship.cargoSlots * ship.topSpeed;
                 ship.agility = (ship.rudderSpeed / ship.mass) / minManeuverability;
+                ship.tier = tierForRecipe(ship.recipe);
+                ship.tierLabel = TIERS.find(t => t.tier === ship.tier).label;
                 return ship;
             });
         };
@@ -192,10 +227,43 @@
         const filterButtons = document.querySelectorAll('#category-filters button');
         const sortHeaders = document.querySelectorAll('#ship-table th[data-sort]');
 
+        // Progression filter is multi-select, like the Biome filter on the Food
+        // page: an empty Set means "show all"; clicking "All" clears it; clicking
+        // an individual tier toggles its membership.
+        const tierRow = document.getElementById('tier-filters');
+        TIERS.forEach(t => {
+            const btn = document.createElement('button');
+            btn.className = 'filter-btn px-4 py-2 rounded-md text-sm font-bold' + (t.tier === 0 ? ' active' : '');
+            btn.textContent = t.label;
+            btn.dataset.tier = t.tier;
+            btn.addEventListener('click', () => {
+                if (t.tier === 0) {
+                    activeTiers.clear();
+                } else if (activeTiers.has(t.tier)) {
+                    activeTiers.delete(t.tier);
+                } else {
+                    activeTiers.add(t.tier);
+                }
+                refreshTierButtons();
+                renderShips();
+            });
+            tierRow.appendChild(btn);
+        });
+        function refreshTierButtons() {
+            [...tierRow.children].forEach((btn, i) => {
+                const tier = TIERS[i].tier;
+                const isActive = tier === 0 ? activeTiers.size === 0 : activeTiers.has(tier);
+                btn.classList.toggle('active', isActive);
+            });
+        }
+
         const renderShips = () => {
             shipTableBody.innerHTML = '';
-            
-            const filteredData = processedShipData.filter(ship => currentFilter === 'All' || ship.category === currentFilter);
+
+            const filteredData = processedShipData.filter(ship =>
+                (currentFilter === 'All' || ship.category === currentFilter) &&
+                (activeTiers.size === 0 || activeTiers.has(ship.tier))
+            );
 
             const sortedData = filteredData.sort((a, b) => {
                 const valA = a[currentSort.key];
@@ -217,6 +285,7 @@
                 row.innerHTML = `
                     <td class="px-1 py-2 font-bold valheim-title">${ship.name}</td>
                     <td class="px-1 py-2 text-center">${ship.category}</td>
+                    <td class="px-1 py-2 text-center">${ship.tierLabel}</td>
                     <td class="px-1 py-2 text-center">${ship.health}</td>
                     <td class="px-1 py-2 text-center">${ship.mass}</td>
                     <td class="px-1 py-2 text-center">${ship.rudderSpeed}</td>
