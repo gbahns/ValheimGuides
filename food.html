@@ -48,6 +48,11 @@
         .fork-Red    { color: #C0392B; }
         .fork-Yellow { color: #B8960C; }
         .fork-Blue   { color: #7B4FA0; }
+        /* Row tint mirrors the Fork column: light red/yellow/purple, white for Balanced */
+        tr.row-White  { background-color: #FFFFFF; }
+        tr.row-Red    { background-color: #FBEAE8; }
+        tr.row-Yellow { background-color: #FCF3D9; }
+        tr.row-Blue   { background-color: #F1E9F7; }
         th.sortable { cursor: pointer; user-select: none; }
         th.sortable:hover { color: #C45A11; }
         th .sort-indicator { font-size: 0.75em; opacity: 0.6; margin-left: 0.25em; }
@@ -324,7 +329,7 @@
 
             const tbody = document.getElementById('foodTbody');
             tbody.innerHTML = rows.map(f => `
-                <tr class="food-row border-t border-stone-300">
+                <tr class="food-row row-${f.fork} border-t border-stone-300">
                     <td class="font-semibold">${f.name}${f.note ? `<span class="food-note">↳ ${f.note}</span>` : ''}</td>
                     <td class="text-center"><span class="fork-label fork-${f.fork}">${FORK_LABELS[f.fork]}</span></td>
                     <td class="text-right">${f.hp}</td>
