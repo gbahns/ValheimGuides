@@ -21,7 +21,20 @@
 //   "fullPage": false,                // capture the whole scrollable page
 //   "hover": "<selector>",            // hover this element before capturing
 //   "focus": "<selector>",            // keyboard-focus this element before capturing
-//   "clicks": ["<selector>", ...],    // click these elements in order
+//   "contextMenu": "<selector>",      // dispatch a real 'contextmenu' event on this
+//                                     // element before capturing, for testing custom
+//                                     // right-click menus. Prefer this over
+//                                     // clicks[].button:"right" — Playwright's
+//                                     // simulated right-click also fires a 'click'
+//                                     // DOM event, which real browsers don't do for
+//                                     // the non-primary button, so it can trip an
+//                                     // app's "click outside closes this" handler
+//                                     // in a way a real user's right-click never would
+//   "clicks": ["<selector>", ...],    // click these elements in order. Each entry
+//                                     // is either a selector string (left click)
+//                                     // or {"selector": "...", "button": "right"}
+//                                     // for a right-click (context menus, etc.) —
+//                                     // see the contextMenu caveat above
 //   "prints": ["<selector>", ...],    // print each element's textContent
 //   "rects": ["<selector>", ...],     // print each element's box geometry as JSON
 //   "evals": ["<js expression>", ...],// evaluate JS in the page, print the result
@@ -51,6 +64,7 @@ function loadArgs() {
         wait: raw.wait ?? 200,
         hover: raw.hover || null,
         focus: raw.focus || null,
+        contextMenu: raw.contextMenu || null,
         clicks: raw.clicks || [],
         prints: raw.prints || [],
         rects: raw.rects || [],
@@ -80,8 +94,22 @@ function loadArgs() {
     await page.goto('file:///' + pagePath.replace(/\\/g, '/'));
     await page.waitForTimeout(args.wait);
 
-    for (const selector of args.clicks) {
-        await page.click(selector);
+    if (args.contextMenu) {
+        // Runs before clicks[] so a subsequent click can target a menu item this opens.
+        const box = await page.locator(args.contextMenu).boundingBox();
+        await page.evaluate(({ selector, x, y }) => {
+            document.querySelector(selector).dispatchEvent(
+                new MouseEvent('contextmenu', { bubbles: true, clientX: x, clientY: y })
+            );
+        }, { selector: args.contextMenu, x: box.x + box.width / 2, y: box.y + box.height / 2 });
+        await page.waitForTimeout(150);
+    }
+    for (const click of args.clicks) {
+        if (typeof click === 'string') {
+            await page.click(click);
+        } else {
+            await page.click(click.selector, { button: click.button || 'left' });
+        }
         await page.waitForTimeout(100);
     }
     if (args.hover) {

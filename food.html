@@ -71,25 +71,50 @@
         th .sort-indicator { font-size: 0.75em; opacity: 0.6; margin-left: 0.25em; }
         tr.food-row:hover { background-color: rgba(210, 180, 140, 0.25); }
         td, th { padding: 0.25rem 0.55rem; white-space: nowrap; }
-        /* Per-row hide/unhide, for foods that are unavailable/undesirable to the
-           player (e.g. too expensive in scarce ingredients) but shouldn't be
-           deleted from the underlying data. */
-        .hide-btn {
-            display: inline-block;
-            width: 1.1rem;
-            margin-right: 0.3rem;
-            text-align: center;
-            color: #B0A18C;
-            font-weight: 700;
-            font-size: 0.85rem;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        .hide-btn:hover { color: #C0392B; background: rgba(192,57,43,0.12); }
+        /* Right-click (or long-press) a row to flag it Not Available / Not Optimal —
+           for foods that are unavailable/undesirable to the player (e.g. too
+           expensive in scarce ingredients) but shouldn't be deleted from the data. */
         tr.is-hidden { opacity: 0.55; }
         tr.is-hidden td.font-semibold { text-decoration: line-through; }
-        tr.is-hidden .hide-btn { color: #6B8F63; }
-        tr.is-hidden .hide-btn:hover { color: #2E7D32; background: rgba(46,125,50,0.14); }
+        .flag-label {
+            display: inline-block;
+            margin-left: 0.4rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            font-style: normal;
+            text-decoration: none;
+            padding: 0.05rem 0.4rem;
+            border-radius: 9999px;
+            vertical-align: middle;
+        }
+        .flag-label.flag-unavailable { background: rgba(192,57,43,0.16); color: #C0392B; }
+        .flag-label.flag-suboptimal  { background: rgba(184,150,12,0.18); color: #8A6D00; }
+        /* Custom context menu (native one can't be styled/scoped to a row) */
+        #rowMenu {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            background: #2E2620;
+            color: #FAF3E0;
+            border-radius: 0.4rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+            padding: 0.3rem;
+            font-size: 0.85rem;
+            min-width: 180px;
+        }
+        #rowMenu.open { display: block; }
+        #rowMenu button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.4rem 0.6rem;
+            border-radius: 0.3rem;
+            color: inherit;
+            background: none;
+            cursor: pointer;
+        }
+        #rowMenu button:hover { background: rgba(255,255,255,0.12); }
+        #rowMenu .menu-divider { border-top: 1px solid rgba(255,255,255,0.15); margin: 0.25rem 0; }
         #filterBar {
             flex: 0 0 auto;
         }
@@ -235,6 +260,8 @@
 
     </main>
 
+    <div id="rowMenu" role="menu"></div>
+
     <script>
         const FOODS = [
             // ── Tier 7 — Ashlands ────────────────────────────────────────────
@@ -345,6 +372,7 @@
         // A Feast is any dish cooked at the Food preparation table (long duration, boss-gated spice).
         const isFeast = f => f.station === "Food preparation table";
         const FEAST_STATES = ["Include Feasts", "Exclude Feasts", "Only Feasts"];
+        const FLAG_LABELS = { unavailable: "Not Available", suboptimal: "Not Optimal" };
 
         // ── Persisted filter/sort state ──────────────────────────────────────
         const STORAGE_KEY = 'vkb-food-filters';
@@ -360,7 +388,7 @@
                 biomes: [...activeBiomes],
                 forks: [...activeForks],
                 feastState,
-                hidden: [...hiddenFoods],
+                flagged: [...flaggedFoods],
                 sortKey,
                 sortDir,
             }));
@@ -373,11 +401,12 @@
         const activeForks  = new Set(saved.forks || []);
         // Feast filter is a single tri-state button that cycles through FEAST_STATES on click.
         let feastState  = FEAST_STATES.includes(saved.feastState) ? saved.feastState : "Include Feasts";
-        // Foods the player has flagged as unavailable/undesirable (e.g. too expensive
-        // in scarce ingredients). Keyed by name — hidden from the list by default;
-        // the "Show Hidden" toggle reveals them (dimmed, with an unhide button) so
-        // the choice is never permanent/invisible.
-        const hiddenFoods = new Set(saved.hidden || []);
+        // Foods the player has flagged (via right-click / long-press context menu) as
+        // unavailable or suboptimal. Keyed by name -> reason ("unavailable" |
+        // "suboptimal"). Removed from the list by default; the "Show Flagged" toggle
+        // reveals them (dimmed, struck through, labeled with their reason) so the
+        // choice is never permanent/invisible.
+        const flaggedFoods = new Map(saved.flagged || []);
         let showHidden = false;
         let sortKey     = saved.sortKey ?? "score";
         let sortDir     = saved.sortDir ?? -1; // -1 desc, 1 asc
@@ -450,6 +479,13 @@
             render();
         };
         hiddenRow.appendChild(hiddenBtn);
+        // Fix width to the longest realistic label so it doesn't resize as the count changes.
+        let hiddenBtnMaxWidth = 0;
+        ['No Flagged Foods', `Showing Flagged (${FOODS.length})`].forEach(label => {
+            hiddenBtn.textContent = label;
+            hiddenBtnMaxWidth = Math.max(hiddenBtnMaxWidth, hiddenBtn.offsetWidth);
+        });
+        hiddenBtn.style.minWidth = hiddenBtnMaxWidth + 'px';
 
         // Fix the result-count width too, so its changing digit count doesn't
         // reflow/shift the filter buttons in this space-between row. The widest
@@ -472,29 +508,85 @@
                 b.classList.toggle('active', isActive);
             });
             feastBtn.textContent = feastState;
-            hiddenBtn.textContent = hiddenFoods.size === 0
-                ? 'No Hidden Foods'
-                : `${showHidden ? 'Showing' : 'Show'} Hidden (${hiddenFoods.size})`;
+            hiddenBtn.textContent = flaggedFoods.size === 0
+                ? 'No Flagged Foods'
+                : `${showHidden ? 'Showing' : 'Show'} Flagged (${flaggedFoods.size})`;
             hiddenBtn.classList.toggle('active', showHidden);
-            hiddenBtn.disabled = hiddenFoods.size === 0;
-            hiddenBtn.style.opacity = hiddenFoods.size === 0 ? '0.5' : '1';
-            hiddenBtn.style.cursor = hiddenFoods.size === 0 ? 'default' : 'pointer';
+            hiddenBtn.disabled = flaggedFoods.size === 0;
+            hiddenBtn.style.opacity = flaggedFoods.size === 0 ? '0.5' : '1';
+            hiddenBtn.style.cursor = flaggedFoods.size === 0 ? 'default' : 'pointer';
         }
 
         // Initial highlight: "All" is the default active state.
         refreshFilters();
 
-        // ── Hide/unhide (event-delegated since rows are rebuilt on every render) ──
-        document.getElementById('foodTbody').addEventListener('click', e => {
-            const btn = e.target.closest('.hide-btn');
-            if (!btn) return;
-            const name = btn.dataset.name;
-            if (hiddenFoods.has(name)) hiddenFoods.delete(name);
-            else hiddenFoods.add(name);
+        // ── Right-click / long-press context menu to flag a row ──────────────────
+        const rowMenu = document.getElementById('rowMenu');
+        const tbody = document.getElementById('foodTbody');
+        let menuTargetName = null;
+
+        function closeRowMenu() {
+            rowMenu.classList.remove('open');
+            menuTargetName = null;
+        }
+
+        function openRowMenu(name, x, y) {
+            menuTargetName = name;
+            const current = flaggedFoods.get(name);
+            const items = [
+                `<button type="button" role="menuitem" data-action="unavailable">${current === 'unavailable' ? '✓ ' : ''}Flag: Not Available</button>`,
+                `<button type="button" role="menuitem" data-action="suboptimal">${current === 'suboptimal' ? '✓ ' : ''}Flag: Not Optimal</button>`,
+            ];
+            if (current) {
+                items.push('<div class="menu-divider"></div>');
+                items.push('<button type="button" role="menuitem" data-action="clear">Clear Flag</button>');
+            }
+            rowMenu.innerHTML = items.join('');
+            rowMenu.classList.add('open');
+            const menuRect = rowMenu.getBoundingClientRect();
+            const maxX = window.innerWidth - menuRect.width - 8;
+            const maxY = window.innerHeight - menuRect.height - 8;
+            rowMenu.style.left = Math.max(8, Math.min(x, maxX)) + 'px';
+            rowMenu.style.top = Math.max(8, Math.min(y, maxY)) + 'px';
+        }
+
+        rowMenu.addEventListener('click', e => {
+            const btn = e.target.closest('button[data-action]');
+            if (!btn || !menuTargetName) return;
+            if (btn.dataset.action === 'clear') flaggedFoods.delete(menuTargetName);
+            else flaggedFoods.set(menuTargetName, btn.dataset.action);
+            closeRowMenu();
             refreshFilters();
             saveState();
             render();
         });
+        document.addEventListener('click', e => {
+            if (rowMenu.classList.contains('open') && !rowMenu.contains(e.target)) closeRowMenu();
+        });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRowMenu(); });
+        document.getElementById('tableWrap').addEventListener('scroll', closeRowMenu);
+        window.addEventListener('resize', closeRowMenu);
+
+        tbody.addEventListener('contextmenu', e => {
+            const tr = e.target.closest('tr[data-name]');
+            if (!tr) return;
+            e.preventDefault();
+            openRowMenu(tr.dataset.name, e.clientX, e.clientY);
+        });
+
+        // Long-press (touch devices have no right-click)
+        let longPressTimer = null;
+        tbody.addEventListener('touchstart', e => {
+            const tr = e.target.closest('tr[data-name]');
+            if (!tr) return;
+            const touch = e.touches[0];
+            longPressTimer = setTimeout(() => {
+                openRowMenu(tr.dataset.name, touch.clientX, touch.clientY);
+                longPressTimer = null;
+            }, 500);
+        }, { passive: true });
+        tbody.addEventListener('touchend', () => { if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; } });
+        tbody.addEventListener('touchmove', () => { if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; } });
 
         // ── Sortable headers ─────────────────────────────────────────────────
         document.querySelectorAll('th.sortable').forEach(th => {
@@ -539,7 +631,7 @@
                 (activeBiomes.size === 0 || activeBiomes.has(f.tier)) &&
                 (activeForks.size === 0 || activeForks.has(f.fork)) &&
                 (feastState === "Include Feasts" || (feastState === "Only Feasts") === isFeast(f)) &&
-                (showHidden || !hiddenFoods.has(f.name))
+                (showHidden || !flaggedFoods.has(f.name))
             );
 
             rows.sort((a, b) => {
@@ -558,11 +650,14 @@
             tbody.innerHTML = rows.map(f => {
                 const noteHtml = f.note ? `<span class="note-trigger" tabindex="0" aria-label="${f.note}"><span class="note-icon" aria-hidden="true">ⓘ</span><span class="note-tip" aria-hidden="true">${f.note}</span></span>` : '';
                 const ingredientsText = formatIngredients(f.ingredients);
-                const isHidden = hiddenFoods.has(f.name);
-                const hideBtn = `<button type="button" class="hide-btn" data-name="${f.name}" title="${isHidden ? 'Unhide' : 'Hide'} ${f.name}" aria-label="${isHidden ? 'Unhide' : 'Hide'} ${f.name}">${isHidden ? '↺' : '✕'}</button>`;
+                const flagReason = flaggedFoods.get(f.name);
+                const isHidden = !!flagReason;
+                const flagLabel = isHidden
+                    ? `<span class="flag-label flag-${flagReason}">${FLAG_LABELS[flagReason]}</span>`
+                    : '';
                 return `
-                <tr class="food-row row-${f.fork} border-t border-stone-300${isHidden ? ' is-hidden' : ''}">
-                    <td class="font-semibold">${hideBtn}${f.name}</td>
+                <tr class="food-row row-${f.fork} border-t border-stone-300${isHidden ? ' is-hidden' : ''}" data-name="${f.name}">
+                    <td class="font-semibold">${f.name}${flagLabel}</td>
                     <td class="text-center"><span class="fork-label fork-${f.fork}">${FORK_LABELS[f.fork]}</span></td>
                     <td class="text-right">${f.hp}</td>
                     <td class="text-right">${f.st}</td>
