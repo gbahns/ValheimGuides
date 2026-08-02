@@ -317,7 +317,7 @@
             return s.replace(/[()]/g, '');
         }
 
-        // "Blueberries x1, Cooked deer meat x2" -> "1 Blueberry, 2 Cooked deer meat"
+        // "Blueberries x1, Cooked deer meat x2" -> "Blueberry, 2 Cooked deer meat"
         function formatIngredients(str) {
             if (!str) return '';
             return str.split(',').map(part => {
@@ -326,8 +326,10 @@
                 if (!m) return s;
                 let [, name, qty, rest] = m;
                 name = name.trim();
-                if (qty === '1' && /ies$/i.test(name)) name = name.replace(/ies$/i, 'y');
-                return rest ? `${qty} ${name} ${rest}` : `${qty} ${name}`;
+                const isOne = qty === '1';
+                if (isOne && /ies$/i.test(name)) name = name.replace(/ies$/i, 'y');
+                const labeled = isOne ? name : `${qty} ${name}`;
+                return rest ? `${labeled} ${rest}` : labeled;
             }).join(', ');
         }
 
