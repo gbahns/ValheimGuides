@@ -34,19 +34,12 @@
             background-color: #4A3F35;
             color: #FAF3E0;
         }
-        /* Fork colors mirror Valheim's HUD food-icon backgrounds */
-        .fork-pill {
-            display: inline-block;
-            padding: 0 0.45rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            border: 1px solid #4A3F35;
-        }
-        .fork-White  { background-color: #F5F5F0; color: #4A3F35; }
-        .fork-Red    { background-color: #C45A11; color: #FAF3E0; }
-        .fork-Yellow { background-color: #E0B040; color: #4A3F35; }
-        .fork-Blue   { background-color: #4F8FCB; color: #FAF3E0; }
+        /* Fork colors mirror Valheim's HUD food-icon colors */
+        .fork-label  { font-weight: 700; }
+        .fork-White  { color: #8a8073; }
+        .fork-Red    { color: #C45A11; }
+        .fork-Yellow { color: #A8790A; }
+        .fork-Blue   { color: #3572A5; }
         th.sortable { cursor: pointer; user-select: none; }
         th.sortable:hover { color: #C45A11; }
         th .sort-indicator { font-size: 0.75em; opacity: 0.6; margin-left: 0.25em; }
@@ -296,7 +289,7 @@
             tbody.innerHTML = rows.map(f => `
                 <tr class="food-row border-t border-stone-300">
                     <td class="font-semibold">${f.name}${f.note ? `<span class="food-note">↳ ${f.note}</span>` : ''}</td>
-                    <td class="text-center"><span class="fork-pill fork-${f.fork}">${f.fork}</span></td>
+                    <td class="text-center"><span class="fork-label fork-${f.fork}">${f.fork}</span></td>
                     <td class="text-right">${f.hp}</td>
                     <td class="text-right">${f.st}</td>
                     <td class="text-right">${f.ei || ''}</td>
