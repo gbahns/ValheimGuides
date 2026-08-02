@@ -71,6 +71,25 @@
         th .sort-indicator { font-size: 0.75em; opacity: 0.6; margin-left: 0.25em; }
         tr.food-row:hover { background-color: rgba(210, 180, 140, 0.25); }
         td, th { padding: 0.25rem 0.55rem; white-space: nowrap; }
+        /* Per-row hide/unhide, for foods that are unavailable/undesirable to the
+           player (e.g. too expensive in scarce ingredients) but shouldn't be
+           deleted from the underlying data. */
+        .hide-btn {
+            display: inline-block;
+            width: 1.1rem;
+            margin-right: 0.3rem;
+            text-align: center;
+            color: #B0A18C;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .hide-btn:hover { color: #C0392B; background: rgba(192,57,43,0.12); }
+        tr.is-hidden { opacity: 0.55; }
+        tr.is-hidden td.font-semibold { text-decoration: line-through; }
+        tr.is-hidden .hide-btn { color: #6B8F63; }
+        tr.is-hidden .hide-btn:hover { color: #2E7D32; background: rgba(46,125,50,0.14); }
         #filterBar {
             flex: 0 0 auto;
         }
@@ -185,6 +204,7 @@
                 <div id="biomeFilters" class="flex flex-wrap gap-1"></div>
                 <div id="forkFilters" class="flex flex-wrap gap-1"></div>
                 <div id="feastFilters" class="flex flex-wrap gap-1"></div>
+                <div id="hiddenFilters" class="flex flex-wrap gap-1"></div>
                 <span id="resultCount" class="text-stone-700 text-sm"></span>
             </div>
         </section>
@@ -340,6 +360,7 @@
                 biomes: [...activeBiomes],
                 forks: [...activeForks],
                 feastState,
+                hidden: [...hiddenFoods],
                 sortKey,
                 sortDir,
             }));
@@ -352,6 +373,12 @@
         const activeForks  = new Set(saved.forks || []);
         // Feast filter is a single tri-state button that cycles through FEAST_STATES on click.
         let feastState  = FEAST_STATES.includes(saved.feastState) ? saved.feastState : "Include Feasts";
+        // Foods the player has flagged as unavailable/undesirable (e.g. too expensive
+        // in scarce ingredients). Keyed by name — hidden from the list by default;
+        // the "Show Hidden" toggle reveals them (dimmed, with an unhide button) so
+        // the choice is never permanent/invisible.
+        const hiddenFoods = new Set(saved.hidden || []);
+        let showHidden = false;
         let sortKey     = saved.sortKey ?? "score";
         let sortDir     = saved.sortDir ?? -1; // -1 desc, 1 asc
 
@@ -414,6 +441,16 @@
         });
         feastBtn.style.minWidth = feastBtnMaxWidth + 'px';
 
+        const hiddenRow = document.getElementById('hiddenFilters');
+        const hiddenBtn = document.createElement('button');
+        hiddenBtn.className = 'filter-btn px-3 py-1 rounded';
+        hiddenBtn.onclick = () => {
+            showHidden = !showHidden;
+            refreshFilters();
+            render();
+        };
+        hiddenRow.appendChild(hiddenBtn);
+
         // Fix the result-count width too, so its changing digit count doesn't
         // reflow/shift the filter buttons in this space-between row. The widest
         // it can ever render is "Showing <total> of <total> foods" (filtered
@@ -435,10 +472,29 @@
                 b.classList.toggle('active', isActive);
             });
             feastBtn.textContent = feastState;
+            hiddenBtn.textContent = hiddenFoods.size === 0
+                ? 'No Hidden Foods'
+                : `${showHidden ? 'Showing' : 'Show'} Hidden (${hiddenFoods.size})`;
+            hiddenBtn.classList.toggle('active', showHidden);
+            hiddenBtn.disabled = hiddenFoods.size === 0;
+            hiddenBtn.style.opacity = hiddenFoods.size === 0 ? '0.5' : '1';
+            hiddenBtn.style.cursor = hiddenFoods.size === 0 ? 'default' : 'pointer';
         }
 
         // Initial highlight: "All" is the default active state.
         refreshFilters();
+
+        // ── Hide/unhide (event-delegated since rows are rebuilt on every render) ──
+        document.getElementById('foodTbody').addEventListener('click', e => {
+            const btn = e.target.closest('.hide-btn');
+            if (!btn) return;
+            const name = btn.dataset.name;
+            if (hiddenFoods.has(name)) hiddenFoods.delete(name);
+            else hiddenFoods.add(name);
+            refreshFilters();
+            saveState();
+            render();
+        });
 
         // ── Sortable headers ─────────────────────────────────────────────────
         document.querySelectorAll('th.sortable').forEach(th => {
@@ -482,7 +538,8 @@
             let rows = FOODS.filter(f =>
                 (activeBiomes.size === 0 || activeBiomes.has(f.tier)) &&
                 (activeForks.size === 0 || activeForks.has(f.fork)) &&
-                (feastState === "Include Feasts" || (feastState === "Only Feasts") === isFeast(f))
+                (feastState === "Include Feasts" || (feastState === "Only Feasts") === isFeast(f)) &&
+                (showHidden || !hiddenFoods.has(f.name))
             );
 
             rows.sort((a, b) => {
@@ -501,9 +558,11 @@
             tbody.innerHTML = rows.map(f => {
                 const noteHtml = f.note ? `<span class="note-trigger" tabindex="0" aria-label="${f.note}"><span class="note-icon" aria-hidden="true">ⓘ</span><span class="note-tip" aria-hidden="true">${f.note}</span></span>` : '';
                 const ingredientsText = formatIngredients(f.ingredients);
+                const isHidden = hiddenFoods.has(f.name);
+                const hideBtn = `<button type="button" class="hide-btn" data-name="${f.name}" title="${isHidden ? 'Unhide' : 'Hide'} ${f.name}" aria-label="${isHidden ? 'Unhide' : 'Hide'} ${f.name}">${isHidden ? '↺' : '✕'}</button>`;
                 return `
-                <tr class="food-row row-${f.fork} border-t border-stone-300">
-                    <td class="font-semibold">${f.name}</td>
+                <tr class="food-row row-${f.fork} border-t border-stone-300${isHidden ? ' is-hidden' : ''}">
+                    <td class="font-semibold">${hideBtn}${f.name}</td>
                     <td class="text-center"><span class="fork-label fork-${f.fork}">${FORK_LABELS[f.fork]}</span></td>
                     <td class="text-right">${f.hp}</td>
                     <td class="text-right">${f.st}</td>
