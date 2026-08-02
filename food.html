@@ -205,6 +205,7 @@
             { tier:7, label:"7 Ashlands"   },
         ];
         const FORKS = ["All", "White", "Red", "Yellow", "Blue"];
+        const FORK_LABELS = { White: "Balanced", Red: "Health", Yellow: "Stamina", Blue: "Eitr" };
 
         // Biome filter is multi-select: an empty Set means "show all".
         // Clicking "All" clears the Set; clicking an individual tier toggles its membership.
@@ -237,7 +238,7 @@
         FORKS.forEach(f => {
             const btn = document.createElement('button');
             btn.className = 'filter-btn px-3 py-1 rounded text-sm';
-            btn.textContent = f;
+            btn.textContent = f === "All" ? f : FORK_LABELS[f];
             if (f === activeFork) btn.classList.add('active');
             btn.onclick = () => { activeFork = f; refreshFilters(); render(); };
             forkRow.appendChild(btn);
@@ -289,7 +290,7 @@
             tbody.innerHTML = rows.map(f => `
                 <tr class="food-row border-t border-stone-300">
                     <td class="font-semibold">${f.name}${f.note ? `<span class="food-note">↳ ${f.note}</span>` : ''}</td>
-                    <td class="text-center"><span class="fork-label fork-${f.fork}">${f.fork}</span></td>
+                    <td class="text-center"><span class="fork-label fork-${f.fork}">${FORK_LABELS[f.fork]}</span></td>
                     <td class="text-right">${f.hp}</td>
                     <td class="text-right">${f.st}</td>
                     <td class="text-right">${f.ei || ''}</td>
