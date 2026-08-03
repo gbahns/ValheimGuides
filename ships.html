@@ -211,8 +211,23 @@
             { name: "Fast Ship Skuldelev", category: "Speed", health: 1500, mass: 1000, sailForce: 0.9, rudderSpeed: 1, cargoSlots: 12, recipe: "Cloth Ship: 4; Caulked Wood: 40; Iron Nails: 100; Ship Rope: 2" }
         ];
 
-        let currentFilter = 'All';
-        let currentSort = { key: 'name', asc: true };
+        // ── Persisted filter/sort/flag state ──────────────────────────────────
+        const STORAGE_KEY = 'vkb-ships-filters';
+        function loadState() {
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+        }
+        function saveState() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                category: currentFilter,
+                tiers: [...activeTiers],
+                sort: currentSort,
+                flagged: [...flaggedShips],
+            }));
+        }
+        const savedState = loadState();
+
+        let currentFilter = savedState.category ?? 'All';
+        let currentSort = savedState.sort ?? { key: 'name', asc: true };
 
         // Progression tier: the highest-tier vanilla material a ship's recipe
         // requires. Not a strict biome mapping — Leather Scraps and Deer Hide are
@@ -251,17 +266,9 @@
                 return `${qty} ${name}`;
             }).join(', ');
         }
-        const activeTiers = new Set(); // empty = show all
+        const activeTiers = new Set(savedState.tiers || []); // empty = show all
 
         const FLAG_LABELS = { unavailable: "Not Available", uninterested: "Not Interested" };
-        const STORAGE_KEY = 'vkb-ships-filters';
-        function loadState() {
-            try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
-        }
-        function saveState() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify({ flagged: [...flaggedShips] }));
-        }
-        const savedState = loadState();
         // Ships the player has flagged (via right-click / long-press context menu)
         // as unavailable or uninteresting. Keyed by name -> reason ("unavailable" |
         // "uninterested"). Removed from the list by default; the "Show Flagged"
@@ -323,6 +330,7 @@
                     activeTiers.add(t.tier);
                 }
                 refreshTierButtons();
+                saveState();
                 renderShips();
             });
             tierRow.appendChild(btn);
@@ -334,6 +342,7 @@
                 btn.classList.toggle('active', isActive);
             });
         }
+        refreshTierButtons(); // sync initial state with anything restored from storage
 
         const hiddenRow = document.getElementById('hidden-filters');
         const hiddenBtn = document.createElement('button');
@@ -481,10 +490,12 @@
         };
 
         filterButtons.forEach(button => {
+            button.classList.toggle('active', button.dataset.category === currentFilter);
             button.addEventListener('click', () => {
                 filterButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
                 currentFilter = button.dataset.category;
+                saveState();
                 renderShips();
             });
         });
@@ -498,6 +509,7 @@
                     currentSort.key = sortKey;
                     currentSort.asc = (sortKey === 'name' || sortKey === 'category');
                 }
+                saveState();
                 renderShips();
             });
         });

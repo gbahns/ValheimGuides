@@ -35,6 +35,11 @@
 //                                     // or {"selector": "...", "button": "right"}
 //                                     // for a right-click (context menus, etc.) —
 //                                     // see the contextMenu caveat above
+//   "reload": true,                   // reload the page after clicks[]/contextMenu,
+//                                     // before capturing — for testing that state
+//                                     // (localStorage, etc.) actually survives a
+//                                     // real page load, not just that it was
+//                                     // written correctly before one
 //   "prints": ["<selector>", ...],    // print each element's textContent
 //   "rects": ["<selector>", ...],     // print each element's box geometry as JSON
 //   "evals": ["<js expression>", ...],// evaluate JS in the page, print the result
@@ -66,6 +71,7 @@ function loadArgs() {
         focus: raw.focus || null,
         contextMenu: raw.contextMenu || null,
         clicks: raw.clicks || [],
+        reload: !!raw.reload,
         prints: raw.prints || [],
         rects: raw.rects || [],
         evals: raw.evals || [],
@@ -111,6 +117,10 @@ function loadArgs() {
             await page.click(click.selector, { button: click.button || 'left' });
         }
         await page.waitForTimeout(100);
+    }
+    if (args.reload) {
+        await page.reload();
+        await page.waitForTimeout(args.wait);
     }
     if (args.hover) {
         await page.hover(args.hover);
