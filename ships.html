@@ -68,6 +68,49 @@
             border-bottom: 1px dotted #4A3F35;
             cursor: help;
         }
+        /* Right-click (or long-press) a row to flag it Not Available / Not
+           Interested — for ships that are unavailable/undesirable to the player
+           but shouldn't be deleted from the data. */
+        tr.is-hidden { opacity: 0.55; }
+        tr.is-hidden td.font-bold { text-decoration: line-through; }
+        .flag-label {
+            display: inline-block;
+            margin-left: 0.4rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 0.05rem 0.4rem;
+            border-radius: 9999px;
+            vertical-align: middle;
+        }
+        .flag-label.flag-unavailable  { background: rgba(192,57,43,0.16); color: #C0392B; }
+        .flag-label.flag-uninterested { background: rgba(107,93,79,0.18); color: #6B5D4F; }
+        /* Custom context menu (native one can't be styled/scoped to a row) */
+        #rowMenu {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            background: #2E2620;
+            color: #FAF3E0;
+            border-radius: 0.4rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+            padding: 0.3rem;
+            font-size: 0.85rem;
+            min-width: 180px;
+        }
+        #rowMenu.open { display: block; }
+        #rowMenu button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.4rem 0.6rem;
+            border-radius: 0.3rem;
+            color: inherit;
+            background: none;
+            cursor: pointer;
+        }
+        #rowMenu button:hover { background: rgba(255,255,255,0.12); }
+        #rowMenu .menu-divider { border-top: 1px solid rgba(255,255,255,0.15); margin: 0.25rem 0; }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -88,6 +131,7 @@
                 <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="War">War</button>
             </div>
             <div id="tier-filters" class="flex flex-wrap gap-2 justify-center"></div>
+            <div id="hidden-filters" class="flex flex-wrap gap-2 justify-center"></div>
         </div>
 
         <main class="card p-2 rounded-lg shadow-md overflow-x-auto">
@@ -141,6 +185,8 @@
             </div>
         </section>
     </div>
+
+    <div id="rowMenu" role="menu"></div>
 
     <script>
         const shipData = [
@@ -206,6 +252,22 @@
             }).join(', ');
         }
         const activeTiers = new Set(); // empty = show all
+
+        const FLAG_LABELS = { unavailable: "Not Available", uninterested: "Not Interested" };
+        const STORAGE_KEY = 'vkb-ships-filters';
+        function loadState() {
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+        }
+        function saveState() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ flagged: [...flaggedShips] }));
+        }
+        const savedState = loadState();
+        // Ships the player has flagged (via right-click / long-press context menu)
+        // as unavailable or uninteresting. Keyed by name -> reason ("unavailable" |
+        // "uninterested"). Removed from the list by default; the "Show Flagged"
+        // toggle reveals them (dimmed, struck through, labeled with their reason).
+        const flaggedShips = new Map(savedState.flagged || []);
+        let showHidden = false;
 
         const processShipData = (data) => {
             const shipsWithSails = data.filter(s => s.sailForce > 0);
@@ -273,12 +335,107 @@
             });
         }
 
+        const hiddenRow = document.getElementById('hidden-filters');
+        const hiddenBtn = document.createElement('button');
+        hiddenBtn.className = 'filter-btn px-4 py-2 rounded-md text-sm font-bold';
+        hiddenBtn.addEventListener('click', () => {
+            showHidden = !showHidden;
+            refreshHiddenButton();
+            renderShips();
+        });
+        hiddenRow.appendChild(hiddenBtn);
+        // Fix width to the longest realistic label so it doesn't resize as the count changes.
+        let hiddenBtnMaxWidth = 0;
+        ['No Flagged Ships', `Showing Flagged (${shipData.length})`].forEach(label => {
+            hiddenBtn.textContent = label;
+            hiddenBtnMaxWidth = Math.max(hiddenBtnMaxWidth, hiddenBtn.offsetWidth);
+        });
+        hiddenBtn.style.minWidth = hiddenBtnMaxWidth + 'px';
+        function refreshHiddenButton() {
+            hiddenBtn.textContent = flaggedShips.size === 0
+                ? 'No Flagged Ships'
+                : `${showHidden ? 'Showing' : 'Show'} Flagged (${flaggedShips.size})`;
+            hiddenBtn.classList.toggle('active', showHidden);
+            hiddenBtn.disabled = flaggedShips.size === 0;
+            hiddenBtn.style.opacity = flaggedShips.size === 0 ? '0.5' : '1';
+            hiddenBtn.style.cursor = flaggedShips.size === 0 ? 'default' : 'pointer';
+        }
+        refreshHiddenButton();
+
+        // ── Right-click / long-press context menu to flag a row ──────────────────
+        const rowMenu = document.getElementById('rowMenu');
+        let menuTargetName = null;
+
+        function closeRowMenu() {
+            rowMenu.classList.remove('open');
+            menuTargetName = null;
+        }
+
+        function openRowMenu(name, x, y) {
+            menuTargetName = name;
+            const current = flaggedShips.get(name);
+            const items = [
+                `<button type="button" role="menuitem" data-action="unavailable">${current === 'unavailable' ? '✓ ' : ''}Not Available</button>`,
+                `<button type="button" role="menuitem" data-action="uninterested">${current === 'uninterested' ? '✓ ' : ''}Not Interested</button>`,
+            ];
+            if (current) {
+                items.push('<div class="menu-divider"></div>');
+                items.push('<button type="button" role="menuitem" data-action="clear">Clear Flag</button>');
+            }
+            rowMenu.innerHTML = items.join('');
+            rowMenu.classList.add('open');
+            const menuRect = rowMenu.getBoundingClientRect();
+            const maxX = window.innerWidth - menuRect.width - 8;
+            const maxY = window.innerHeight - menuRect.height - 8;
+            rowMenu.style.left = Math.max(8, Math.min(x, maxX)) + 'px';
+            rowMenu.style.top = Math.max(8, Math.min(y, maxY)) + 'px';
+        }
+
+        rowMenu.addEventListener('click', e => {
+            const btn = e.target.closest('button[data-action]');
+            if (!btn || !menuTargetName) return;
+            if (btn.dataset.action === 'clear') flaggedShips.delete(menuTargetName);
+            else flaggedShips.set(menuTargetName, btn.dataset.action);
+            closeRowMenu();
+            refreshHiddenButton();
+            saveState();
+            renderShips();
+        });
+        document.addEventListener('click', e => {
+            if (rowMenu.classList.contains('open') && !rowMenu.contains(e.target)) closeRowMenu();
+        });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRowMenu(); });
+        window.addEventListener('scroll', closeRowMenu);
+        window.addEventListener('resize', closeRowMenu);
+
+        shipTableBody.addEventListener('contextmenu', e => {
+            const tr = e.target.closest('tr[data-name]');
+            if (!tr) return;
+            e.preventDefault();
+            openRowMenu(tr.dataset.name, e.clientX, e.clientY);
+        });
+
+        // Long-press (touch devices have no right-click)
+        let longPressTimer = null;
+        shipTableBody.addEventListener('touchstart', e => {
+            const tr = e.target.closest('tr[data-name]');
+            if (!tr) return;
+            const touch = e.touches[0];
+            longPressTimer = setTimeout(() => {
+                openRowMenu(tr.dataset.name, touch.clientX, touch.clientY);
+                longPressTimer = null;
+            }, 500);
+        }, { passive: true });
+        shipTableBody.addEventListener('touchend', () => { if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; } });
+        shipTableBody.addEventListener('touchmove', () => { if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; } });
+
         const renderShips = () => {
             shipTableBody.innerHTML = '';
 
             const filteredData = processedShipData.filter(ship =>
                 (currentFilter === 'All' || ship.category === currentFilter) &&
-                (activeTiers.size === 0 || activeTiers.has(ship.tier))
+                (activeTiers.size === 0 || activeTiers.has(ship.tier)) &&
+                (showHidden || !flaggedShips.has(ship.name))
             );
 
             const sortedData = filteredData.sort((a, b) => {
@@ -297,9 +454,15 @@
 
             sortedData.forEach(ship => {
                 const row = document.createElement('tr');
-                row.className = 'border-b border-stone-300/50 hover:bg-amber-50/50 transition-colors';
+                const flagReason = flaggedShips.get(ship.name);
+                const isHidden = !!flagReason;
+                const flagLabel = isHidden
+                    ? `<span class="flag-label flag-${flagReason}">${FLAG_LABELS[flagReason]}</span>`
+                    : '';
+                row.className = 'border-b border-stone-300/50 hover:bg-amber-50/50 transition-colors' + (isHidden ? ' is-hidden' : '');
+                row.dataset.name = ship.name;
                 row.innerHTML = `
-                    <td class="px-1 py-2 font-bold">${ship.name}</td>
+                    <td class="px-1 py-2 font-bold">${ship.name}${flagLabel}</td>
                     <td class="px-1 py-2 text-center">${ship.category}</td>
                     <td class="px-1 py-2 text-center">${ship.tierLabel}</td>
                     <td class="px-1 py-2 text-center">${ship.health}</td>
