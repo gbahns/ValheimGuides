@@ -50,6 +50,13 @@
             border-radius: 0.5rem;
             border: 1px solid #D2B48C;
         }
+        /* Performance chart carries a name+accel label per bubble, so it needs
+           more room to breathe than the cargo bar chart. */
+        .chart-container-performance {
+            max-width: 100%;
+            height: 650px;
+            max-height: 70vh;
+        }
         table {
             font-family: 'Inter', sans-serif;
             font-size: 0.85rem;
@@ -158,13 +165,11 @@
 
         <section class="mt-12">
             <h2 class="text-3xl md:text-4xl valheim-title text-center mb-8">Fleet Comparison</h2>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="chart-container">
-                    <canvas id="cargoChart"></canvas>
-                </div>
-                <div class="chart-container">
-                    <canvas id="performanceChart"></canvas>
-                </div>
+            <div class="chart-container">
+                <canvas id="cargoChart"></canvas>
+            </div>
+            <div class="chart-container chart-container-performance mt-8">
+                <canvas id="performanceChart"></canvas>
             </div>
              <div class="text-center text-sm text-gray-500 mt-4">
                 <p>The charts above provide a high-level comparison of the fleet. The Cargo Capacity chart helps identify the best haulers, while the Performance chart shows the trade-off between a ship's mass and its speed potential under sail.</p>
@@ -564,7 +569,8 @@
                 x: s.mass,
                 y: s.sailForce,
                 r: Math.max(s.cargoSlots / 8, 5),
-                label: s.name
+                label: s.name,
+                accel: s.relativeAccel
             }));
 
             // Mass axis is reversed (see scales.x below) so light ships sit on the
@@ -588,6 +594,25 @@
                 }
             };
 
+            const performancePointLabels = {
+                id: 'performancePointLabels',
+                afterDatasetsDraw(chart) {
+                    const { ctx } = chart;
+                    const meta = chart.getDatasetMeta(0);
+                    ctx.save();
+                    ctx.font = "10px 'Inter', sans-serif";
+                    ctx.fillStyle = '#4A3F35';
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'middle';
+                    meta.data.forEach((point, i) => {
+                        const raw = performanceData[i];
+                        const x = point.x + point.options.radius + 4;
+                        ctx.fillText(`${raw.label} (${raw.accel.toFixed(1)})`, x, point.y);
+                    });
+                    ctx.restore();
+                }
+            };
+
             const ctxPerformance = document.getElementById('performanceChart').getContext('2d');
             new Chart(ctxPerformance, {
                 type: 'bubble',
@@ -599,7 +624,7 @@
                         borderColor: '#4A3F35'
                     }]
                 },
-                plugins: [performanceCornerLabels],
+                plugins: [performanceCornerLabels, performancePointLabels],
                 options: {
                     maintainAspectRatio: false,
                     plugins: {
