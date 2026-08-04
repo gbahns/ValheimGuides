@@ -123,7 +123,6 @@
         <div class="bg-white/50 backdrop-blur-sm p-4 rounded-lg shadow-md mb-8 sticky top-4 z-10 space-y-3">
             <div id="category-filters" class="flex flex-wrap gap-2 justify-center">
                 <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold active" data-category="All">All</button>
-                <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="Vanilla">Vanilla</button>
                 <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="Cargo Ships">Cargo Ships</button>
                 <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="Small Boats">Small Boats</button>
                 <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="War Ships">War Ships</button>
@@ -189,10 +188,10 @@
 
     <script>
         const shipData = [
-            { name: "Raft", category: "Vanilla", health: 300, mass: 400, sailForce: 0.2, rudderSpeed: 1, cargoSlots: 3, recipe: "Wood: 20; Leather Scraps: 6; Resin: 6" },
-            { name: "Karve", category: "Vanilla", health: 500, mass: 600, sailForce: 0.5, rudderSpeed: 1, cargoSlots: 4, recipe: "Fine Wood: 30; Deer Hide: 10; Resin: 20; Bronze Nails: 80" },
-            { name: "Longship", category: "Vanilla", health: 1000, mass: 1000, sailForce: 0.7, rudderSpeed: 1, cargoSlots: 18, recipe: "Iron Nails: 100; Deer Hide: 10; Fine Wood: 40; Ancient Bark: 40" },
-            { name: "Drakkar", category: "Vanilla", health: 3000, mass: 1500, sailForce: 0.8, rudderSpeed: 1, cargoSlots: 24, recipe: "Iron Nails: 100; Ceramic Plate: 30; Fine Wood: 50; Yggdrasil Wood: 25" },
+            { name: "Raft", category: "Small Boats", health: 300, mass: 400, sailForce: 0.2, rudderSpeed: 1, cargoSlots: 3, recipe: "Wood: 20; Leather Scraps: 6; Resin: 6" },
+            { name: "Karve", category: "Small Boats", health: 500, mass: 600, sailForce: 0.5, rudderSpeed: 1, cargoSlots: 4, recipe: "Fine Wood: 30; Deer Hide: 10; Resin: 20; Bronze Nails: 80" },
+            { name: "Longship", category: "Special Ships", health: 1000, mass: 1000, sailForce: 0.7, rudderSpeed: 1, cargoSlots: 18, recipe: "Iron Nails: 100; Deer Hide: 10; Fine Wood: 40; Ancient Bark: 40" },
+            { name: "Drakkar", category: "Special Ships", health: 3000, mass: 1500, sailForce: 0.8, rudderSpeed: 1, cargoSlots: 24, recipe: "Iron Nails: 100; Ceramic Plate: 30; Fine Wood: 50; Yggdrasil Wood: 25" },
             { name: "Rowing Canoe", category: "Small Boats", health: 400, mass: 400, sailForce: 0, rudderSpeed: 1, cargoSlots: 4, recipe: "Resin: 8; Wood: 20" },
             { name: "Double Rowing Canoe", category: "Small Boats", health: 500, mass: 400, sailForce: 0, rudderSpeed: 1, cargoSlots: 4, recipe: "Resin: 10; Wood: 25" },
             { name: "Little Boat", category: "Small Boats", health: 800, mass: 500, sailForce: 0.3, rudderSpeed: 1, cargoSlots: 4, recipe: "Leather Scraps: 8; Wood: 40" },
@@ -227,7 +226,7 @@
 
         // Fall back to "All" if storage has a category from before the Cargo/Small
         // Boats/War/Special Ships rename (e.g. the old "Speed"/"Fishing" labels).
-        const VALID_CATEGORIES = ['All', 'Vanilla', 'Cargo Ships', 'Small Boats', 'War Ships', 'Special Ships'];
+        const VALID_CATEGORIES = ['All', 'Cargo Ships', 'Small Boats', 'War Ships', 'Special Ships'];
         let currentFilter = VALID_CATEGORIES.includes(savedState.category) ? savedState.category : 'All';
         let currentSort = savedState.sort ?? { key: 'name', asc: true };
 
