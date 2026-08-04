@@ -50,9 +50,9 @@
             border-radius: 0.5rem;
             border: 1px solid #D2B48C;
         }
-        /* Acceleration chart carries a name+accel label per bubble, so it needs
-           more room to breathe than the cargo bar chart. */
-        .chart-container-performance {
+        /* The Acceleration and Performance charts carry a name+number label per
+           bubble, so they need more room to breathe than the cargo bar chart. */
+        .chart-container-wide {
             max-width: 100%;
             height: 650px;
             max-height: 70vh;
@@ -168,11 +168,14 @@
             <div class="chart-container">
                 <canvas id="cargoChart"></canvas>
             </div>
-            <div class="chart-container chart-container-performance mt-8">
+            <div class="chart-container chart-container-wide mt-8">
+                <canvas id="accelerationChart"></canvas>
+            </div>
+            <div class="chart-container chart-container-wide mt-8">
                 <canvas id="performanceChart"></canvas>
             </div>
              <div class="text-center text-sm text-gray-500 mt-4">
-                <p>The charts above provide a high-level comparison of the fleet. The Cargo Capacity chart helps identify the best haulers, while the Acceleration chart shows the trade-off between a heavier hull (more HP, less prone to capsizing) and how quickly a ship gets up to speed.</p>
+                <p>The charts above provide a high-level comparison of the fleet. The Cargo Capacity chart helps identify the best haulers, the Acceleration chart shows the trade-off between a heavier hull (more HP, less prone to capsizing) and how quickly a ship gets up to speed, and the Performance chart blends Top Speed and Acceleration together (bubble size shows Agility) for a fuller picture of how a ship handles.</p>
             </div>
         </section>
         
@@ -565,7 +568,7 @@
                 }
             });
 
-            const performanceData = processedShipData.map(s => ({
+            const accelerationData = processedShipData.map(s => ({
                 x: s.mass,
                 y: s.sailForce,
                 r: Math.max(s.cargoSlots / 8, 5),
@@ -576,8 +579,8 @@
             // Mass axis is reversed (see scales.x below) so light ships sit on the
             // right, keeping the low-mass/high-sail-force "best" combo in the
             // conventional top-right corner and the opposite "worst" combo bottom-left.
-            const performanceCornerLabels = {
-                id: 'performanceCornerLabels',
+            const accelerationCornerLabels = {
+                id: 'accelerationCornerLabels',
                 afterDraw(chart) {
                     const { ctx, chartArea: { left, right, top, bottom } } = chart;
                     ctx.save();
@@ -594,8 +597,8 @@
                 }
             };
 
-            const performancePointLabels = {
-                id: 'performancePointLabels',
+            const accelerationPointLabels = {
+                id: 'accelerationPointLabels',
                 afterDatasetsDraw(chart) {
                     const { ctx } = chart;
                     const meta = chart.getDatasetMeta(0);
@@ -615,7 +618,7 @@
                     meta.data.forEach((point, i) => {
                         const key = `${Math.round(point.x)},${Math.round(point.y)}`;
                         if (!groups.has(key)) groups.set(key, []);
-                        groups.get(key).push({ point, raw: performanceData[i] });
+                        groups.get(key).push({ point, raw: accelerationData[i] });
                     });
 
                     groups.forEach(entries => {
@@ -639,18 +642,18 @@
                 }
             };
 
-            const ctxPerformance = document.getElementById('performanceChart').getContext('2d');
-            new Chart(ctxPerformance, {
+            const ctxAcceleration = document.getElementById('accelerationChart').getContext('2d');
+            new Chart(ctxAcceleration, {
                 type: 'bubble',
                 data: {
                     datasets: [{
                         label: 'Ships',
-                        data: performanceData,
+                        data: accelerationData,
                         backgroundColor: 'rgba(139, 69, 19, 0.6)',
                         borderColor: '#4A3F35'
                     }]
                 },
-                plugins: [performanceCornerLabels, performancePointLabels],
+                plugins: [accelerationCornerLabels, accelerationPointLabels],
                 options: {
                     maintainAspectRatio: false,
                     plugins: {
@@ -672,6 +675,122 @@
                         },
                         y: {
                             title: { display: true, text: 'Sail Force Factor' },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Performance chart: Top Speed vs. Acceleration are independently
+            // computed stats (not two views of the same ratio, like the
+            // Acceleration chart's mass/sail-force pair), so this plots a real
+            // trade-off. Agility rides along as bubble size -- an "honorable
+            // mention" third dimension rather than a full axis.
+            const performanceData = processedShipData.map(s => ({
+                x: s.topSpeed,
+                y: s.relativeAccel,
+                r: Math.min(Math.max(s.agility * 1.1 + 4, 5), 22),
+                label: s.name,
+                agility: s.agility
+            }));
+
+            const performanceCornerLabels = {
+                id: 'performanceCornerLabels',
+                afterDraw(chart) {
+                    const { ctx, chartArea: { left, right, top, bottom } } = chart;
+                    ctx.save();
+                    ctx.font = "bold 12px 'Inter', sans-serif";
+                    ctx.fillStyle = 'rgba(46, 125, 50, 0.8)';
+                    ctx.textAlign = 'right';
+                    ctx.textBaseline = 'top';
+                    ctx.fillText('▲ Best', right - 8, top + 8);
+                    ctx.fillStyle = 'rgba(192, 57, 43, 0.8)';
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'bottom';
+                    ctx.fillText('Worst ▼', left + 8, bottom - 8);
+                    ctx.restore();
+                }
+            };
+
+            const performancePointLabels = {
+                id: 'performancePointLabels',
+                afterDatasetsDraw(chart) {
+                    const { ctx } = chart;
+                    const meta = chart.getDatasetMeta(0);
+                    const numberFont = "bold 15px 'Inter', sans-serif";
+                    const nameFont = "13px 'Inter', sans-serif";
+                    const lineHeight = 19;
+                    ctx.save();
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'middle';
+
+                    // Ships with identical top speed/acceleration land on the exact
+                    // same pixel, so group by rounded position and stack their
+                    // labels vertically instead of drawing them on top of each
+                    // other. Agility can still differ within a group (it's not
+                    // part of the position), so it's shown per-ship, not deduped.
+                    const groups = new Map();
+                    meta.data.forEach((point, i) => {
+                        const key = `${Math.round(point.x)},${Math.round(point.y)}`;
+                        if (!groups.has(key)) groups.set(key, []);
+                        groups.get(key).push({ point, raw: performanceData[i] });
+                    });
+
+                    groups.forEach(entries => {
+                        const { point } = entries[0];
+                        const maxRadius = Math.max(...entries.map(e => e.point.options.radius));
+                        const x = point.x + maxRadius + 5;
+                        const lineHeightTotal = entries.length * lineHeight;
+                        const startY = point.y - (lineHeightTotal - lineHeight) / 2;
+                        entries.forEach((entry, i) => {
+                            const y = startY + i * lineHeight;
+                            const agilityText = entry.raw.agility.toFixed(1);
+                            ctx.font = numberFont;
+                            ctx.fillStyle = '#4A3F35';
+                            ctx.fillText(agilityText, x, y);
+                            const numberWidth = ctx.measureText(agilityText).width;
+                            ctx.font = nameFont;
+                            ctx.fillStyle = '#8B7355';
+                            ctx.fillText(entry.raw.label, x + numberWidth + 6, y);
+                        });
+                    });
+                    ctx.restore();
+                }
+            };
+
+            const ctxPerformance = document.getElementById('performanceChart').getContext('2d');
+            new Chart(ctxPerformance, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Ships',
+                        data: performanceData,
+                        backgroundColor: 'rgba(74, 111, 165, 0.55)',
+                        borderColor: '#2E4A6B'
+                    }]
+                },
+                plugins: [performanceCornerLabels, performancePointLabels],
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { display: true, text: 'Performance (Top Speed vs. Acceleration, size = Agility)', font: { size: 18, family: "'IM Fell English', serif" } },
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const dataPoint = context.raw;
+                                    return `${dataPoint.label}: Top Speed ${dataPoint.x.toFixed(1)}, Acceleration ${dataPoint.y.toFixed(1)}, Agility ${dataPoint.agility.toFixed(1)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Top Speed (m/s)' },
+                            beginAtZero: true
+                        },
+                        y: {
+                            title: { display: true, text: 'Acceleration' },
                             beginAtZero: true
                         }
                     }
