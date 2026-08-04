@@ -123,13 +123,13 @@
         <div class="bg-white/50 backdrop-blur-sm p-4 rounded-lg shadow-md mb-8 sticky top-4 z-10 flex flex-wrap gap-3 items-center justify-center">
             <div id="category-filters" class="flex flex-wrap gap-2 justify-center">
                 <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold active" data-category="All">All</button>
-                <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="Cargo Ships">Cargo Ships</button>
                 <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="Small Boats">Small Boats</button>
-                <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="War Ships">War Ships</button>
                 <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="Special Ships">Special Ships</button>
+                <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="Cargo Ships">Cargo Ships</button>
+                <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="War Ships">War Ships</button>
             </div>
-            <div id="tier-filters" class="flex flex-wrap gap-2 justify-center"></div>
-            <div id="hidden-filters" class="flex flex-wrap gap-2 justify-center"></div>
+            <div id="tier-filters" class="flex flex-wrap gap-2 justify-center ml-3"></div>
+            <div id="hidden-filters" class="flex flex-wrap gap-2 justify-center ml-3"></div>
         </div>
 
         <main class="card p-2 rounded-lg shadow-md overflow-x-auto">
@@ -466,7 +466,7 @@
                 const row = document.createElement('tr');
                 const flagReason = flaggedShips.get(ship.name);
                 const isHidden = !!flagReason;
-                const flagLabel = isHidden
+                const flagLabel = (isHidden && flagReason !== 'uninterested')
                     ? `<span class="flag-label flag-${flagReason}">${FLAG_LABELS[flagReason]}</span>`
                     : '';
                 row.className = 'border-b border-stone-300/50 hover:bg-amber-50/50 transition-colors' + (isHidden ? ' is-hidden' : '');
