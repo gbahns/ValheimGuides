@@ -600,8 +600,8 @@
                     const { ctx } = chart;
                     const meta = chart.getDatasetMeta(0);
                     const accelFont = "bold 15px 'Inter', sans-serif";
-                    const nameFont = "11px 'Inter', sans-serif";
-                    const lineHeight = 18;
+                    const nameFont = "13px 'Inter', sans-serif";
+                    const lineHeight = 19;
                     ctx.save();
                     ctx.textAlign = 'left';
                     ctx.textBaseline = 'middle';
@@ -609,6 +609,8 @@
                     // Ships with identical mass/sailForce land on the exact same
                     // pixel, so group by rounded position and stack their labels
                     // vertically instead of drawing them on top of each other.
+                    // Same position also means identical acceleration, so it's
+                    // drawn once per group instead of repeating per ship.
                     const groups = new Map();
                     meta.data.forEach((point, i) => {
                         const key = `${Math.round(point.x)},${Math.round(point.y)}`;
@@ -620,17 +622,17 @@
                         const { point } = entries[0];
                         const maxRadius = Math.max(...entries.map(e => e.point.options.radius));
                         const x = point.x + maxRadius + 5;
+                        const accelText = entries[0].raw.accel.toFixed(1);
+                        ctx.font = accelFont;
+                        ctx.fillStyle = '#4A3F35';
+                        ctx.fillText(accelText, x, point.y);
+                        const accelWidth = ctx.measureText(accelText).width;
+                        const nameX = x + accelWidth + 6;
                         const startY = point.y - ((entries.length - 1) * lineHeight) / 2;
+                        ctx.font = nameFont;
+                        ctx.fillStyle = '#8B7355';
                         entries.forEach((entry, i) => {
-                            const y = startY + i * lineHeight;
-                            const accelText = entry.raw.accel.toFixed(1);
-                            ctx.font = accelFont;
-                            ctx.fillStyle = '#4A3F35';
-                            ctx.fillText(accelText, x, y);
-                            const accelWidth = ctx.measureText(accelText).width;
-                            ctx.font = nameFont;
-                            ctx.fillStyle = '#8B7355';
-                            ctx.fillText(entry.raw.label, x + accelWidth + 6, y);
+                            ctx.fillText(entry.raw.label, nameX, startY + i * lineHeight);
                         });
                     });
                     ctx.restore();
