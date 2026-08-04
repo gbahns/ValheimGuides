@@ -599,15 +599,32 @@
                 afterDatasetsDraw(chart) {
                     const { ctx } = chart;
                     const meta = chart.getDatasetMeta(0);
+                    const fontSize = 13;
+                    const lineHeight = fontSize + 3;
                     ctx.save();
-                    ctx.font = "10px 'Inter', sans-serif";
+                    ctx.font = `bold ${fontSize}px 'Inter', sans-serif`;
                     ctx.fillStyle = '#4A3F35';
                     ctx.textAlign = 'left';
                     ctx.textBaseline = 'middle';
+
+                    // Ships with identical mass/sailForce land on the exact same
+                    // pixel, so group by rounded position and stack their labels
+                    // vertically instead of drawing them on top of each other.
+                    const groups = new Map();
                     meta.data.forEach((point, i) => {
-                        const raw = performanceData[i];
-                        const x = point.x + point.options.radius + 4;
-                        ctx.fillText(`${raw.label} (${raw.accel.toFixed(1)})`, x, point.y);
+                        const key = `${Math.round(point.x)},${Math.round(point.y)}`;
+                        if (!groups.has(key)) groups.set(key, []);
+                        groups.get(key).push({ point, raw: performanceData[i] });
+                    });
+
+                    groups.forEach(entries => {
+                        const { point } = entries[0];
+                        const maxRadius = Math.max(...entries.map(e => e.point.options.radius));
+                        const x = point.x + maxRadius + 5;
+                        const startY = point.y - ((entries.length - 1) * lineHeight) / 2;
+                        entries.forEach((entry, i) => {
+                            ctx.fillText(`${entry.raw.label} (${entry.raw.accel.toFixed(1)})`, x, startY + i * lineHeight);
+                        });
                     });
                     ctx.restore();
                 }
