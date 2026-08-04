@@ -124,10 +124,10 @@
             <div id="category-filters" class="flex flex-wrap gap-2 justify-center">
                 <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold active" data-category="All">All</button>
                 <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="Vanilla">Vanilla</button>
-                <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="Speed">Speed</button>
-                <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="Cargo">Cargo</button>
-                <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="Fishing">Fishing</button>
-                <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="War">War</button>
+                <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="Cargo Ships">Cargo Ships</button>
+                <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="Small Boats">Small Boats</button>
+                <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="War Ships">War Ships</button>
+                <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="Special Ships">Special Ships</button>
             </div>
             <div id="tier-filters" class="flex flex-wrap gap-2 justify-center"></div>
             <div id="hidden-filters" class="flex flex-wrap gap-2 justify-center"></div>
@@ -193,21 +193,21 @@
             { name: "Karve", category: "Vanilla", health: 500, mass: 600, sailForce: 0.5, rudderSpeed: 1, cargoSlots: 4, recipe: "Fine Wood: 30; Deer Hide: 10; Resin: 20; Bronze Nails: 80" },
             { name: "Longship", category: "Vanilla", health: 1000, mass: 1000, sailForce: 0.7, rudderSpeed: 1, cargoSlots: 18, recipe: "Iron Nails: 100; Deer Hide: 10; Fine Wood: 40; Ancient Bark: 40" },
             { name: "Drakkar", category: "Vanilla", health: 3000, mass: 1500, sailForce: 0.8, rudderSpeed: 1, cargoSlots: 24, recipe: "Iron Nails: 100; Ceramic Plate: 30; Fine Wood: 50; Yggdrasil Wood: 25" },
-            { name: "Rowing Canoe", category: "Speed", health: 400, mass: 400, sailForce: 0, rudderSpeed: 1, cargoSlots: 4, recipe: "Resin: 8; Wood: 20" },
-            { name: "Double Rowing Canoe", category: "Speed", health: 500, mass: 400, sailForce: 0, rudderSpeed: 1, cargoSlots: 4, recipe: "Resin: 10; Wood: 25" },
-            { name: "Little Boat", category: "Fishing", health: 800, mass: 500, sailForce: 0.3, rudderSpeed: 1, cargoSlots: 4, recipe: "Leather Scraps: 8; Wood: 40" },
-            { name: "Hercule Fishing Boat", category: "Fishing", health: 1200, mass: 1500, sailForce: 0.5, rudderSpeed: 1, cargoSlots: 12, recipe: "Cloth Ship: 2; Resin Wood: 30; Bronze Nails: 100; Ship Rope: 2" },
-            { name: "Goblin Boat", category: "War", health: 1500, mass: 2000, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 28, recipe: "Cloth Ship: 5; Caulked Wood: 50; Iron Nails: 120; Ship Rope: 5" },
-            { name: "Merchant Ship", category: "Cargo", health: 1800, mass: 2000, sailForce: 0.5, rudderSpeed: 1, cargoSlots: 21, recipe: "Cloth Ship: 4; Resin Wood: 40; Iron Nails: 100; Ship Rope: 2" },
-            { name: "Cargo Ship", category: "Cargo", health: 2000, mass: 2000, sailForce: 0.4, rudderSpeed: 0.8, cargoSlots: 64, recipe: "Cloth Ship: 4; Caulked Wood: 40; Iron Nails: 100; Ship Rope: 2" },
-            { name: "Big Cargo Ship", category: "Cargo", health: 2500, mass: 2000, sailForce: 0.4, rudderSpeed: 0.8, cargoSlots: 64, recipe: "Cloth Ship: 4; Caulked Wood: 50; Iron Nails: 150; Ship Rope: 4" },
-            { name: "Huge Cargo Ship", category: "Cargo", health: 3000, mass: 2500, sailForce: 0.4, rudderSpeed: 0.8, cargoSlots: 128, recipe: "Cloth Ship: 4; Caulked Wood: 50; Iron Nails: 150; Ship Rope: 6" },
-            { name: "Cargo Animal Ship", category: "Cargo", health: 2800, mass: 2500, sailForce: 0.4, rudderSpeed: 1, cargoSlots: 64, recipe: "Cloth Ship: 4; Caulked Wood: 50; Iron Nails: 150; Ship Rope: 6" },
-            { name: "Cargo Caravel", category: "Cargo", health: 3500, mass: 3000, sailForce: 0.4, rudderSpeed: 0.5, cargoSlots: 64, recipe: "Cloth Ship: 5; Caulked Wood: 60; Iron Nails: 120; Ship Rope: 4" },
-            { name: "War Ship", category: "War", health: 2000, mass: 2000, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 24, recipe: "Cloth Ship: 4; Caulked Wood: 50; Iron Nails: 120; Ship Rope: 2" },
-            { name: "War Ship Skuldelev", category: "War", health: 2500, mass: 2500, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 28, recipe: "Cloth Ship: 4; Caulked Wood: 60; Iron Nails: 160; Ship Rope: 4" },
-            { name: "Taurus War Ship", category: "War", health: 3000, mass: 3000, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 32, recipe: "Cloth Ship: 4; Caulked Wood: 60; Iron Nails: 180; Ship Rope: 4" },
-            { name: "Fast Ship Skuldelev", category: "Speed", health: 1500, mass: 1000, sailForce: 0.9, rudderSpeed: 1, cargoSlots: 12, recipe: "Cloth Ship: 4; Caulked Wood: 40; Iron Nails: 100; Ship Rope: 2" }
+            { name: "Rowing Canoe", category: "Small Boats", health: 400, mass: 400, sailForce: 0, rudderSpeed: 1, cargoSlots: 4, recipe: "Resin: 8; Wood: 20" },
+            { name: "Double Rowing Canoe", category: "Small Boats", health: 500, mass: 400, sailForce: 0, rudderSpeed: 1, cargoSlots: 4, recipe: "Resin: 10; Wood: 25" },
+            { name: "Little Boat", category: "Small Boats", health: 800, mass: 500, sailForce: 0.3, rudderSpeed: 1, cargoSlots: 4, recipe: "Leather Scraps: 8; Wood: 40" },
+            { name: "Hercule Fishing Boat", category: "Special Ships", health: 1200, mass: 1500, sailForce: 0.5, rudderSpeed: 1, cargoSlots: 12, recipe: "Cloth Ship: 2; Resin Wood: 30; Bronze Nails: 100; Ship Rope: 2" },
+            { name: "Goblin Boat", category: "Special Ships", health: 1500, mass: 2000, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 28, recipe: "Cloth Ship: 5; Caulked Wood: 50; Iron Nails: 120; Ship Rope: 5" },
+            { name: "Merchants Boat", category: "Cargo Ships", health: 1800, mass: 2000, sailForce: 0.5, rudderSpeed: 1, cargoSlots: 21, recipe: "Cloth Ship: 4; Resin Wood: 40; Iron Nails: 100; Ship Rope: 2" },
+            { name: "Cargo Ship", category: "Cargo Ships", health: 2000, mass: 2000, sailForce: 0.4, rudderSpeed: 0.8, cargoSlots: 64, recipe: "Cloth Ship: 4; Resin Wood: 40; Iron Nails: 100; Ship Rope: 2" },
+            { name: "Big Cargo Ship", category: "Cargo Ships", health: 2500, mass: 2000, sailForce: 0.4, rudderSpeed: 0.8, cargoSlots: 64, recipe: "Cloth Ship: 4; Caulked Wood: 50; Iron Nails: 150; Ship Rope: 4" },
+            { name: "Huge Cargo Ship", category: "Cargo Ships", health: 3000, mass: 2500, sailForce: 0.4, rudderSpeed: 0.8, cargoSlots: 128, recipe: "Cloth Ship: 4; Caulked Wood: 50; Iron Nails: 150; Ship Rope: 6" },
+            { name: "Animal Transport Ship", category: "Cargo Ships", health: 2800, mass: 2500, sailForce: 0.4, rudderSpeed: 1, cargoSlots: 64, recipe: "Cloth Ship: 4; Caulked Wood: 50; Iron Nails: 150; Ship Rope: 6" },
+            { name: "Cargo Caravel", category: "Cargo Ships", health: 3500, mass: 3000, sailForce: 0.4, rudderSpeed: 0.5, cargoSlots: 64, recipe: "Cloth Ship: 5; Caulked Wood: 60; Iron Nails: 120; Ship Rope: 4" },
+            { name: "War Ship", category: "War Ships", health: 2000, mass: 2000, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 24, recipe: "Cloth Ship: 4; Caulked Wood: 50; Iron Nails: 120; Ship Rope: 2" },
+            { name: "War Ship Skuldelev", category: "War Ships", health: 2500, mass: 2500, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 28, recipe: "Cloth Ship: 4; Caulked Wood: 60; Iron Nails: 160; Ship Rope: 4" },
+            { name: "Taurus War Ship", category: "War Ships", health: 3000, mass: 3000, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 32, recipe: "Cloth Ship: 4; Caulked Wood: 60; Iron Nails: 180; Ship Rope: 4" },
+            { name: "Fast Ship Skuldelev", category: "Special Ships", health: 1500, mass: 1000, sailForce: 0.9, rudderSpeed: 1, cargoSlots: 12, recipe: "Cloth Ship: 4; Caulked Wood: 40; Iron Nails: 100; Ship Rope: 2" }
         ];
 
         // ── Persisted filter/sort/flag state ──────────────────────────────────
@@ -225,7 +225,10 @@
         }
         const savedState = loadState();
 
-        let currentFilter = savedState.category ?? 'All';
+        // Fall back to "All" if storage has a category from before the Cargo/Small
+        // Boats/War/Special Ships rename (e.g. the old "Speed"/"Fishing" labels).
+        const VALID_CATEGORIES = ['All', 'Vanilla', 'Cargo Ships', 'Small Boats', 'War Ships', 'Special Ships'];
+        let currentFilter = VALID_CATEGORIES.includes(savedState.category) ? savedState.category : 'All';
         let currentSort = savedState.sort ?? { key: 'name', asc: true };
 
         // Progression tier: the highest-tier vanilla material a ship's recipe
