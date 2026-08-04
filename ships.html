@@ -50,7 +50,7 @@
             border-radius: 0.5rem;
             border: 1px solid #D2B48C;
         }
-        /* Performance chart carries a name+accel label per bubble, so it needs
+        /* Acceleration chart carries a name+accel label per bubble, so it needs
            more room to breathe than the cargo bar chart. */
         .chart-container-performance {
             max-width: 100%;
@@ -172,7 +172,7 @@
                 <canvas id="performanceChart"></canvas>
             </div>
              <div class="text-center text-sm text-gray-500 mt-4">
-                <p>The charts above provide a high-level comparison of the fleet. The Cargo Capacity chart helps identify the best haulers, while the Performance chart shows the trade-off between a ship's mass and its speed potential under sail.</p>
+                <p>The charts above provide a high-level comparison of the fleet. The Cargo Capacity chart helps identify the best haulers, while the Acceleration chart shows the trade-off between a heavier hull (more HP, less prone to capsizing) and how quickly a ship gets up to speed.</p>
             </div>
         </section>
         
@@ -654,7 +654,7 @@
                 options: {
                     maintainAspectRatio: false,
                     plugins: {
-                        title: { display: true, text: 'Performance (Mass vs. Sail Force)', font: { size: 18, family: "'IM Fell English', serif" } },
+                        title: { display: true, text: 'Acceleration (Mass vs. Sail Force)', font: { size: 18, family: "'IM Fell English', serif" } },
                         legend: { display: false },
                         tooltip: {
                             callbacks: {
