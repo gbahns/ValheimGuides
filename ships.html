@@ -216,7 +216,7 @@
         }
         function saveState() {
             localStorage.setItem(STORAGE_KEY, JSON.stringify({
-                category: currentFilter,
+                categories: [...activeCategories],
                 tiers: [...activeTiers],
                 sort: currentSort,
                 flagged: [...flaggedShips],
@@ -224,10 +224,12 @@
         }
         const savedState = loadState();
 
-        // Fall back to "All" if storage has a category from before the Cargo/Small
-        // Boats/War/Special Ships rename (e.g. the old "Speed"/"Fishing" labels).
-        const VALID_CATEGORIES = ['All', 'Cargo Ships', 'Small Boats', 'War Ships', 'Special Ships'];
-        let currentFilter = VALID_CATEGORIES.includes(savedState.category) ? savedState.category : 'All';
+        // Discard categories from before the Cargo/Small Boats/War/Special Ships
+        // rename (e.g. the old "Speed"/"Fishing" labels).
+        const VALID_CATEGORIES = ['Cargo Ships', 'Small Boats', 'War Ships', 'Special Ships'];
+        // Category filter is multi-select, like the progression/tier filter below:
+        // an empty Set means "show all".
+        const activeCategories = new Set((savedState.categories || []).filter(c => VALID_CATEGORIES.includes(c)));
         let currentSort = savedState.sort ?? { key: 'name', asc: true };
 
         // Progression tier: the highest-tier vanilla material a ship's recipe
@@ -443,7 +445,7 @@
             shipTableBody.innerHTML = '';
 
             const filteredData = processedShipData.filter(ship =>
-                (currentFilter === 'All' || ship.category === currentFilter) &&
+                (activeCategories.size === 0 || activeCategories.has(ship.category)) &&
                 (activeTiers.size === 0 || activeTiers.has(ship.tier)) &&
                 (showHidden || !flaggedShips.has(ship.name))
             );
@@ -491,11 +493,22 @@
         };
 
         filterButtons.forEach(button => {
-            button.classList.toggle('active', button.dataset.category === currentFilter);
+            const category = button.dataset.category;
+            const isActive = category === 'All' ? activeCategories.size === 0 : activeCategories.has(category);
+            button.classList.toggle('active', isActive);
             button.addEventListener('click', () => {
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                currentFilter = button.dataset.category;
+                if (category === 'All') {
+                    activeCategories.clear();
+                } else if (activeCategories.has(category)) {
+                    activeCategories.delete(category);
+                } else {
+                    activeCategories.add(category);
+                }
+                filterButtons.forEach(btn => {
+                    const btnCategory = btn.dataset.category;
+                    const btnActive = btnCategory === 'All' ? activeCategories.size === 0 : activeCategories.has(btnCategory);
+                    btn.classList.toggle('active', btnActive);
+                });
                 saveState();
                 renderShips();
             });
