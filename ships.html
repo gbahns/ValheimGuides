@@ -567,8 +567,9 @@
                 label: s.name
             }));
 
-            // Low mass + high sail force (top-left) is the efficient/best corner;
-            // high mass + low sail force (bottom-right) is the sluggish/worst one.
+            // Mass axis is reversed (see scales.x below) so light ships sit on the
+            // right, keeping the low-mass/high-sail-force "best" combo in the
+            // conventional top-right corner and the opposite "worst" combo bottom-left.
             const performanceCornerLabels = {
                 id: 'performanceCornerLabels',
                 afterDraw(chart) {
@@ -576,13 +577,13 @@
                     ctx.save();
                     ctx.font = "bold 12px 'Inter', sans-serif";
                     ctx.fillStyle = 'rgba(46, 125, 50, 0.8)';
-                    ctx.textAlign = 'left';
-                    ctx.textBaseline = 'top';
-                    ctx.fillText('▲ Best', left + 8, top + 8);
-                    ctx.fillStyle = 'rgba(192, 57, 43, 0.8)';
                     ctx.textAlign = 'right';
+                    ctx.textBaseline = 'top';
+                    ctx.fillText('▲ Best', right - 8, top + 8);
+                    ctx.fillStyle = 'rgba(192, 57, 43, 0.8)';
+                    ctx.textAlign = 'left';
                     ctx.textBaseline = 'bottom';
-                    ctx.fillText('Worst ▼', right - 8, bottom - 8);
+                    ctx.fillText('Worst ▼', left + 8, bottom - 8);
                     ctx.restore();
                 }
             };
@@ -615,7 +616,8 @@
                     },
                     scales: {
                         x: {
-                            title: { display: true, text: 'Mass' }
+                            reverse: true,
+                            title: { display: true, text: 'Mass (lighter →)' }
                         },
                         y: {
                             title: { display: true, text: 'Sail Force Factor' },
