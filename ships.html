@@ -567,6 +567,26 @@
                 label: s.name
             }));
 
+            // Low mass + high sail force (top-left) is the efficient/best corner;
+            // high mass + low sail force (bottom-right) is the sluggish/worst one.
+            const performanceCornerLabels = {
+                id: 'performanceCornerLabels',
+                afterDraw(chart) {
+                    const { ctx, chartArea: { left, right, top, bottom } } = chart;
+                    ctx.save();
+                    ctx.font = "bold 12px 'Inter', sans-serif";
+                    ctx.fillStyle = 'rgba(46, 125, 50, 0.8)';
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'top';
+                    ctx.fillText('▲ Best', left + 8, top + 8);
+                    ctx.fillStyle = 'rgba(192, 57, 43, 0.8)';
+                    ctx.textAlign = 'right';
+                    ctx.textBaseline = 'bottom';
+                    ctx.fillText('Worst ▼', right - 8, bottom - 8);
+                    ctx.restore();
+                }
+            };
+
             const ctxPerformance = document.getElementById('performanceChart').getContext('2d');
             new Chart(ctxPerformance, {
                 type: 'bubble',
@@ -578,6 +598,7 @@
                         borderColor: '#4A3F35'
                     }]
                 },
+                plugins: [performanceCornerLabels],
                 options: {
                     maintainAspectRatio: false,
                     plugins: {
