@@ -165,7 +165,7 @@
 
         <section class="mt-12">
             <h2 class="text-3xl md:text-4xl valheim-title text-center mb-8">Fleet Comparison</h2>
-            <div class="chart-container">
+            <div class="chart-container chart-container-wide">
                 <canvas id="cargoChart"></canvas>
             </div>
             <div class="chart-container chart-container-wide mt-8">
@@ -175,7 +175,7 @@
                 <canvas id="performanceChart"></canvas>
             </div>
              <div class="text-center text-sm text-gray-500 mt-4">
-                <p>The charts above provide a high-level comparison of the fleet. The Cargo Capacity chart helps identify the best haulers, the Acceleration chart shows the trade-off between a heavier hull (more HP, less prone to capsizing) and how quickly a ship gets up to speed, and the Performance chart blends Top Speed and Acceleration together (bubble size shows Agility) for a fuller picture of how a ship handles.</p>
+                <p>The charts above provide a high-level comparison of the fleet. The Hauling chart shows the trade-off between Top Speed and Cargo Capacity (bubble size shows Cargo Throughput), the Acceleration chart shows the trade-off between a heavier hull (more HP, less prone to capsizing) and how quickly a ship gets up to speed, and the Performance chart blends Top Speed and Acceleration together (bubble size shows Agility) for a fuller picture of how a ship handles.</p>
             </div>
         </section>
         
@@ -537,33 +537,117 @@
         });
 
         const renderCharts = () => {
-            const sortedByCargo = [...processedShipData].sort((a, b) => b.cargoSlots - a.cargoSlots);
-            const cargoLabels = sortedByCargo.map(s => s.name);
-            const cargoValues = sortedByCargo.map(s => s.cargoSlots);
-            
-            const ctxCargo = document.getElementById('cargoChart').getContext('2d');
-            new Chart(ctxCargo, {
-                type: 'bar',
+            // Hauling chart: Top Speed vs. Cargo Slots are independently
+            // meaningful stats, so this plots the real cargo/speed trade-off.
+            // Cargo Throughput (Cargo Slots x Top Speed) rides along as bubble
+            // size -- a blended "how much can this ship actually move" measure.
+            const haulingData = processedShipData.map(s => ({
+                x: s.topSpeed,
+                y: s.cargoSlots,
+                r: Math.min(Math.max(Math.sqrt(s.cargoThroughput), 5), 22),
+                label: s.name,
+                throughput: s.cargoThroughput
+            }));
+
+            const haulingCornerLabels = {
+                id: 'haulingCornerLabels',
+                afterDraw(chart) {
+                    const { ctx, chartArea: { left, right, top, bottom } } = chart;
+                    ctx.save();
+                    ctx.font = "bold 12px 'Inter', sans-serif";
+                    ctx.fillStyle = 'rgba(46, 125, 50, 0.8)';
+                    ctx.textAlign = 'right';
+                    ctx.textBaseline = 'top';
+                    ctx.fillText('▲ Best', right - 8, top + 8);
+                    ctx.fillStyle = 'rgba(192, 57, 43, 0.8)';
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'bottom';
+                    ctx.fillText('Worst ▼', left + 8, bottom - 8);
+                    ctx.restore();
+                }
+            };
+
+            const haulingPointLabels = {
+                id: 'haulingPointLabels',
+                afterDatasetsDraw(chart) {
+                    const { ctx } = chart;
+                    const meta = chart.getDatasetMeta(0);
+                    const numberFont = "bold 15px 'Inter', sans-serif";
+                    const nameFont = "13px 'Inter', sans-serif";
+                    const lineHeight = 19;
+                    ctx.save();
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'middle';
+
+                    // Ships with identical top speed/cargo slots land on the exact
+                    // same pixel, so group by rounded position and stack their
+                    // labels vertically instead of drawing them on top of each
+                    // other. Throughput can still differ within a group (mass
+                    // isn't part of the position), so it's shown per-ship.
+                    const groups = new Map();
+                    meta.data.forEach((point, i) => {
+                        const key = `${Math.round(point.x)},${Math.round(point.y)}`;
+                        if (!groups.has(key)) groups.set(key, []);
+                        groups.get(key).push({ point, raw: haulingData[i] });
+                    });
+
+                    groups.forEach(entries => {
+                        const { point } = entries[0];
+                        const maxRadius = Math.max(...entries.map(e => e.point.options.radius));
+                        const x = point.x + maxRadius + 5;
+                        const lineHeightTotal = entries.length * lineHeight;
+                        const startY = point.y - (lineHeightTotal - lineHeight) / 2;
+                        entries.forEach((entry, i) => {
+                            const y = startY + i * lineHeight;
+                            const throughputText = entry.raw.throughput.toFixed(0);
+                            ctx.font = numberFont;
+                            ctx.fillStyle = '#4A3F35';
+                            ctx.fillText(throughputText, x, y);
+                            const numberWidth = ctx.measureText(throughputText).width;
+                            ctx.font = nameFont;
+                            ctx.fillStyle = '#8B7355';
+                            ctx.fillText(entry.raw.label, x + numberWidth + 6, y);
+                        });
+                    });
+                    ctx.restore();
+                }
+            };
+
+            const ctxHauling = document.getElementById('cargoChart').getContext('2d');
+            new Chart(ctxHauling, {
+                type: 'bubble',
                 data: {
-                    labels: cargoLabels,
                     datasets: [{
-                        label: 'Cargo Slots',
-                        data: cargoValues,
-                        backgroundColor: '#8B4513',
-                        borderColor: '#4A3F35',
-                        borderWidth: 1
+                        label: 'Ships',
+                        data: haulingData,
+                        backgroundColor: 'rgba(139, 69, 19, 0.6)',
+                        borderColor: '#4A3F35'
                     }]
                 },
+                plugins: [haulingCornerLabels, haulingPointLabels],
                 options: {
                     maintainAspectRatio: false,
-                    indexAxis: 'y',
                     plugins: {
-                        title: { display: true, text: 'Ship Cargo Capacity', font: { size: 18, family: "'IM Fell English', serif" } },
-                        legend: { display: false }
+                        title: { display: true, text: 'Hauling (Top Speed vs. Cargo Capacity, size = Cargo Throughput)', font: { size: 18, family: "'IM Fell English', serif" } },
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const dataPoint = context.raw;
+                                    return `${dataPoint.label}: Top Speed ${dataPoint.x.toFixed(1)}, Cargo Slots ${dataPoint.y}, Throughput ${dataPoint.throughput.toFixed(1)}`;
+                                }
+                            }
+                        }
                     },
                     scales: {
-                        x: { beginAtZero: true },
-                         y: { ticks: { font: { size: 10 } } }
+                        x: {
+                            title: { display: true, text: 'Top Speed (m/s)' },
+                            beginAtZero: true
+                        },
+                        y: {
+                            title: { display: true, text: 'Cargo Slots' },
+                            beginAtZero: true
+                        }
                     }
                 }
             });
