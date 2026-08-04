@@ -599,11 +599,10 @@
                 afterDatasetsDraw(chart) {
                     const { ctx } = chart;
                     const meta = chart.getDatasetMeta(0);
-                    const fontSize = 13;
-                    const lineHeight = fontSize + 3;
+                    const accelFont = "bold 15px 'Inter', sans-serif";
+                    const nameFont = "11px 'Inter', sans-serif";
+                    const lineHeight = 18;
                     ctx.save();
-                    ctx.font = `bold ${fontSize}px 'Inter', sans-serif`;
-                    ctx.fillStyle = '#4A3F35';
                     ctx.textAlign = 'left';
                     ctx.textBaseline = 'middle';
 
@@ -623,7 +622,15 @@
                         const x = point.x + maxRadius + 5;
                         const startY = point.y - ((entries.length - 1) * lineHeight) / 2;
                         entries.forEach((entry, i) => {
-                            ctx.fillText(`${entry.raw.label} (${entry.raw.accel.toFixed(1)})`, x, startY + i * lineHeight);
+                            const y = startY + i * lineHeight;
+                            const accelText = entry.raw.accel.toFixed(1);
+                            ctx.font = accelFont;
+                            ctx.fillStyle = '#4A3F35';
+                            ctx.fillText(accelText, x, y);
+                            const accelWidth = ctx.measureText(accelText).width;
+                            ctx.font = nameFont;
+                            ctx.fillStyle = '#8B7355';
+                            ctx.fillText(entry.raw.label, x + accelWidth + 6, y);
                         });
                     });
                     ctx.restore();
