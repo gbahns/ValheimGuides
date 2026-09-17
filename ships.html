@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OdinShip+ Fleet Guide</title>
+    <title>Valheim Ships</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -124,7 +124,7 @@
 
     <div class="container mx-auto px-4 py-2 md:px-8 md:py-3">
         <header class="text-center mb-2">
-            <h1 class="text-4xl md:text-6xl valheim-title">OdinShip+ Fleet Guide</h1>
+            <h1 class="text-4xl md:text-6xl valheim-title">Valheim Ships</h1>
         </header>
 
         <div class="bg-white/50 backdrop-blur-sm p-4 rounded-lg shadow-md mb-8 sticky top-4 z-10 flex flex-wrap gap-3 items-center justify-center">
@@ -143,6 +143,7 @@
              <table id="ship-table" class="w-full text-left">
                 <thead class="valheim-title border-b-2 border-[#4A3F35]">
                     <tr>
+                        <th class="px-1 py-2" data-sort="source">Source</th>
                         <th class="px-1 py-2" data-sort="name">Name</th>
                         <th class="px-1 py-2 text-center" data-sort="category">Category</th>
                         <th class="px-1 py-2 text-center" data-sort="tier"><span title="Highest-tier vanilla material required to build it">Tier</span></th>
@@ -154,6 +155,7 @@
                         <th class="px-1 py-2 text-center" data-sort="relativeAccel">Acceleration</th>
                         <th class="px-1 py-2 text-center" data-sort="topSpeed"><span title="Estimated Top Speed in meters/second">Top Speed</span></th>
                         <th class="px-1 py-2 text-center" data-sort="cargoSlots">Cargo Slots</th>
+                        <th class="px-1 py-2 text-center" data-sort="width"><span title="Hull width relative to the vanilla ship it is based on">Width</span></th>
                         <th class="px-1 py-2 text-center" data-sort="cargoThroughput"><span title="Cargo Slots * Top Speed">Cargo Throughput</span></th>
                         <th class="px-1 py-2">Build Recipe</th>
                     </tr>
@@ -182,10 +184,14 @@
         <section class="mt-12 card p-6">
              <h2 class="text-3xl md:text-4xl valheim-title text-center mb-6">Key Information</h2>
              <div class="text-center max-w-3xl mx-auto text-gray-700 space-y-4">
-                <p>To build these advanced ships, you must first understand the mod's custom crafting progression. This guide will help you get started on your naval adventures.</p>
+                <p>This guide covers the vanilla ships alongside those added by the OdinShipPlus and TheGreatestShips mods. The Source column shows where each ship comes from.</p>
                 <div class="p-4 bg-amber-100/50 border-l-4 border-amber-500 text-amber-800 rounded-r-lg">
-                    <h3 class="font-bold text-lg mb-2">Custom Materials & Crafting Station</h3>
-                    <p>The OdinShip mod introduces its own materials like <span class="font-bold">Resin Wood</span>, <span class="font-bold">Caulked Wood</span>, <span class="font-bold">Sail Canvas</span>, and <span class="font-bold">Marine Rope</span>. You must craft these components at the new <span class="font-bold">Carpenter Table</span> station before you can build the ships themselves.</p>
+                    <h3 class="font-bold text-lg mb-2">OdinShipPlus: Custom Materials & Crafting Station</h3>
+                    <p>The OdinShipPlus mod introduces its own materials like <span class="font-bold">Resin Wood</span>, <span class="font-bold">Caulked Wood</span>, <span class="font-bold">Sail Canvas</span>, and <span class="font-bold">Marine Rope</span>. You must craft these components at the new <span class="font-bold">Carpenter Table</span> station before you can build the ships themselves.</p>
+                </div>
+                <div class="p-4 bg-amber-100/50 border-l-4 border-amber-500 text-amber-800 rounded-r-lg">
+                    <h3 class="font-bold text-lg mb-2">TheGreatestShips: Variants of Vanilla Hulls</h3>
+                    <p>The <span class="font-bold">Fast Karve</span>, <span class="font-bold">Fast Longship</span> and <span class="font-bold">Cargo Longship</span> are built at the Workbench from vanilla materials. Each keeps its base ship's health and mass but changes top speed, storage and hull width.</p>
                 </div>
                  <p>Remember to check the mod's configuration files in your `BepInEx/config` folder for the most precise and up-to-date stats, as these can sometimes be customized by server administrators or updated by the mod author.</p>
             </div>
@@ -196,25 +202,32 @@
 
     <script>
         const shipData = [
-            { name: "Raft", category: "Small Boats", health: 300, mass: 400, sailForce: 0.2, rudderSpeed: 1, cargoSlots: 3, recipe: "Wood: 20; Leather Scraps: 6; Resin: 6" },
-            { name: "Karve", category: "Small Boats", health: 500, mass: 600, sailForce: 0.5, rudderSpeed: 1, cargoSlots: 4, recipe: "Fine Wood: 30; Deer Hide: 10; Resin: 20; Bronze Nails: 80" },
-            { name: "Longship", category: "Special Ships", health: 1000, mass: 1000, sailForce: 0.7, rudderSpeed: 1, cargoSlots: 18, recipe: "Iron Nails: 100; Deer Hide: 10; Fine Wood: 40; Ancient Bark: 40" },
-            { name: "Drakkar", category: "Special Ships", health: 3000, mass: 1500, sailForce: 0.8, rudderSpeed: 1, cargoSlots: 24, recipe: "Iron Nails: 100; Ceramic Plate: 30; Fine Wood: 50; Yggdrasil Wood: 25" },
-            { name: "Rowing Canoe", category: "Small Boats", health: 400, mass: 400, sailForce: 0, rudderSpeed: 1, cargoSlots: 4, recipe: "Resin: 8; Wood: 20" },
-            { name: "Double Rowing Canoe", category: "Small Boats", health: 500, mass: 400, sailForce: 0, rudderSpeed: 1, cargoSlots: 4, recipe: "Resin: 10; Wood: 25" },
-            { name: "Little Boat", category: "Small Boats", health: 800, mass: 500, sailForce: 0.3, rudderSpeed: 1, cargoSlots: 4, recipe: "Leather Scraps: 8; Wood: 40" },
-            { name: "Hercule Fishing Boat", category: "Special Ships", health: 1200, mass: 1500, sailForce: 0.5, rudderSpeed: 1, cargoSlots: 12, recipe: "Sail Canvas: 2; Resin Wood: 30; Bronze Nails: 100; Marine Rope: 2" },
-            { name: "Goblin Boat", category: "Special Ships", health: 1500, mass: 2000, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 28, recipe: "Sail Canvas: 5; Caulked Wood: 50; Iron Nails: 120; Marine Rope: 5" },
-            { name: "Marchant Ship", category: "Cargo Ships", health: 1800, mass: 2000, sailForce: 0.5, rudderSpeed: 1, cargoSlots: 21, recipe: "Sail Canvas: 4; Resin Wood: 40; Iron Nails: 100; Marine Rope: 2" },
-            { name: "Cargo Ship", category: "Cargo Ships", health: 2000, mass: 2000, sailForce: 0.4, rudderSpeed: 0.8, cargoSlots: 64, recipe: "Sail Canvas: 4; Resin Wood: 40; Iron Nails: 100; Marine Rope: 2" },
-            { name: "Big Cargo Ship", category: "Cargo Ships", health: 2500, mass: 2000, sailForce: 0.4, rudderSpeed: 0.8, cargoSlots: 64, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 150; Marine Rope: 4" },
-            { name: "Huge Cargo Ship", category: "Cargo Ships", health: 3000, mass: 2500, sailForce: 0.4, rudderSpeed: 0.8, cargoSlots: 128, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 150; Marine Rope: 6" },
-            { name: "Animal Transport Ship", category: "Cargo Ships", health: 2800, mass: 2500, sailForce: 0.4, rudderSpeed: 1, cargoSlots: 64, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 150; Marine Rope: 6" },
-            { name: "Cargo Caravel", category: "Cargo Ships", health: 3500, mass: 3000, sailForce: 0.4, rudderSpeed: 0.5, cargoSlots: 64, recipe: "Sail Canvas: 5; Caulked Wood: 60; Iron Nails: 120; Marine Rope: 4" },
-            { name: "War Ship", category: "War Ships", health: 2000, mass: 2000, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 24, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 120; Marine Rope: 2" },
-            { name: "War Ship Skuldelev", category: "War Ships", health: 2500, mass: 2500, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 28, recipe: "Sail Canvas: 4; Caulked Wood: 60; Iron Nails: 160; Marine Rope: 4" },
-            { name: "Taurus War Ship", category: "War Ships", health: 3000, mass: 3000, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 32, recipe: "Sail Canvas: 4; Caulked Wood: 60; Iron Nails: 180; Marine Rope: 4" },
-            { name: "Fast Ship Skuldelev", category: "Special Ships", health: 1500, mass: 1000, sailForce: 0.9, rudderSpeed: 1, cargoSlots: 12, recipe: "Sail Canvas: 4; Caulked Wood: 40; Iron Nails: 100; Marine Rope: 2" }
+            { source: "Vanilla", name: "Raft", category: "Small Boats", width: 1, health: 300, mass: 400, sailForce: 0.2, rudderSpeed: 1, cargoSlots: 3, recipe: "Wood: 20; Leather Scraps: 6; Resin: 6" },
+            { source: "Vanilla", name: "Karve", category: "Small Boats", width: 1, measuredSpeed: 8.8, health: 500, mass: 600, sailForce: 0.5, rudderSpeed: 1, cargoSlots: 4, recipe: "Fine Wood: 30; Deer Hide: 10; Resin: 20; Bronze Nails: 80" },
+            { source: "Vanilla", name: "Longship", category: "Special Ships", width: 1, measuredSpeed: 9.5, health: 1000, mass: 1000, sailForce: 0.7, rudderSpeed: 1, cargoSlots: 18, recipe: "Iron Nails: 100; Deer Hide: 10; Fine Wood: 40; Ancient Bark: 40" },
+            { source: "Vanilla", name: "Drakkar", category: "Special Ships", width: 1, health: 3000, mass: 1500, sailForce: 0.8, rudderSpeed: 1, cargoSlots: 24, recipe: "Iron Nails: 100; Ceramic Plate: 30; Fine Wood: 50; Yggdrasil Wood: 25" },
+            { source: "OdinShip", name: "Rowing Canoe", category: "Small Boats", health: 400, mass: 400, sailForce: 0, rudderSpeed: 1, cargoSlots: 4, recipe: "Resin: 8; Wood: 20" },
+            { source: "OdinShip", name: "Double Rowing Canoe", category: "Small Boats", health: 500, mass: 400, sailForce: 0, rudderSpeed: 1, cargoSlots: 4, recipe: "Resin: 10; Wood: 25" },
+            { source: "OdinShip", name: "Little Boat", category: "Small Boats", health: 800, mass: 500, sailForce: 0.3, rudderSpeed: 1, cargoSlots: 4, recipe: "Leather Scraps: 8; Wood: 40" },
+            { source: "OdinShipPlus", name: "Hercule Fishing Boat", category: "Special Ships", health: 1200, mass: 1500, sailForce: 0.5, rudderSpeed: 1, cargoSlots: 12, recipe: "Sail Canvas: 2; Resin Wood: 30; Bronze Nails: 100; Marine Rope: 2" },
+            { source: "OdinShipPlus", name: "Goblin Boat", category: "Special Ships", health: 1500, mass: 2000, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 28, recipe: "Sail Canvas: 5; Caulked Wood: 50; Iron Nails: 120; Marine Rope: 5" },
+            { source: "OdinShip", name: "Marchant Ship", category: "Cargo Ships", health: 1800, mass: 2000, sailForce: 0.5, rudderSpeed: 1, cargoSlots: 21, recipe: "Sail Canvas: 4; Resin Wood: 40; Iron Nails: 100; Marine Rope: 2" },
+            { source: "OdinShip", name: "Cargo Ship", category: "Cargo Ships", health: 2000, mass: 2000, sailForce: 0.4, rudderSpeed: 0.8, cargoSlots: 64, recipe: "Sail Canvas: 4; Resin Wood: 40; Iron Nails: 100; Marine Rope: 2" },
+            { source: "OdinShip", name: "Big Cargo Ship", category: "Cargo Ships", health: 2500, mass: 2000, sailForce: 0.4, rudderSpeed: 0.8, cargoSlots: 64, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 150; Marine Rope: 4" },
+            { source: "OdinShipPlus", name: "Huge Cargo Ship", category: "Cargo Ships", health: 3000, mass: 2500, sailForce: 0.4, rudderSpeed: 0.8, cargoSlots: 128, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 150; Marine Rope: 6" },
+            { source: "OdinShipPlus", name: "Animal Transport Ship", category: "Cargo Ships", health: 2800, mass: 2500, sailForce: 0.4, rudderSpeed: 1, cargoSlots: 64, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 150; Marine Rope: 6" },
+            { source: "OdinShipPlus", name: "Cargo Caravel", category: "Cargo Ships", health: 3500, mass: 3000, sailForce: 0.4, rudderSpeed: 0.5, cargoSlots: 64, recipe: "Sail Canvas: 5; Caulked Wood: 60; Iron Nails: 120; Marine Rope: 4" },
+            { source: "OdinShip", name: "War Ship", category: "War Ships", health: 2000, mass: 2000, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 24, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 120; Marine Rope: 2" },
+            { source: "OdinShipPlus", name: "War Ship Skuldelev", category: "War Ships", health: 2500, mass: 2500, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 28, recipe: "Sail Canvas: 4; Caulked Wood: 60; Iron Nails: 160; Marine Rope: 4" },
+            { source: "OdinShipPlus", name: "Taurus War Ship", category: "War Ships", health: 3000, mass: 3000, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 32, recipe: "Sail Canvas: 4; Caulked Wood: 60; Iron Nails: 180; Marine Rope: 4" },
+            { source: "OdinShipPlus", name: "Fast Ship Skuldelev", category: "Special Ships", health: 1500, mass: 1000, sailForce: 0.9, rudderSpeed: 1, cargoSlots: 12, recipe: "Sail Canvas: 4; Caulked Wood: 40; Iron Nails: 100; Marine Rope: 2" },
+            // TheGreatestShips clones a vanilla hull, so health, mass and rudder
+            // speed are the base ship's. Its speed setting multiplies top speed,
+            // which it does by scaling sail force by the multiplier squared
+            // (Karve 0.5 x 1.14², Longship 0.7 x 1.28² / 0.89²).
+            { source: "TheGreatestShips", name: "Fast Karve", category: "Small Boats", width: 0.85, measuredSpeed: 10, health: 500, mass: 600, sailForce: 0.65, rudderSpeed: 1, cargoSlots: 2, recipe: "Fine Wood: 30; Ancient Bark: 20; Bronze Nails: 60; Troll Hide: 8; Resin: 20" },
+            { source: "TheGreatestShips", name: "Cargo Longship", category: "Cargo Ships", width: 1.25, measuredSpeed: 8.5, health: 1000, mass: 1000, sailForce: 0.55, rudderSpeed: 1, cargoSlots: 32, recipe: "Fine Wood: 40; Ancient Bark: 60; Iron Nails: 150; Deer Hide: 10; Core Wood: 30" },
+            { source: "TheGreatestShips", name: "Fast Longship", category: "Special Ships", width: 0.85, measuredSpeed: 12.2, health: 1000, mass: 1000, sailForce: 1.15, rudderSpeed: 1, cargoSlots: 9, recipe: "Fine Wood: 40; Ancient Bark: 40; Iron Nails: 100; Linen Thread: 20; Resin: 30" }
         ];
 
         // ── Persisted filter/sort/flag state ──────────────────────────────────
@@ -254,14 +267,16 @@
             { tier: 2, label: "Meadows" },
             { tier: 3, label: "Black Forest" },
             { tier: 4, label: "Swamp" },
-            { tier: 5, label: "Ashlands" },
+            { tier: 5, label: "Plains" },
+            { tier: 6, label: "Ashlands" },
         ];
         const MATERIAL_TIER = {
             "Wood": 1, "Resin": 1,
             "Leather Scraps": 2, "Deer Hide": 2,
-            "Bronze Nails": 3,
-            "Iron Nails": 4,
-            "Yggdrasil Wood": 5, "Ceramic Plate": 5,
+            "Bronze Nails": 3, "Troll Hide": 3, "Core Wood": 3,
+            "Iron Nails": 4, "Ancient Bark": 4,
+            "Linen Thread": 5,
+            "Yggdrasil Wood": 6, "Ceramic Plate": 6,
         };
         function tierForRecipe(recipe) {
             const tiers = recipe.split(';')
@@ -300,7 +315,8 @@
             return data.map(ship => {
                 if (ship.sailForce > 0) {
                     ship.relativeAccel = (ship.sailForce / ship.mass) / minAccel;
-                    ship.topSpeed = (ship.sailForce / Math.sqrt(ship.mass)) * conversionFactor;
+                    // Prefer a speed measured in game over the sail-force estimate.
+                    ship.topSpeed = ship.measuredSpeed ?? (ship.sailForce / Math.sqrt(ship.mass)) * conversionFactor;
                 } else {
                     ship.relativeAccel = 0;
                     if (ship.name.includes("Canoe")) {
@@ -482,6 +498,7 @@
                 row.className = 'border-b border-stone-300/50 hover:bg-amber-50/50 transition-colors' + (isHidden ? ' is-hidden' : '');
                 row.dataset.name = ship.name;
                 row.innerHTML = `
+                    <td class="px-1 py-2 whitespace-nowrap">${ship.source}</td>
                     <td class="px-1 py-2 font-bold whitespace-nowrap">${ship.name}${flagLabel}</td>
                     <td class="px-1 py-2 text-center">${ship.category}</td>
                     <td class="px-1 py-2 text-center">${ship.tierLabel}</td>
@@ -493,6 +510,7 @@
                     <td class="px-1 py-2 text-center">${ship.relativeAccel.toFixed(1)}</td>
                     <td class="px-1 py-2 text-center">${ship.topSpeed.toFixed(1)}</td>
                     <td class="px-1 py-2 text-center">${ship.cargoSlots}</td>
+                    <td class="px-1 py-2 text-center">${ship.width ?? '—'}</td>
                     <td class="px-1 py-2 text-center">${ship.cargoThroughput.toFixed(1)}</td>
                     <td class="px-1 py-2 text-sm">${formatRecipe(ship.recipe)}</td>
                 `;
@@ -529,7 +547,7 @@
                     currentSort.asc = !currentSort.asc;
                 } else {
                     currentSort.key = sortKey;
-                    currentSort.asc = (sortKey === 'name' || sortKey === 'category');
+                    currentSort.asc = (sortKey === 'name' || sortKey === 'category' || sortKey === 'source');
                 }
                 saveState();
                 renderShips();
