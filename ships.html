@@ -163,7 +163,7 @@
                         <th class="px-1 py-2 text-center" data-sort="catSkin">Skin</th>
                         <th class="px-1 py-2 text-center" data-sort="catNails">Nails</th>
                         <th class="px-1 py-2 text-center" data-sort="catOther"><span title="Everything else: Bronze, Iron, Silver, Coal, Bone Fragments, Ceramic Plate, Linen Thread, and -- with Show Vanilla Equivalent off -- OdinShip's own crafted materials">Other</span></th>
-                        <th class="px-1 py-2">Build Recipe</th>
+                        <th class="px-1 py-2"><span title="Only what isn't already broken out in Resin/Wood/Skin/Nails to the left">Other Ingredients</span></th>
                     </tr>
                 </thead>
                 <tbody id="ship-table-body">
@@ -679,9 +679,13 @@
             const withRecipeBreakdown = processedShipData.map(ship => {
                 const expanded = expandRecipe(parseRecipe(ship.recipe), showVanillaEquivalent);
                 const cats = categorizeRecipe(expanded);
+                // Everything already broken out into the Resin/Wood/Skin/Nails columns is
+                // dropped from Build Recipe, which is left showing only "Other" ingredients --
+                // no point saying "40 Fine Wood" twice just in a different format.
+                const recipeOnlyOther = expanded.filter(({ name }) => (INGREDIENT_CATEGORY[name] || "Other") === "Other");
                 return {
                     ...ship,
-                    recipeDisplay: formatParsedRecipe(expanded),
+                    recipeDisplay: recipeOnlyOther.length ? formatParsedRecipe(recipeOnlyOther) : '—',
                     catResin: cats.Resin, catWood: cats.Wood, catSkin: cats.Skin,
                     catNails: cats.Nails, catOther: cats.Other,
                     // Sort keys stay the bare numeric totals above; these are what's displayed.
