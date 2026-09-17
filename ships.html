@@ -178,7 +178,7 @@
             </div>
              <div class="text-center text-sm text-gray-500 mt-4">
                 <p>The charts above provide a high-level comparison of the fleet. The Hauling chart shows the trade-off between Top Speed and Cargo Capacity (bubble size shows Cargo Throughput), the Acceleration chart ranks how quickly each sailing ship gets up to speed (its sail force), and the Performance chart blends Top Speed and Acceleration together (bubble size shows Agility) for a fuller picture of how a ship handles.</p>
-                <p>Every stat except top speed is the ship's real in-game value, read from Valheim's and OdinShipPlus's own data. Mass is shown for reference only: the game scales every force on a ship by its mass, so a heavier ship is no slower to start, no slower at full sail and no harder to turn. Top speeds are for full wind at the best angle, 64° off the stern; in a moderate breeze every ship is slower. Speeds marked ✓ were worked out from logged sailing (Karve, Cargo Ship, Fast Ship Skuldelev, Fast Karve). The rest are estimated from sail force and drag, scaled from the Karve or the Longship. The Longship's own 9.4 is an estimate too, probably within 0.4 m/s.</p>
+                <p>Every stat except top speed is the ship's real in-game value, read from Valheim's and OdinShipPlus's own data. Mass is shown for reference only: the game scales every force on a ship by its mass, so a heavier ship is no slower to start, no slower at full sail and no harder to turn. Top speeds are for full wind at the best angle, 64° off the stern; in a moderate breeze every ship is slower. Speeds marked ✓ were worked out from logged sailing (Karve, Longship, Cargo Ship, Fast Ship Skuldelev, Fast Karve). The rest are estimated from sail force and drag, scaled from the Karve or the Longship.</p>
             </div>
         </section>
         
@@ -210,7 +210,7 @@
         const shipData = [
             { source: "Vanilla", name: "Raft", category: "Small Boats", width: 1, health: 300, mass: 1000, sailForce: 0.05, drag: 0.005, rudderSpeed: 1.0, cargoSlots: 0, recipe: "Wood: 20; Leather Scraps: 6; Resin: 6" },
             { source: "Vanilla", name: "Karve", category: "Small Boats", width: 1, measuredSpeed: 7.3, health: 500, mass: 1000, sailForce: 0.03, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 4, hull: "karve", recipe: "Fine Wood: 30; Deer Hide: 10; Resin: 20; Bronze Nails: 80" },
-            { source: "Vanilla", name: "Longship", category: "Special Ships", width: 1, referenceSpeed: 9.4, health: 1000, mass: 2000, sailForce: 0.05, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 18, recipe: "Iron Nails: 100; Deer Hide: 10; Fine Wood: 40; Ancient Bark: 40" },
+            { source: "Vanilla", name: "Longship", category: "Special Ships", width: 1, measuredSpeed: 9.65, health: 1000, mass: 2000, sailForce: 0.05, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 18, recipe: "Iron Nails: 100; Deer Hide: 10; Fine Wood: 40; Ancient Bark: 40" },
             { source: "Vanilla", name: "Drakkar", category: "Special Ships", width: 1, health: 3000, mass: 3000, sailForce: 0.085, drag: 0.002, rudderSpeed: 0.5, cargoSlots: 32, recipe: "Iron Nails: 100; Ceramic Plate: 30; Fine Wood: 50; Yggdrasil Wood: 25" },
             { source: "OdinShip", name: "Rowing Canoe", category: "Small Boats", health: 500, mass: 500, sailForce: 0, drag: 0.005, rudderSpeed: 1.0, cargoSlots: 4, recipe: "Resin: 8; Wood: 20" },
             { source: "OdinShip", name: "Double Rowing Canoe", category: "Small Boats", health: 500, mass: 600, sailForce: 0, drag: 0.005, rudderSpeed: 1.4, cargoSlots: 4, recipe: "Resin: 10; Wood: 25" },
@@ -227,13 +227,16 @@
             { source: "OdinShipPlus", name: "War Ship Skuldelev", category: "War Ships", health: 1000, mass: 2500, sailForce: 0.06, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 28, recipe: "Sail Canvas: 4; Caulked Wood: 60; Iron Nails: 160; Marine Rope: 4" },
             { source: "OdinShipPlus", name: "Taurus War Ship", category: "War Ships", health: 2500, mass: 3000, sailForce: 0.06, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 32, recipe: "Sail Canvas: 4; Caulked Wood: 60; Iron Nails: 180; Marine Rope: 4" },
             { source: "OdinShipPlus", name: "Fast Ship Skuldelev", category: "Special Ships", measuredSpeed: 12.2, health: 1000, mass: 2000, sailForce: 0.09, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 12, recipe: "Sail Canvas: 4; Caulked Wood: 40; Iron Nails: 100; Marine Rope: 2" },
-            // TheGreatestShips clones a vanilla hull, so health, mass, drag and
-            // rudder speed are the base ship's. Its speed setting multiplies top
-            // speed by scaling sail force by the multiplier squared
-            // (Karve 0.03 x 1.14², Longship 0.05 x 1.28² / 0.89²).
-            { source: "TheGreatestShips", name: "Fast Karve", category: "Small Boats", measuredSpeed: 8.4, width: 0.85, health: 500, mass: 1000, sailForce: 0.039, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 2, hull: "karve", recipe: "Fine Wood: 30; Ancient Bark: 20; Bronze Nails: 60; Troll Hide: 8; Resin: 20" },
-            { source: "TheGreatestShips", name: "Cargo Longship", category: "Cargo Ships", width: 1.25, health: 1000, mass: 2000, sailForce: 0.0396, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 32, recipe: "Fine Wood: 40; Ancient Bark: 60; Iron Nails: 150; Deer Hide: 10; Core Wood: 30" },
-            { source: "TheGreatestShips", name: "Fast Longship", category: "Special Ships", width: 0.85, health: 1000, mass: 2000, sailForce: 0.0819, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 9, recipe: "Fine Wood: 40; Ancient Bark: 40; Iron Nails: 100; Linen Thread: 20; Resin: 30" }
+            // TheGreatestShips clones a vanilla hull, so mass and drag are the
+            // base ship's; health, rudder speed and cargo are its own 0.9.1
+            // settings. Its speed setting multiplies top speed by scaling sail
+            // force by the multiplier squared (Karve 0.03 x 1.37², Longship
+            // 0.05 x 1.243² / 0.87²). None of these have been logged yet at
+            // their 0.9.1 settings, so their speeds are estimated like the
+            // Longship's used to be.
+            { source: "TheGreatestShips", name: "Fast Karve", category: "Small Boats", width: 0.85, health: 400, mass: 1000, sailForce: 0.0563, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 2, hull: "karve", recipe: "Fine Wood: 30; Ancient Bark: 20; Bronze Nails: 60; Troll Hide: 8; Resin: 20" },
+            { source: "TheGreatestShips", name: "Cargo Longship", category: "Cargo Ships", width: 1.25, health: 1500, mass: 2000, sailForce: 0.0378, drag: 0.001, rudderSpeed: 0.8, cargoSlots: 32, recipe: "Fine Wood: 40; Ancient Bark: 60; Iron Nails: 180; Deer Hide: 10; Core Wood: 30" },
+            { source: "TheGreatestShips", name: "Fast Longship", category: "Special Ships", width: 0.85, health: 800, mass: 2000, sailForce: 0.0773, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 12, recipe: "Fine Wood: 40; Ancient Bark: 40; Iron Nails: 100; Linen Thread: 20; Resin: 30" }
         ];
 
         // ── Persisted filter/sort/flag state ──────────────────────────────────
@@ -323,10 +326,10 @@
         // game's wind-angle factor × lerp(0.25, 1, wind intensity) × the forward
         // share of the sail force, with k within ±2% across hundreds of samples.
         // The top speed is √(k × 0.737), 0.737 being the best drive there is
-        // (full wind, 64° off the stern). Karve 7.3, Cargo Ship 8.7, Fast Ship
-        // Skuldelev 12.2, Fast Karve 8.4 (at its 1.14 speed setting).
-        // The Longship has no full-sail log yet; its 9.4 comes from k / sailForce,
-        // which the logged hulls put at 2250-2580, so it could be 9.1-9.8.
+        // (full wind, 64° off the stern). Karve 7.3, Longship 9.65, Cargo Ship
+        // 8.7, Fast Ship Skuldelev 12.2, Fast Karve 8.4 (at its 1.14 speed
+        // setting). The Longship's fit used 260 steady full-sail samples with
+        // 1.1% average error.
         const processShipData = (data) => {
             const shipsWithSails = data.filter(s => s.sailForce > 0);
             const references = {
