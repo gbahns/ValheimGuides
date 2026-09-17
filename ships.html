@@ -136,6 +136,7 @@
                 <button class="filter-btn px-4 py-2 rounded-md text-sm font-bold" data-category="War Ships">War Ships</button>
             </div>
             <div id="tier-filters" class="flex flex-wrap gap-2 justify-center ml-3"></div>
+            <div id="source-filters" class="flex flex-wrap gap-2 justify-center ml-3"></div>
             <div id="vanilla-equivalent-filters" class="flex flex-wrap gap-2 justify-center ml-3"></div>
             <div id="hidden-filters" class="flex flex-wrap gap-2 justify-center ml-3"></div>
         </div>
@@ -162,8 +163,6 @@
                         <th class="px-1 py-2 text-center" data-sort="catWood">Wood</th>
                         <th class="px-1 py-2 text-center" data-sort="catSkin">Skin</th>
                         <th class="px-1 py-2 text-center" data-sort="catNails">Nails</th>
-                        <th class="px-1 py-2 text-center" data-sort="catOther"><span title="Everything else: Bronze, Iron, Silver, Coal, Bone Fragments, Ceramic Plate, Linen Thread, and -- with Show Vanilla Equivalent off -- OdinShip's own crafted materials">Other</span></th>
-                        <th class="px-1 py-2"><span title="Only what isn't already broken out in Resin/Wood/Skin/Nails to the left">Other Ingredients</span></th>
                     </tr>
                 </thead>
                 <tbody id="ship-table-body">
@@ -256,6 +255,7 @@
             localStorage.setItem(STORAGE_KEY, JSON.stringify({
                 categories: [...activeCategories],
                 tiers: [...activeTiers],
+                sources: [...activeSources],
                 sort: currentSort,
                 flagged: [...flaggedShips],
                 vanillaEquivalent: showVanillaEquivalent,
@@ -272,6 +272,17 @@
         // Category filter is multi-select, like the progression/tier filter below:
         // an empty Set means "show all".
         const activeCategories = new Set((savedState.categories || []).filter(c => VALID_CATEGORIES.includes(c)));
+        // Source filter: which mod (or vanilla) a ship comes from. Multi-select, same as
+        // category and tier above -- an empty Set means "show all".
+        const SOURCES = [
+            { source: 'All', label: 'All' },
+            { source: 'Vanilla', label: 'Vanilla' },
+            { source: 'OdinShip', label: 'OdinShip' },
+            { source: 'OdinShipPlus', label: 'OdinShip+' },
+            { source: 'TheGreatestShips', label: 'TheGreatestShips' },
+        ];
+        const VALID_SOURCES = SOURCES.map(s => s.source).filter(s => s !== 'All');
+        const activeSources = new Set((savedState.sources || []).filter(s => VALID_SOURCES.includes(s)));
         let currentSort = savedState.sort ?? { key: 'name', asc: true };
 
         // Progression tier: the highest-tier vanilla material a ship's recipe
@@ -336,17 +347,12 @@
                 .filter(t => t != null);
             return tiers.length ? Math.max(...tiers) : 0;
         }
-        // [{name,amount}] -> "20 Wood, Resin" (qty dropped when it's 1)
-        function formatParsedRecipe(parsed) {
-            return parsed.map(({ name, amount }) => amount === 1 ? name : `${amount} ${name}`).join(', ');
-        }
-        // Ingredient -> one of five buckets, for the Resin/Wood/Skin/Nails/Other columns.
-        // Anything not listed (Bronze, Iron, Silver, Coal, Bone Fragments, Ceramic Plate,
-        // Linen Thread) falls into "Other". Sail Canvas, Marine Rope, Caulked Wood and Resin
-        // Wood are OdinShip's own crafted items, not vanilla materials, but their dominant
-        // ingredient (see VANILLA_EQUIVALENT) puts them in Skin/Skin/Wood/Wood even with the
-        // vanilla-equivalent toggle off, so they don't all just pile into "Other" before being
-        // expanded.
+        // Ingredient -> one of four buckets, for the Resin/Wood/Skin/Nails columns. Every
+        // ingredient that actually appears in a ship's own recipe (not a sub-crafting recipe
+        // like Caulked Wood's) lands in one of these -- there's no leftover "Other" bucket.
+        // Sail Canvas, Marine Rope, Caulked Wood and Resin Wood are OdinShip's own crafted
+        // items, not vanilla materials, but their dominant ingredient (see VANILLA_EQUIVALENT)
+        // puts them in Skin/Skin/Wood/Wood even with the vanilla-equivalent toggle off.
         const INGREDIENT_CATEGORY = {
             "Wood": "Wood", "Fine Wood": "Wood", "Core Wood": "Wood",
             "Ancient Bark": "Wood", "Yggdrasil Wood": "Wood",
@@ -354,12 +360,14 @@
             "Resin": "Resin",
             "Deer Hide": "Skin", "Troll Hide": "Skin", "Leather Scraps": "Skin",
             "Sail Canvas": "Skin", "Marine Rope": "Skin",
+            "Linen Thread": "Skin", "Ceramic Plate": "Skin",
             "Bronze Nails": "Nails", "Iron Nails": "Nails",
         };
         function categorizeRecipe(parsed) {
-            const totals = { Resin: 0, Wood: 0, Skin: 0, Nails: 0, Other: 0 };
+            const totals = { Resin: 0, Wood: 0, Skin: 0, Nails: 0 };
             parsed.forEach(({ name, amount }) => {
-                totals[INGREDIENT_CATEGORY[name] || "Other"] += amount;
+                const category = INGREDIENT_CATEGORY[name];
+                if (category) totals[category] += amount;
             });
             return totals;
         }
@@ -369,7 +377,8 @@
         const SUBTYPE_LABEL = {
             "Wood": "", "Fine Wood": "Fine", "Core Wood": "Core",
             "Ancient Bark": "Bark", "Yggdrasil Wood": "Yggdrasil",
-            "Caulked Wood": "Caulked", "Resin Wood": "Resin Wood",
+            "Caulked Wood": "Caulked", "Resin Wood": "Resin",
+            "Linen Thread": "Linen", "Ceramic Plate": "Ceramic",
             "Deer Hide": "Deer Hide", "Troll Hide": "Troll Hide", "Leather Scraps": "Leather",
             "Sail Canvas": "Canvas", "Marine Rope": "Rope",
             "Bronze Nails": "Bronze", "Iron Nails": "Iron",
@@ -570,6 +579,36 @@
         }
         refreshTierButtons(); // sync initial state with anything restored from storage
 
+        // Source filter: same multi-select pattern as the progression filter above.
+        const sourceRow = document.getElementById('source-filters');
+        SOURCES.forEach(s => {
+            const btn = document.createElement('button');
+            btn.className = 'filter-btn px-4 py-2 rounded-md text-sm font-bold' + (s.source === 'All' ? ' active' : '');
+            btn.textContent = s.label;
+            btn.dataset.source = s.source;
+            btn.addEventListener('click', () => {
+                if (s.source === 'All') {
+                    activeSources.clear();
+                } else if (activeSources.has(s.source)) {
+                    activeSources.delete(s.source);
+                } else {
+                    activeSources.add(s.source);
+                }
+                refreshSourceButtons();
+                saveState();
+                renderShips();
+            });
+            sourceRow.appendChild(btn);
+        });
+        function refreshSourceButtons() {
+            [...sourceRow.children].forEach((btn, i) => {
+                const source = SOURCES[i].source;
+                const isActive = source === 'All' ? activeSources.size === 0 : activeSources.has(source);
+                btn.classList.toggle('active', isActive);
+            });
+        }
+        refreshSourceButtons(); // sync initial state with anything restored from storage
+
         const vanillaEquivRow = document.getElementById('vanilla-equivalent-filters');
         const vanillaEquivBtn = document.createElement('button');
         vanillaEquivBtn.className = 'filter-btn px-4 py-2 rounded-md text-sm font-bold' + (showVanillaEquivalent ? ' active' : '');
@@ -686,15 +725,9 @@
             const withRecipeBreakdown = processedShipData.map(ship => {
                 const expanded = expandRecipe(parseRecipe(ship.recipe), showVanillaEquivalent);
                 const cats = categorizeRecipe(expanded);
-                // Everything already broken out into the Resin/Wood/Skin/Nails columns is
-                // dropped from Build Recipe, which is left showing only "Other" ingredients --
-                // no point saying "40 Fine Wood" twice just in a different format.
-                const recipeOnlyOther = expanded.filter(({ name }) => (INGREDIENT_CATEGORY[name] || "Other") === "Other");
                 return {
                     ...ship,
-                    recipeDisplay: recipeOnlyOther.length ? formatParsedRecipe(recipeOnlyOther) : '—',
-                    catResin: cats.Resin, catWood: cats.Wood, catSkin: cats.Skin,
-                    catNails: cats.Nails, catOther: cats.Other,
+                    catResin: cats.Resin, catWood: cats.Wood, catSkin: cats.Skin, catNails: cats.Nails,
                     // Sort keys stay the bare numeric totals above; these are what's displayed.
                     catWoodDisplay: breakdownForCategory(expanded, "Wood"),
                     catSkinDisplay: breakdownForCategory(expanded, "Skin"),
@@ -705,6 +738,7 @@
             const filteredData = withRecipeBreakdown.filter(ship =>
                 (activeCategories.size === 0 || activeCategories.has(ship.category)) &&
                 (activeTiers.size === 0 || activeTiers.has(ship.tier)) &&
+                (activeSources.size === 0 || activeSources.has(ship.source)) &&
                 (showHidden || !flaggedShips.has(ship.name))
             );
 
@@ -750,8 +784,6 @@
                     <td class="px-1 py-2 text-center whitespace-nowrap">${ship.catWoodDisplay || '—'}</td>
                     <td class="px-1 py-2 text-center whitespace-nowrap">${ship.catSkinDisplay || '—'}</td>
                     <td class="px-1 py-2 text-center whitespace-nowrap">${ship.catNailsDisplay || '—'}</td>
-                    <td class="px-1 py-2 text-center">${ship.catOther || '—'}</td>
-                    <td class="px-1 py-2 text-sm">${ship.recipeDisplay}</td>
                 `;
                 shipTableBody.appendChild(row);
             });
