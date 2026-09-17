@@ -158,6 +158,7 @@
                         <th class="px-1 py-2 text-center" data-sort="topSpeed"><span title="Top speed in m/s in full wind at the best angle (64° off the stern). ✓ marks speeds worked out from logged sailing; the rest are estimated from sail force and drag.">Top Speed</span></th>
                         <th class="px-1 py-2 text-center" data-sort="cargoSlots">Cargo Slots</th>
                         <th class="px-1 py-2 text-center" data-sort="width"><span title="Hull width relative to the vanilla ship it is based on">Width</span></th>
+                        <th class="px-1 py-2 text-center" data-sort="length"><span title="Bow-to-stern length relative to the vanilla ship it is based on">Length</span></th>
                         <th class="px-1 py-2 text-center" data-sort="cargoThroughput"><span title="Cargo Slots * Top Speed">Cargo Throughput</span></th>
                         <th class="px-1 py-2 text-center" data-sort="catResin">Resin</th>
                         <th class="px-1 py-2 text-center" data-sort="catWood">Wood</th>
@@ -241,8 +242,8 @@
             // Longship's used to be.
             { source: "TheGreatestShips", name: "Fast Karve", category: "Small Boats", measuredSpeed: 10.09, width: 0.85, health: 400, mass: 1000, sailForce: 0.0563, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 2, hull: "karve", recipe: "Fine Wood: 30; Ancient Bark: 20; Bronze Nails: 60; Troll Hide: 8; Resin: 20" },
             { source: "TheGreatestShips", name: "Knarr", category: "Cargo Ships", measuredSpeed: 8.58, width: 1.25, health: 1500, mass: 2000, sailForce: 0.0378, drag: 0.001, rudderSpeed: 0.8, cargoSlots: 32, recipe: "Fine Wood: 40; Ancient Bark: 60; Iron Nails: 180; Deer Hide: 10; Core Wood: 30" },
-            { source: "TheGreatestShips", name: "Busse", category: "Cargo Ships", width: 1.3, health: 1800, mass: 2000, sailForce: 0.0344, drag: 0.001, rudderSpeed: 0.7, cargoSlots: 36, recipe: "Fine Wood: 55; Ancient Bark: 85; Iron Nails: 250; Deer Hide: 15; Core Wood: 45" },
-            { source: "TheGreatestShips", name: "Big Busse", category: "Cargo Ships", width: 1.4, health: 2200, mass: 2000, sailForce: 0.0304, drag: 0.001, rudderSpeed: 0.6, cargoSlots: 64, recipe: "Fine Wood: 80; Ancient Bark: 130; Iron Nails: 350; Deer Hide: 25; Core Wood: 70" },
+            { source: "TheGreatestShips", name: "Busse", category: "Cargo Ships", width: 1.3, length: 1.15, health: 1800, mass: 2000, sailForce: 0.0344, drag: 0.001, rudderSpeed: 0.7, cargoSlots: 36, recipe: "Fine Wood: 55; Ancient Bark: 85; Iron Nails: 250; Deer Hide: 15; Core Wood: 45" },
+            { source: "TheGreatestShips", name: "Big Busse", category: "Cargo Ships", width: 1.4, length: 1.3, health: 2200, mass: 2000, sailForce: 0.0304, drag: 0.001, rudderSpeed: 0.6, cargoSlots: 64, recipe: "Fine Wood: 80; Ancient Bark: 130; Iron Nails: 350; Deer Hide: 25; Core Wood: 70" },
             { source: "TheGreatestShips", name: "Fast Longship", category: "Special Ships", measuredSpeed: 12.35, width: 0.85, health: 800, mass: 2000, sailForce: 0.0773, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 12, recipe: "Fine Wood: 40; Ancient Bark: 40; Iron Nails: 100; Linen Thread: 20; Resin: 30" }
         ];
 
@@ -779,6 +780,7 @@
                     <td class="px-1 py-2 text-center">${ship.topSpeed.toFixed(1)}${ship.topSpeedMeasured ? ' <span title="Worked out from logged sailing">✓</span>' : ''}</td>
                     <td class="px-1 py-2 text-center">${ship.cargoSlots}</td>
                     <td class="px-1 py-2 text-center">${ship.width ?? '—'}</td>
+                    <td class="px-1 py-2 text-center">${ship.length ?? '—'}</td>
                     <td class="px-1 py-2 text-center">${ship.cargoThroughput.toFixed(1)}</td>
                     <td class="px-1 py-2 text-center">${ship.catResin || '—'}</td>
                     <td class="px-1 py-2 text-center whitespace-nowrap">${ship.catWoodDisplay || '—'}</td>
