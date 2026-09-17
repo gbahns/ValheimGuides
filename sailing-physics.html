@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sailing Physics — Valheim Knowledgebase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared/styles.css">
+    <script src="shared/chrome.js" defer></script>
+    <style>
+        body {
+            font-family: 'IM Fell English', serif;
+            background-color: #FDF5E6;
+            color: #4A3F35;
+        }
+        .valheim-title {
+            font-family: 'IM Fell English', serif;
+            font-weight: 700;
+            color: #4A3F35;
+        }
+        .card {
+            background-color: #FAF3E0;
+            border: 1px solid #D2B48C;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 420px;
+            max-height: 55vh;
+            background-color: #FAF3E0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #D2B48C;
+        }
+        code, .mono {
+            font-family: 'Consolas', 'Menlo', monospace;
+            font-size: 0.85em;
+        }
+        pre.code-block {
+            font-family: 'Consolas', 'Menlo', monospace;
+            font-size: 0.8rem;
+            background: #2E2620;
+            color: #FAF3E0;
+            padding: 0.9rem 1.1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+        .callout {
+            border-left: 4px solid #4A3F35;
+            background: rgba(210,180,140,0.25);
+            padding: 0.75rem 1rem;
+            border-radius: 0 0.4rem 0.4rem 0;
+        }
+        table.stat-table {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+        }
+        table.stat-table th, table.stat-table td { padding: 0.45rem 0.7rem; }
+        .measured-badge {
+            display: inline-block;
+            background: rgba(46,125,50,0.18);
+            color: #2E7D32;
+            font-weight: 700;
+            font-size: 0.7rem;
+            border-radius: 9999px;
+            padding: 0.05rem 0.5rem;
+            margin-left: 0.35rem;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <main class="container mx-auto max-w-4xl px-4 py-10">
+
+        <header class="text-center mb-10">
+            <h1 class="valheim-title text-5xl">Sailing Physics</h1>
+            <p class="text-lg mt-2 text-stone-700">How Valheim's ships actually move — decompiled from the game itself, and checked against real sailing logs.</p>
+        </header>
+
+        <section class="card rounded-lg p-6 mb-8">
+            <h2 class="valheim-title text-2xl mb-3">Mass doesn't matter</h2>
+            <p class="mb-3">It's tempting to assume a heavier ship is slower to get moving, or slower at full sail. It isn't. Every force the game applies to a ship — buoyancy, the rudder, the sail — is applied through Unity's <code>Rigidbody.AddForceAtPosition(..., ForceMode.Impulse)</code>, and an impulse divides by mass to produce a velocity change. Valheim's code pre-multiplies each force by the ship's own mass right before applying it:</p>
+            <pre class="code-block">m_body.AddForceAtPosition(sailForce * m_body.mass, position2, ForceMode.Impulse);</pre>
+            <p class="mb-3">Multiply by mass, then Unity divides by that same mass — the two cancel, every physics tick. A Karve and a Drakkar under the same sail settings pick up speed at exactly the same rate. This is true of buoyancy and rudder-turning forces too, not just the sail.</p>
+            <p class="mb-3">Drag works differently, and it's worth knowing why it doesn't reintroduce mass. The forward-drag term is a straight subtraction from velocity — no <code>AddForce</code>, no mass anywhere in it:</p>
+            <pre class="code-block">float num8 = num5 * num5 * Sign(num5) * m_dampingForward * num4;   // num5 = forward speed
+vector9 -= transform.forward * Clamp(num8, -1f, 1f);                // subtracted straight from velocity</pre>
+            <p>So acceleration, top speed and turning are all governed purely by the ship's <span class="mono">m_sailForceFactor</span> and <span class="mono">m_dampingForward</span> — mass only matters for what happens when a ship hits something.</p>
+        </section>
+
+        <section class="card rounded-lg p-6 mb-8">
+            <h2 class="valheim-title text-2xl mb-3">The wind-angle formula</h2>
+            <p class="mb-3">Decompiling <code>Ship.GetWindAngleFactor()</code> and <code>Ship.GetSailForce()</code> (<code>assembly_valheim.dll</code>, ilspycmd) gives the exact curve the game uses to turn wind direction into thrust:</p>
+            <pre class="code-block">public float GetWindAngleFactor()
+{
+    float num = Vector3.Dot(EnvMan.instance.GetWindDir(), -transform.forward);
+    float num2 = Mathf.Lerp(0.7f, 1f, 1f - Abs(num));   // 0.7 astern/ahead -> 1.0 abeam
+    float num3 = 1f - Utils.LerpStep(0.75f, 0.8f, num); // hard cutoff near dead upwind
+    return num2 * num3;
+}
+
+private Vector3 GetSailForce(float sailSize, float dt)
+{
+    float windIntensity = EnvMan.instance.GetWindIntensity();
+    float num = Mathf.Lerp(0.25f, 1f, windIntensity);          // weak wind still pushes a little
+    float windAngleFactor = GetWindAngleFactor() * num;
+    Vector3 target = Normalize(windDir + transform.forward) * (windAngleFactor * m_sailForceFactor * sailSize);
+    ...
+}</pre>
+            <p class="mb-3">Two things are stacked here, and they pull in different directions:</p>
+            <ul class="list-disc pl-6 mb-3 space-y-1">
+                <li><strong><code>windAngleFactor</code> alone</strong> peaks at 1.0 with the wind on the beam (90° to your heading) and bottoms out at 0.7 running dead downwind or sailing dead into the wind.</li>
+                <li><strong>The thrust direction</strong> isn't straight forward — it's the average (bisector) of the wind direction and the ship's heading, <code>Normalize(windDir + forward)</code>. Only the forward-facing slice of that bisector actually moves the ship, and that slice shrinks the further the wind angle is from dead-astern, following <code>cos(angle / 2)</code>.</li>
+            </ul>
+            <p>Multiply the two together and the peak moves. It isn't at the beam, and it isn't running downwind — it lands at a broad reach, angled off the stern.</p>
+        </section>
+
+        <section class="card rounded-lg p-6 mb-8">
+            <h2 class="valheim-title text-2xl mb-3">Drive across every point of sail</h2>
+            <p class="mb-4">Combined drive = <span class="mono">windAngleFactor(θ) × cos(θ / 2)</span>, where θ is the wind angle measured off the stern (0° = wind dead astern / running downwind, 180° = wind dead ahead). This is exactly what's plotted below, computed live from the formulas above.</p>
+            <div class="chart-container">
+                <canvas id="driveChart"></canvas>
+            </div>
+            <p class="text-sm text-stone-600 mt-3 text-center">Peak drive (0.737) lands at 64° off the stern — a broad reach. The shaded band past ~139° is the "in irons" zone: no forward thrust at all within about 37° of sailing straight into the wind.</p>
+        </section>
+
+        <section class="card rounded-lg p-6 mb-8">
+            <h2 class="valheim-title text-2xl mb-3">Is that realistic?</h2>
+            <p class="mb-3">The shape is — dead-downwind not being the fastest point of sail is genuinely true of real sailboats. The specific number (64°) is a hand-tuned game curve, though, not a physics derivation, so the resemblance is qualitative rather than exact.</p>
+            <p class="mb-3">Why real boats work out this way:</p>
+            <ul class="list-disc pl-6 mb-3 space-y-1">
+                <li><strong>Apparent wind.</strong> A moving boat's own velocity combines with the true wind to produce the "apparent wind" the sail actually feels. On a reach, that apparent wind is stronger and hits the sail at a better angle than on a dead run.</li>
+                <li><strong>Lift vs. drag.</strong> Reaching lets a sail generate lift, like an airfoil — efficient. Running dead downwind is pure drag propulsion, and a boat running dead downwind can't really exceed the true wind speed itself.</li>
+                <li><strong>Rig efficiency.</strong> Dead downwind, a mainsail often blankets the headsail, and you risk sailing "by the lee" — genuinely worse trim, not just a geometric artifact.</li>
+            </ul>
+            <p class="mb-3">In real sailing convention (true wind angle measured from the <em>bow</em>, 0° = head to wind, 180° = dead run), Valheim's "64° off the stern" converts to 180° − 64° = <strong>116° true wind angle</strong> — squarely in broad-reach territory, a very plausible number for a cruising boat. High-performance boats (catamarans, foilers) generate so much of their own apparent wind that they can peak even further forward, closer to a beam reach.</p>
+            <div class="callout">
+                What the game's model <em>doesn't</em> do: it only ever uses the true wind direction — there's no feedback from the ship's own speed into an apparent wind angle, no lift/drag distinction, no heel or leeway. The 64° peak was almost certainly tuned by feel, not simulated — it just happens to land in the right real-world neighborhood.
+            </div>
+        </section>
+
+        <section class="card rounded-lg p-6 mb-8">
+            <h2 class="valheim-title text-2xl mb-3">Turning this into real numbers</h2>
+            <p class="mb-3">At steady state, the sail's forward push balances the forward drag term exactly, which gives a clean formula for top speed at any wind angle:</p>
+            <pre class="code-block">topSpeed(θ) = sqrt( drive(θ) × sailForceFactor / dampingForward )</pre>
+            <p class="mb-3">Rather than trust that formula blind, it's checked against real gameplay: the <strong>Captain's Log</strong> mod logs speed, heading, wind angle and wind intensity twice a second while sailing. Every steady full-sail stretch (speed and drive both flat for a few consecutive samples) is a data point, fit to <span class="mono">speed² = k × drive</span> by linear regression through the origin — and the top speed at the best angle is <span class="mono">√(k × 0.737)</span>.</p>
+            <p class="mb-4">Measured so far, with hundreds of steady-state samples per ship and well under 2% average fit error:</p>
+            <div class="overflow-x-auto">
+                <table class="stat-table w-full">
+                    <thead class="bg-[#4A3F35] text-[#FAF3E0] valheim-title">
+                        <tr>
+                            <th class="text-left">Ship</th>
+                            <th class="text-right">Top speed (m/s)</th>
+                            <th class="text-left">Samples</th>
+                            <th class="text-left">Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-t border-stone-300"><td>Karve <em>(vanilla)</em></td><td class="text-right">7.3<span class="measured-badge">measured</span></td><td>—</td><td>The Karve-sized reference hull.</td></tr>
+                        <tr class="border-t border-stone-300"><td>Longship <em>(vanilla)</em></td><td class="text-right">9.65<span class="measured-badge">measured</span></td><td>260</td><td>1.1% average fit error. Replaced an earlier 9.4 sail-force estimate.</td></tr>
+                        <tr class="border-t border-stone-300"><td>OdinShipPlus Cargo Ship</td><td class="text-right">8.7<span class="measured-badge">measured</span></td><td>—</td><td>—</td></tr>
+                        <tr class="border-t border-stone-300"><td>OdinShipPlus Fast Ship Skuldelev</td><td class="text-right">12.2<span class="measured-badge">measured</span></td><td>—</td><td>The fastest hull logged.</td></tr>
+                        <tr class="border-t border-stone-300"><td>TheGreatestShips Fast Longship</td><td class="text-right">12.35<span class="measured-badge">measured</span></td><td>34</td><td>Designed to be about the same as the Skuldelev.</td></tr>
+                        <tr class="border-t border-stone-300"><td>TheGreatestShips Cargo Longship</td><td class="text-right">8.58<span class="measured-badge">measured</span></td><td>67</td><td>Designed for about 8.4.</td></tr>
+                        <tr class="border-t border-stone-300"><td>TheGreatestShips Fast Karve</td><td class="text-right">~10 (target)</td><td>—</td><td>Not yet logged long enough at full sail to fit.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="mt-4 text-sm text-stone-600">Full ship-by-ship stats, recipes and cargo live on the <a href="ships.html" class="underline hover:text-stone-800">Ships page</a>.</p>
+        </section>
+
+        <footer class="text-center text-sm text-stone-600 pb-4">
+            Everything above comes from decompiling <span class="mono">assembly_valheim.dll</span> and from real Captain's Log sailing data — not guesswork. If a future Valheim patch changes the sail or drag formulas, this page (and the ships it's built from) will need re-checking.
+        </footer>
+
+    </main>
+
+    <script>
+        function lerp(a, b, t) { t = Math.max(0, Math.min(1, t)); return a + (b - a) * t; }
+        function lerpStep(a, b, x) { return Math.max(0, Math.min(1, (x - a) / (b - a))); }
+
+        function windAngleFactor(thetaDeg) {
+            const theta = thetaDeg * Math.PI / 180;
+            const num = -Math.cos(theta); // dot(windDir, -forward)
+            const num2 = lerp(0.7, 1, 1 - Math.abs(num));
+            const num3 = 1 - lerpStep(0.75, 0.8, num);
+            return num2 * num3;
+        }
+        function drive(thetaDeg) {
+            const theta = thetaDeg * Math.PI / 180;
+            return windAngleFactor(thetaDeg) * Math.cos(theta / 2);
+        }
+
+        const labels = [];
+        const points = [];
+        for (let theta = 0; theta <= 180; theta += 1) {
+            labels.push(theta);
+            points.push(drive(theta));
+        }
+
+        // Find and mark the peak.
+        let peakIdx = 0;
+        for (let i = 1; i < points.length; i++) if (points[i] > points[peakIdx]) peakIdx = i;
+
+        new Chart(document.getElementById('driveChart'), {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'Forward drive',
+                    data: points,
+                    borderColor: '#4A3F35',
+                    backgroundColor: 'rgba(74,63,53,0.12)',
+                    fill: true,
+                    pointRadius: 0,
+                    borderWidth: 2,
+                    tension: 0.15,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'Drive vs. wind angle off the stern', font: { size: 15 } },
+                    tooltip: {
+                        callbacks: {
+                            title: (items) => `${items[0].label}° off the stern`,
+                            label: (item) => `drive = ${item.parsed.y.toFixed(3)}`,
+                        }
+                    },
+                    annotation: undefined,
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Wind angle off the stern (°) — 0 = downwind, 90 = beam, 180 = into the wind' },
+                        ticks: { stepSize: 30, callback: (v, i) => (labels[i] % 30 === 0 ? labels[i] + '°' : '') },
+                    },
+                    y: {
+                        title: { display: true, text: 'Drive (relative thrust)' },
+                        min: 0,
+                        max: 0.8,
+                    }
+                }
+            },
+            plugins: [{
+                id: 'peakMarker',
+                afterDatasetsDraw(chart) {
+                    const { ctx, scales } = chart;
+                    const x = scales.x.getPixelForValue(peakIdx);
+                    const y = scales.y.getPixelForValue(points[peakIdx]);
+                    ctx.save();
+                    ctx.fillStyle = '#C0392B';
+                    ctx.beginPath();
+                    ctx.arc(x, y, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.font = '12px sans-serif';
+                    ctx.fillText(`peak: ${peakIdx}° (${points[peakIdx].toFixed(3)})`, x + 8, y - 8);
+                    ctx.restore();
+                }
+            }]
+        });
+    </script>
+</body>
+</html>

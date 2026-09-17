@@ -11,6 +11,7 @@
     const PAGES = [
         { page: 'index',     label: 'Home' },
         { page: 'ships',     label: 'Ships' },
+        { page: 'sailing-physics', label: 'Sailing Physics' },
         { page: 'weapons',   label: 'Weapons' },
         { page: 'damage',    label: 'Damage' },
         { page: 'fishing',   label: 'Fishing' },
