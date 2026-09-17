@@ -13,7 +13,7 @@
     <script src="shared/chrome.js" defer></script>
     <!-- Chosen Palette: Valheim Parchment & Stone -->
     <!-- Application Structure Plan: The application is designed as an interactive dashboard. The primary content is a responsive, sortable table view of all ships, which is optimal for direct stat comparison. Key interactions include filtering ships by category (Speed, Cargo, etc.) and sorting by clicking table headers. This is more direct than a dropdown for sorting. The structure also includes summary charts for high-level visual comparison and an info section for essential mod context. -->
-    <!-- Visualization & Content Choices: Ship data is presented in a responsive HTML table, with JS handling the dynamic filtering, sorting, and rendering of rows. This is a classic and effective way to handle tabular data. A bar chart (Chart.js) compares cargo capacity, and a scatter plot (Chart.js) shows the mass vs. sail force relationship. These visualizations complement the table by providing at-a-glance insights. -->
+    <!-- Visualization & Content Choices: Ship data is presented in a responsive HTML table, with JS handling the dynamic filtering, sorting, and rendering of rows. This is a classic and effective way to handle tabular data. A bubble chart (Chart.js) compares speed against cargo capacity, a bar chart ranks acceleration, and a second bubble chart plots top speed against acceleration. These visualizations complement the table by providing at-a-glance insights. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -50,8 +50,8 @@
             border-radius: 0.5rem;
             border: 1px solid #D2B48C;
         }
-        /* The Acceleration and Performance charts carry a name+number label per
-           bubble, so they need more room to breathe than the cargo bar chart. */
+        /* The Hauling and Performance charts carry a name+number label per bubble,
+           and the Acceleration chart a label per bar, so they need more room. */
         .chart-container-wide {
             max-width: 100%;
             height: 650px;
@@ -148,12 +148,12 @@
                         <th class="px-1 py-2 text-center" data-sort="category">Category</th>
                         <th class="px-1 py-2 text-center" data-sort="tier"><span title="Highest-tier vanilla material required to build it">Tier</span></th>
                         <th class="px-1 py-2 text-center" data-sort="health">Health</th>
-                        <th class="px-1 py-2 text-center" data-sort="mass">Mass</th>
+                        <th class="px-1 py-2 text-center" data-sort="mass"><span title="Rigidbody mass. It does not change speed, acceleration or turning: the game scales every force by it.">Mass</span></th>
                         <th class="px-1 py-2 text-center" data-sort="rudderSpeed">Rudder Speed</th>
-                        <th class="px-1 py-2 text-center" data-sort="agility"><span title="Relative turning ability based on Rudder Speed and Mass">Agility</span></th>
+                        <th class="px-1 py-2 text-center" data-sort="agility"><span title="How quickly the rudder swings, relative to the slowest ship">Agility</span></th>
                         <th class="px-1 py-2 text-center" data-sort="sailForce">Sail Force</th>
                         <th class="px-1 py-2 text-center" data-sort="relativeAccel">Acceleration</th>
-                        <th class="px-1 py-2 text-center" data-sort="topSpeed"><span title="Estimated Top Speed in meters/second">Top Speed</span></th>
+                        <th class="px-1 py-2 text-center" data-sort="topSpeed"><span title="Top speed in m/s. Measured for the Karve and Longship; estimated for the rest from sail force and drag.">Top Speed</span></th>
                         <th class="px-1 py-2 text-center" data-sort="cargoSlots">Cargo Slots</th>
                         <th class="px-1 py-2 text-center" data-sort="width"><span title="Hull width relative to the vanilla ship it is based on">Width</span></th>
                         <th class="px-1 py-2 text-center" data-sort="cargoThroughput"><span title="Cargo Slots * Top Speed">Cargo Throughput</span></th>
@@ -177,7 +177,8 @@
                 <canvas id="performanceChart"></canvas>
             </div>
              <div class="text-center text-sm text-gray-500 mt-4">
-                <p>The charts above provide a high-level comparison of the fleet. The Hauling chart shows the trade-off between Top Speed and Cargo Capacity (bubble size shows Cargo Throughput), the Acceleration chart shows the trade-off between a heavier hull (more HP, less prone to capsizing) and how quickly a ship gets up to speed, and the Performance chart blends Top Speed and Acceleration together (bubble size shows Agility) for a fuller picture of how a ship handles.</p>
+                <p>The charts above provide a high-level comparison of the fleet. The Hauling chart shows the trade-off between Top Speed and Cargo Capacity (bubble size shows Cargo Throughput), the Acceleration chart ranks how quickly each sailing ship gets up to speed (its sail force), and the Performance chart blends Top Speed and Acceleration together (bubble size shows Agility) for a fuller picture of how a ship handles.</p>
+                <p>Every stat is the ship's real in-game value, read from Valheim's and OdinShipPlus's own data. Mass is shown for reference only: the game scales every force on a ship by its mass, so a heavier ship is no slower to start, no slower at full sail and no harder to turn. Top speeds were measured for the Karve (8.8) and Longship (9.5); the others are estimated from sail force and drag, scaled from whichever of those two has the more similar hull, so treat them as close rather than exact.</p>
             </div>
         </section>
         
@@ -201,33 +202,38 @@
     <div id="rowMenu" role="menu"></div>
 
     <script>
+        // Stats are the ships' real prefab values: vanilla from Valheim 1.0.7's
+        // asset bundles, OdinShip/OdinShipPlus from the bundle inside OdinShipPlus
+        // 0.8.3. sailForce is Ship.m_sailForceFactor, drag is m_dampingForward.
+        // hull: "karve" marks Karve-sized hulls, whose speed is estimated from the
+        // Karve rather than the Longship (see processShipData).
         const shipData = [
-            { source: "Vanilla", name: "Raft", category: "Small Boats", width: 1, health: 300, mass: 400, sailForce: 0.2, rudderSpeed: 1, cargoSlots: 3, recipe: "Wood: 20; Leather Scraps: 6; Resin: 6" },
-            { source: "Vanilla", name: "Karve", category: "Small Boats", width: 1, measuredSpeed: 8.8, health: 500, mass: 600, sailForce: 0.5, rudderSpeed: 1, cargoSlots: 4, recipe: "Fine Wood: 30; Deer Hide: 10; Resin: 20; Bronze Nails: 80" },
-            { source: "Vanilla", name: "Longship", category: "Special Ships", width: 1, measuredSpeed: 9.5, health: 1000, mass: 1000, sailForce: 0.7, rudderSpeed: 1, cargoSlots: 18, recipe: "Iron Nails: 100; Deer Hide: 10; Fine Wood: 40; Ancient Bark: 40" },
-            { source: "Vanilla", name: "Drakkar", category: "Special Ships", width: 1, health: 3000, mass: 1500, sailForce: 0.8, rudderSpeed: 1, cargoSlots: 24, recipe: "Iron Nails: 100; Ceramic Plate: 30; Fine Wood: 50; Yggdrasil Wood: 25" },
-            { source: "OdinShip", name: "Rowing Canoe", category: "Small Boats", health: 400, mass: 400, sailForce: 0, rudderSpeed: 1, cargoSlots: 4, recipe: "Resin: 8; Wood: 20" },
-            { source: "OdinShip", name: "Double Rowing Canoe", category: "Small Boats", health: 500, mass: 400, sailForce: 0, rudderSpeed: 1, cargoSlots: 4, recipe: "Resin: 10; Wood: 25" },
-            { source: "OdinShip", name: "Little Boat", category: "Small Boats", health: 800, mass: 500, sailForce: 0.3, rudderSpeed: 1, cargoSlots: 4, recipe: "Leather Scraps: 8; Wood: 40" },
-            { source: "OdinShipPlus", name: "Hercule Fishing Boat", category: "Special Ships", health: 1200, mass: 1500, sailForce: 0.5, rudderSpeed: 1, cargoSlots: 12, recipe: "Sail Canvas: 2; Resin Wood: 30; Bronze Nails: 100; Marine Rope: 2" },
-            { source: "OdinShipPlus", name: "Goblin Boat", category: "Special Ships", health: 1500, mass: 2000, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 28, recipe: "Sail Canvas: 5; Caulked Wood: 50; Iron Nails: 120; Marine Rope: 5" },
-            { source: "OdinShip", name: "Marchant Ship", category: "Cargo Ships", health: 1800, mass: 2000, sailForce: 0.5, rudderSpeed: 1, cargoSlots: 21, recipe: "Sail Canvas: 4; Resin Wood: 40; Iron Nails: 100; Marine Rope: 2" },
-            { source: "OdinShip", name: "Cargo Ship", category: "Cargo Ships", health: 2000, mass: 2000, sailForce: 0.4, rudderSpeed: 0.8, cargoSlots: 64, recipe: "Sail Canvas: 4; Resin Wood: 40; Iron Nails: 100; Marine Rope: 2" },
-            { source: "OdinShip", name: "Big Cargo Ship", category: "Cargo Ships", health: 2500, mass: 2000, sailForce: 0.4, rudderSpeed: 0.8, cargoSlots: 64, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 150; Marine Rope: 4" },
-            { source: "OdinShipPlus", name: "Huge Cargo Ship", category: "Cargo Ships", health: 3000, mass: 2500, sailForce: 0.4, rudderSpeed: 0.8, cargoSlots: 128, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 150; Marine Rope: 6" },
-            { source: "OdinShipPlus", name: "Animal Transport Ship", category: "Cargo Ships", health: 2800, mass: 2500, sailForce: 0.4, rudderSpeed: 1, cargoSlots: 64, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 150; Marine Rope: 6" },
-            { source: "OdinShipPlus", name: "Cargo Caravel", category: "Cargo Ships", health: 3500, mass: 3000, sailForce: 0.4, rudderSpeed: 0.5, cargoSlots: 64, recipe: "Sail Canvas: 5; Caulked Wood: 60; Iron Nails: 120; Marine Rope: 4" },
-            { source: "OdinShip", name: "War Ship", category: "War Ships", health: 2000, mass: 2000, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 24, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 120; Marine Rope: 2" },
-            { source: "OdinShipPlus", name: "War Ship Skuldelev", category: "War Ships", health: 2500, mass: 2500, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 28, recipe: "Sail Canvas: 4; Caulked Wood: 60; Iron Nails: 160; Marine Rope: 4" },
-            { source: "OdinShipPlus", name: "Taurus War Ship", category: "War Ships", health: 3000, mass: 3000, sailForce: 0.6, rudderSpeed: 1, cargoSlots: 32, recipe: "Sail Canvas: 4; Caulked Wood: 60; Iron Nails: 180; Marine Rope: 4" },
-            { source: "OdinShipPlus", name: "Fast Ship Skuldelev", category: "Special Ships", health: 1500, mass: 1000, sailForce: 0.9, rudderSpeed: 1, cargoSlots: 12, recipe: "Sail Canvas: 4; Caulked Wood: 40; Iron Nails: 100; Marine Rope: 2" },
-            // TheGreatestShips clones a vanilla hull, so health, mass and rudder
-            // speed are the base ship's. Its speed setting multiplies top speed,
-            // which it does by scaling sail force by the multiplier squared
-            // (Karve 0.5 x 1.14², Longship 0.7 x 1.28² / 0.89²).
-            { source: "TheGreatestShips", name: "Fast Karve", category: "Small Boats", width: 0.85, measuredSpeed: 10, health: 500, mass: 600, sailForce: 0.65, rudderSpeed: 1, cargoSlots: 2, recipe: "Fine Wood: 30; Ancient Bark: 20; Bronze Nails: 60; Troll Hide: 8; Resin: 20" },
-            { source: "TheGreatestShips", name: "Cargo Longship", category: "Cargo Ships", width: 1.25, measuredSpeed: 8.5, health: 1000, mass: 1000, sailForce: 0.55, rudderSpeed: 1, cargoSlots: 32, recipe: "Fine Wood: 40; Ancient Bark: 60; Iron Nails: 150; Deer Hide: 10; Core Wood: 30" },
-            { source: "TheGreatestShips", name: "Fast Longship", category: "Special Ships", width: 0.85, measuredSpeed: 12.2, health: 1000, mass: 1000, sailForce: 1.15, rudderSpeed: 1, cargoSlots: 9, recipe: "Fine Wood: 40; Ancient Bark: 40; Iron Nails: 100; Linen Thread: 20; Resin: 30" }
+            { source: "Vanilla", name: "Raft", category: "Small Boats", width: 1, health: 300, mass: 1000, sailForce: 0.05, drag: 0.005, rudderSpeed: 1.0, cargoSlots: 0, recipe: "Wood: 20; Leather Scraps: 6; Resin: 6" },
+            { source: "Vanilla", name: "Karve", category: "Small Boats", width: 1, measuredSpeed: 8.8, health: 500, mass: 1000, sailForce: 0.03, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 4, hull: "karve", recipe: "Fine Wood: 30; Deer Hide: 10; Resin: 20; Bronze Nails: 80" },
+            { source: "Vanilla", name: "Longship", category: "Special Ships", width: 1, measuredSpeed: 9.5, health: 1000, mass: 2000, sailForce: 0.05, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 18, recipe: "Iron Nails: 100; Deer Hide: 10; Fine Wood: 40; Ancient Bark: 40" },
+            { source: "Vanilla", name: "Drakkar", category: "Special Ships", width: 1, health: 3000, mass: 3000, sailForce: 0.085, drag: 0.002, rudderSpeed: 0.5, cargoSlots: 32, recipe: "Iron Nails: 100; Ceramic Plate: 30; Fine Wood: 50; Yggdrasil Wood: 25" },
+            { source: "OdinShip", name: "Rowing Canoe", category: "Small Boats", health: 500, mass: 500, sailForce: 0, drag: 0.005, rudderSpeed: 1.0, cargoSlots: 4, recipe: "Resin: 8; Wood: 20" },
+            { source: "OdinShip", name: "Double Rowing Canoe", category: "Small Boats", health: 500, mass: 600, sailForce: 0, drag: 0.005, rudderSpeed: 1.4, cargoSlots: 4, recipe: "Resin: 10; Wood: 25" },
+            { source: "OdinShip", name: "Little Boat", category: "Small Boats", health: 500, mass: 1000, sailForce: 0.03, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 4, hull: "karve", recipe: "Leather Scraps: 8; Wood: 40" },
+            { source: "OdinShipPlus", name: "Hercule Fishing Boat", category: "Special Ships", health: 1000, mass: 1000, sailForce: 0.05, drag: 0.001, rudderSpeed: 0.7, cargoSlots: 12, hull: "karve", recipe: "Sail Canvas: 2; Resin Wood: 30; Bronze Nails: 100; Marine Rope: 2" },
+            { source: "OdinShipPlus", name: "Goblin Boat", category: "Special Ships", health: 1000, mass: 2000, sailForce: 0.05, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 28, recipe: "Sail Canvas: 5; Caulked Wood: 50; Iron Nails: 120; Marine Rope: 5" },
+            { source: "OdinShip", name: "Marchant Ship", category: "Cargo Ships", health: 1000, mass: 2000, sailForce: 0.05, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 21, recipe: "Sail Canvas: 4; Resin Wood: 40; Iron Nails: 100; Marine Rope: 2" },
+            { source: "OdinShip", name: "Cargo Ship", category: "Cargo Ships", health: 1000, mass: 2000, sailForce: 0.04, drag: 0.001, rudderSpeed: 0.8, cargoSlots: 64, recipe: "Sail Canvas: 4; Resin Wood: 40; Iron Nails: 100; Marine Rope: 2" },
+            { source: "OdinShip", name: "Big Cargo Ship", category: "Cargo Ships", health: 1500, mass: 2000, sailForce: 0.04, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 64, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 150; Marine Rope: 4" },
+            { source: "OdinShipPlus", name: "Huge Cargo Ship", category: "Cargo Ships", health: 1500, mass: 2000, sailForce: 0.04, drag: 0.001, rudderSpeed: 0.8, cargoSlots: 128, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 150; Marine Rope: 6" },
+            { source: "OdinShipPlus", name: "Animal Transport Ship", category: "Cargo Ships", health: 1500, mass: 2000, sailForce: 0.04, drag: 0.001, rudderSpeed: 0.8, cargoSlots: 64, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 150; Marine Rope: 6" },
+            { source: "OdinShipPlus", name: "Cargo Caravel", category: "Cargo Ships", health: 1500, mass: 3000, sailForce: 0.08, drag: 0.002, rudderSpeed: 0.5, cargoSlots: 64, recipe: "Sail Canvas: 5; Caulked Wood: 60; Iron Nails: 120; Marine Rope: 4" },
+            { source: "OdinShip", name: "War Ship", category: "War Ships", health: 1000, mass: 2000, sailForce: 0.06, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 24, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 120; Marine Rope: 2" },
+            { source: "OdinShipPlus", name: "War Ship Skuldelev", category: "War Ships", health: 1000, mass: 2500, sailForce: 0.06, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 28, recipe: "Sail Canvas: 4; Caulked Wood: 60; Iron Nails: 160; Marine Rope: 4" },
+            { source: "OdinShipPlus", name: "Taurus War Ship", category: "War Ships", health: 2500, mass: 3000, sailForce: 0.06, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 32, recipe: "Sail Canvas: 4; Caulked Wood: 60; Iron Nails: 180; Marine Rope: 4" },
+            { source: "OdinShipPlus", name: "Fast Ship Skuldelev", category: "Special Ships", health: 1000, mass: 2000, sailForce: 0.09, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 12, recipe: "Sail Canvas: 4; Caulked Wood: 40; Iron Nails: 100; Marine Rope: 2" },
+            // TheGreatestShips clones a vanilla hull, so health, mass, drag and
+            // rudder speed are the base ship's. Its speed setting multiplies top
+            // speed by scaling sail force by the multiplier squared
+            // (Karve 0.03 x 1.14², Longship 0.05 x 1.28² / 0.89²).
+            { source: "TheGreatestShips", name: "Fast Karve", category: "Small Boats", width: 0.85, health: 500, mass: 1000, sailForce: 0.039, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 2, hull: "karve", recipe: "Fine Wood: 30; Ancient Bark: 20; Bronze Nails: 60; Troll Hide: 8; Resin: 20" },
+            { source: "TheGreatestShips", name: "Cargo Longship", category: "Cargo Ships", width: 1.25, health: 1000, mass: 2000, sailForce: 0.0396, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 32, recipe: "Fine Wood: 40; Ancient Bark: 60; Iron Nails: 150; Deer Hide: 10; Core Wood: 30" },
+            { source: "TheGreatestShips", name: "Fast Longship", category: "Special Ships", width: 0.85, health: 1000, mass: 2000, sailForce: 0.0819, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 9, recipe: "Fine Wood: 40; Ancient Bark: 40; Iron Nails: 100; Linen Thread: 20; Resin: 30" }
         ];
 
         // ── Persisted filter/sort/flag state ──────────────────────────────────
@@ -302,21 +308,30 @@
         const flaggedShips = new Map(savedState.flagged || []);
         let showHidden = false;
 
+        // How Ship.CustomFixedUpdate moves a ship: every physics step the sail
+        // pushes with sailForce (times wind) and water drag slows it by
+        // speed² × drag. Both are multiplied by the ship's mass, so mass cancels
+        // out: it changes neither acceleration nor top speed. So:
+        //   acceleration from a standstill ∝ sailForce
+        //   top speed ∝ √(sailForce / drag)
+        // The constant depends on the hull's shape, so each estimate is scaled
+        // from a ship with a measured speed and a similar hull: the Karve (8.8)
+        // for Karve-sized hulls, the Longship (9.5) for the rest.
         const processShipData = (data) => {
             const shipsWithSails = data.filter(s => s.sailForce > 0);
-            const longship = data.find(s => s.name === "Longship");
-            const longshipKnownSpeed = 9.5; // m/s
-            const longshipTopSpeedIndex = longship.sailForce / Math.sqrt(longship.mass);
-            const conversionFactor = longshipKnownSpeed / longshipTopSpeedIndex;
-
-            const minAccel = Math.min(...shipsWithSails.map(s => s.sailForce / s.mass));
-            const minManeuverability = Math.min(...data.map(s => s.rudderSpeed / s.mass));
+            const references = {
+                karve: data.find(s => s.name === "Karve"),
+                longship: data.find(s => s.name === "Longship"),
+            };
+            const minAccel = Math.min(...shipsWithSails.map(s => s.sailForce));
+            const minRudder = Math.min(...data.map(s => s.rudderSpeed));
 
             return data.map(ship => {
                 if (ship.sailForce > 0) {
-                    ship.relativeAccel = (ship.sailForce / ship.mass) / minAccel;
-                    // Prefer a speed measured in game over the sail-force estimate.
-                    ship.topSpeed = ship.measuredSpeed ?? (ship.sailForce / Math.sqrt(ship.mass)) * conversionFactor;
+                    const ref = references[ship.hull === "karve" ? "karve" : "longship"];
+                    ship.relativeAccel = ship.sailForce / minAccel;
+                    ship.topSpeed = ship.measuredSpeed ??
+                        ref.measuredSpeed * Math.sqrt((ship.sailForce / ship.drag) / (ref.sailForce / ref.drag));
                 } else {
                     ship.relativeAccel = 0;
                     if (ship.name.includes("Canoe")) {
@@ -326,13 +341,94 @@
                     }
                 }
                 ship.cargoThroughput = ship.cargoSlots * ship.topSpeed;
-                ship.agility = (ship.rudderSpeed / ship.mass) / minManeuverability;
+                ship.agility = ship.rudderSpeed / minRudder;
                 ship.tier = tierForRecipe(ship.recipe);
                 ship.tierLabel = TIERS.find(t => t.tier === ship.tier).label;
                 return ship;
             });
         };
-        
+
+        // Groups chart points whose labels would collide: anything within a
+        // label's height vertically and a short run horizontally joins the first
+        // point of its group, and the group's labels are stacked there. Exact
+        // matching by pixel missed near-identical stats (0.0396 vs 0.04 sail
+        // force) and neighbors a few pixels apart.
+        function groupNearbyPoints(points, data) {
+            const groups = new Map();
+            points.forEach((point, i) => {
+                let key = null;
+                for (const [k, entries] of groups) {
+                    const anchor = entries[0].point;
+                    if (Math.abs(anchor.x - point.x) < 36 && Math.abs(anchor.y - point.y) < 14) { key = k; break; }
+                }
+                if (key === null) { key = i; groups.set(key, []); }
+                groups.get(key).push({ point, raw: data[i] });
+            });
+            return groups;
+        }
+
+        // Draws each group's "number name" lines stacked beside its point. A
+        // stack that would overlap one already drawn moves to the nearest free
+        // spot above or below, staying inside the plot area.
+        function drawLabelStacks(ctx, area, groups, numberOf, { numberFont, nameFont, lineHeight }) {
+            const stacks = [...groups.values()].map(entries => {
+                const { point } = entries[0];
+                const maxRadius = Math.max(...entries.map(e => e.point.options.radius));
+                const lines = entries.map(entry => {
+                    const number = numberOf(entry);
+                    ctx.font = numberFont;
+                    const numberWidth = ctx.measureText(number).width;
+                    ctx.font = nameFont;
+                    return { number, numberWidth, name: entry.raw.label, width: numberWidth + 6 + ctx.measureText(entry.raw.label).width };
+                });
+                const height = lines.length * lineHeight;
+                return {
+                    lines,
+                    point,
+                    radius: maxRadius,
+                    x: point.x + maxRadius + 5,
+                    top: point.y - height / 2,
+                    width: Math.max(...lines.map(l => l.width)),
+                    height,
+                };
+            }).sort((a, b) => a.top - b.top);
+
+            const placed = [];
+            const collides = (stack, top) => placed.some(other =>
+                stack.x < other.x + other.width + 4 && other.x < stack.x + stack.width + 4 &&
+                top < other.top + other.height && other.top < top + stack.height);
+            for (const stack of stacks) {
+                // Candidates: where it wants to be, or just above/below any stack
+                // already placed. Take the free one nearest its point, inside the plot.
+                const want = stack.top;
+                const candidates = [want, ...placed.flatMap(o => [o.top - stack.height, o.top + o.height])]
+                    .filter(top => top >= area.top && top + stack.height <= area.bottom && !collides(stack, top));
+                if (candidates.length) {
+                    stack.top = candidates.reduce((best, top) => Math.abs(top - want) < Math.abs(best - want) ? top : best);
+                }
+                placed.push(stack);
+                // A label that had to move gets a thin line back to its point.
+                if (Math.abs(stack.top - want) > lineHeight / 2) {
+                    const nearest = Math.min(Math.max(stack.point.y, stack.top + lineHeight / 2), stack.top + stack.height - lineHeight / 2);
+                    ctx.strokeStyle = 'rgba(74, 63, 53, 0.45)';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(stack.point.x, stack.point.y);
+                    ctx.lineTo(stack.x - 3, nearest);
+                    ctx.stroke();
+                }
+                stack.lines.forEach((line, i) => {
+                    const y = stack.top + lineHeight / 2 + i * lineHeight;
+                    ctx.font = numberFont;
+                    ctx.fillStyle = '#4A3F35';
+                    ctx.fillText(line.number, stack.x, y);
+                    ctx.font = nameFont;
+                    ctx.fillStyle = '#8B7355';
+                    ctx.fillText(line.name, stack.x + line.numberWidth + 6, y);
+                });
+            }
+        }
+
         const processedShipData = processShipData(shipData);
 
         const shipTableBody = document.getElementById('ship-table-body');
@@ -597,36 +693,14 @@
                     ctx.textAlign = 'left';
                     ctx.textBaseline = 'middle';
 
-                    // Ships with identical top speed/cargo slots land on the exact
-                    // same pixel, so group by rounded position and stack their
-                    // labels vertically instead of drawing them on top of each
-                    // other. Throughput can still differ within a group (mass
-                    // isn't part of the position), so it's shown per-ship.
-                    const groups = new Map();
-                    meta.data.forEach((point, i) => {
-                        const key = `${Math.round(point.x)},${Math.round(point.y)}`;
-                        if (!groups.has(key)) groups.set(key, []);
-                        groups.get(key).push({ point, raw: haulingData[i] });
-                    });
+                    // Ships with identical or near-identical top speed/cargo slots
+                    // share a point, so their labels are stacked instead of drawn
+                    // on top of each other. Throughput can still differ slightly within a group,
+                    // so it's shown per-ship.
+                    const groups = groupNearbyPoints(meta.data, haulingData);
 
-                    groups.forEach(entries => {
-                        const { point } = entries[0];
-                        const maxRadius = Math.max(...entries.map(e => e.point.options.radius));
-                        const x = point.x + maxRadius + 5;
-                        const lineHeightTotal = entries.length * lineHeight;
-                        const startY = point.y - (lineHeightTotal - lineHeight) / 2;
-                        entries.forEach((entry, i) => {
-                            const y = startY + i * lineHeight;
-                            const throughputText = entry.raw.throughput.toFixed(0);
-                            ctx.font = numberFont;
-                            ctx.fillStyle = '#4A3F35';
-                            ctx.fillText(throughputText, x, y);
-                            const numberWidth = ctx.measureText(throughputText).width;
-                            ctx.font = nameFont;
-                            ctx.fillStyle = '#8B7355';
-                            ctx.fillText(entry.raw.label, x + numberWidth + 6, y);
-                        });
-                    });
+                    drawLabelStacks(ctx, chart.chartArea, groups, entry => entry.raw.throughput.toFixed(0),
+                        { numberFont, nameFont, lineHeight });
                     ctx.restore();
                 }
             };
@@ -670,113 +744,48 @@
                 }
             });
 
-            const accelerationData = processedShipData.map(s => ({
-                x: s.mass,
-                y: s.sailForce,
-                r: Math.max(s.cargoSlots / 8, 5),
-                label: s.name,
-                accel: s.relativeAccel
-            }));
-
-            // Mass axis is reversed (see scales.x below) so light ships sit on the
-            // right, keeping the low-mass/high-sail-force "best" combo in the
-            // conventional top-right corner and the opposite "worst" combo bottom-left.
-            const accelerationCornerLabels = {
-                id: 'accelerationCornerLabels',
-                afterDraw(chart) {
-                    const { ctx, chartArea: { left, right, top, bottom } } = chart;
-                    ctx.save();
-                    ctx.font = "bold 12px 'Inter', sans-serif";
-                    ctx.fillStyle = 'rgba(46, 125, 50, 0.8)';
-                    ctx.textAlign = 'right';
-                    ctx.textBaseline = 'top';
-                    ctx.fillText('▲ Best', right - 8, top + 8);
-                    ctx.fillStyle = 'rgba(192, 57, 43, 0.8)';
-                    ctx.textAlign = 'left';
-                    ctx.textBaseline = 'bottom';
-                    ctx.fillText('Worst ▼', left + 8, bottom - 8);
-                    ctx.restore();
-                }
-            };
-
-            const accelerationPointLabels = {
-                id: 'accelerationPointLabels',
-                afterDatasetsDraw(chart) {
-                    const { ctx } = chart;
-                    const meta = chart.getDatasetMeta(0);
-                    const accelFont = "bold 15px 'Inter', sans-serif";
-                    const nameFont = "13px 'Inter', sans-serif";
-                    const lineHeight = 19;
-                    ctx.save();
-                    ctx.textAlign = 'left';
-                    ctx.textBaseline = 'middle';
-
-                    // Ships with identical mass/sailForce land on the exact same
-                    // pixel, so group by rounded position and stack their labels
-                    // vertically instead of drawing them on top of each other.
-                    // Same position also means identical acceleration, so it's
-                    // drawn once per group instead of repeating per ship.
-                    const groups = new Map();
-                    meta.data.forEach((point, i) => {
-                        const key = `${Math.round(point.x)},${Math.round(point.y)}`;
-                        if (!groups.has(key)) groups.set(key, []);
-                        groups.get(key).push({ point, raw: accelerationData[i] });
-                    });
-
-                    groups.forEach(entries => {
-                        const { point } = entries[0];
-                        const maxRadius = Math.max(...entries.map(e => e.point.options.radius));
-                        const x = point.x + maxRadius + 5;
-                        const accelText = entries[0].raw.accel.toFixed(1);
-                        ctx.font = accelFont;
-                        ctx.fillStyle = '#4A3F35';
-                        ctx.fillText(accelText, x, point.y);
-                        const accelWidth = ctx.measureText(accelText).width;
-                        const nameX = x + accelWidth + 6;
-                        const startY = point.y - ((entries.length - 1) * lineHeight) / 2;
-                        ctx.font = nameFont;
-                        ctx.fillStyle = '#8B7355';
-                        entries.forEach((entry, i) => {
-                            ctx.fillText(entry.raw.label, nameX, startY + i * lineHeight);
-                        });
-                    });
-                    ctx.restore();
-                }
-            };
+            // Acceleration from a standstill depends on sail force alone (mass
+            // cancels out, and drag is negligible at low speed), so this is a
+            // plain ranking. Oar-only boats have no sail and are left out.
+            const accelerationShips = processedShipData
+                .filter(s => s.sailForce > 0)
+                .sort((a, b) => b.relativeAccel - a.relativeAccel);
 
             const ctxAcceleration = document.getElementById('accelerationChart').getContext('2d');
             new Chart(ctxAcceleration, {
-                type: 'bubble',
+                type: 'bar',
                 data: {
+                    labels: accelerationShips.map(s => s.name),
                     datasets: [{
-                        label: 'Ships',
-                        data: accelerationData,
-                        backgroundColor: 'rgba(139, 69, 19, 0.6)',
-                        borderColor: '#4A3F35'
+                        label: 'Acceleration',
+                        data: accelerationShips.map(s => s.relativeAccel),
+                        backgroundColor: accelerationShips.map(s =>
+                            s.source === 'TheGreatestShips' ? 'rgba(46, 125, 50, 0.7)'
+                            : s.source === 'Vanilla' ? 'rgba(74, 63, 53, 0.75)'
+                            : 'rgba(139, 69, 19, 0.6)'),
+                        borderColor: '#4A3F35',
+                        borderWidth: 1
                     }]
                 },
-                plugins: [accelerationCornerLabels, accelerationPointLabels],
                 options: {
                     maintainAspectRatio: false,
                     plugins: {
-                        title: { display: true, text: 'Acceleration (Mass vs. Sail Force)', font: { size: 18, family: "'IM Fell English', serif" } },
+                        title: { display: true, text: 'Acceleration (Sail Force, relative to the Karve)', font: { size: 18, family: "'IM Fell English', serif" } },
+                        subtitle: { display: true, text: 'Dark: vanilla   ·   Green: TheGreatestShips   ·   Brown: OdinShip / OdinShipPlus' },
                         legend: { display: false },
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    const dataPoint = context.raw;
-                                    return `${dataPoint.label}: Mass ${dataPoint.x}, Sail Force ${dataPoint.y}`;
+                                    const ship = accelerationShips[context.dataIndex];
+                                    return `${ship.relativeAccel.toFixed(2)}x (sail force ${ship.sailForce})`;
                                 }
                             }
                         }
                     },
                     scales: {
-                        x: {
-                            reverse: true,
-                            title: { display: true, text: 'Mass (lighter →)' }
-                        },
+                        x: { ticks: { autoSkip: false, maxRotation: 50, minRotation: 50 } },
                         y: {
-                            title: { display: true, text: 'Sail Force Factor' },
+                            title: { display: true, text: 'Acceleration' },
                             beginAtZero: true
                         }
                     }
@@ -784,8 +793,8 @@
             });
 
             // Performance chart: Top Speed vs. Acceleration are independently
-            // computed stats (not two views of the same ratio, like the
-            // Acceleration chart's mass/sail-force pair), so this plots a real
+            // computed stats (acceleration from sail force alone, top speed from
+            // sail force and drag together), so this plots a real
             // trade-off. Agility rides along as bubble size -- an "honorable
             // mention" third dimension rather than a full axis.
             const performanceData = processedShipData.map(s => ({
@@ -826,36 +835,14 @@
                     ctx.textAlign = 'left';
                     ctx.textBaseline = 'middle';
 
-                    // Ships with identical top speed/acceleration land on the exact
-                    // same pixel, so group by rounded position and stack their
-                    // labels vertically instead of drawing them on top of each
-                    // other. Agility can still differ within a group (it's not
+                    // Ships with identical or near-identical top speed/acceleration
+                    // share a point, so their labels are stacked instead of drawn
+                    // on top of each other. Agility can still differ within a group (it's not
                     // part of the position), so it's shown per-ship, not deduped.
-                    const groups = new Map();
-                    meta.data.forEach((point, i) => {
-                        const key = `${Math.round(point.x)},${Math.round(point.y)}`;
-                        if (!groups.has(key)) groups.set(key, []);
-                        groups.get(key).push({ point, raw: performanceData[i] });
-                    });
+                    const groups = groupNearbyPoints(meta.data, performanceData);
 
-                    groups.forEach(entries => {
-                        const { point } = entries[0];
-                        const maxRadius = Math.max(...entries.map(e => e.point.options.radius));
-                        const x = point.x + maxRadius + 5;
-                        const lineHeightTotal = entries.length * lineHeight;
-                        const startY = point.y - (lineHeightTotal - lineHeight) / 2;
-                        entries.forEach((entry, i) => {
-                            const y = startY + i * lineHeight;
-                            const agilityText = entry.raw.agility.toFixed(1);
-                            ctx.font = numberFont;
-                            ctx.fillStyle = '#4A3F35';
-                            ctx.fillText(agilityText, x, y);
-                            const numberWidth = ctx.measureText(agilityText).width;
-                            ctx.font = nameFont;
-                            ctx.fillStyle = '#8B7355';
-                            ctx.fillText(entry.raw.label, x + numberWidth + 6, y);
-                        });
-                    });
+                    drawLabelStacks(ctx, chart.chartArea, groups, entry => entry.raw.agility.toFixed(1),
+                        { numberFont, nameFont, lineHeight });
                     ctx.restore();
                 }
             };
