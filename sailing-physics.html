@@ -64,17 +64,6 @@
             font-size: 0.88rem;
         }
         table.stat-table th, table.stat-table td { padding: 0.45rem 0.7rem; }
-        .measured-badge {
-            display: inline-block;
-            background: rgba(46,125,50,0.18);
-            color: #2E7D32;
-            font-weight: 700;
-            font-size: 0.7rem;
-            border-radius: 9999px;
-            padding: 0.05rem 0.5rem;
-            margin-left: 0.35rem;
-            vertical-align: middle;
-        }
     </style>
 </head>
 <body>
@@ -157,20 +146,24 @@ private Vector3 GetSailForce(float sailSize, float dt)
                 <table class="stat-table w-full">
                     <thead class="bg-[#4A3F35] text-[#FAF3E0] valheim-title">
                         <tr>
-                            <th class="text-left">Ship</th>
-                            <th class="text-right">Top speed (m/s)</th>
-                            <th class="text-left">Samples</th>
-                            <th class="text-left">Notes</th>
+                            <th class="text-left" rowspan="2">Ship</th>
+                            <th class="text-center" colspan="2">Top speed (m/s)</th>
+                            <th class="text-left" rowspan="2">Samples</th>
+                            <th class="text-left" rowspan="2">Notes</th>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Estimated</th>
+                            <th class="text-right">Observed</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="border-t border-stone-300"><td>Karve <em>(vanilla)</em></td><td class="text-right">7.3<span class="measured-badge">measured</span></td><td>—</td><td>The Karve-sized reference hull.</td></tr>
-                        <tr class="border-t border-stone-300"><td>Longship <em>(vanilla)</em></td><td class="text-right">9.65<span class="measured-badge">measured</span></td><td>260</td><td>1.1% average fit error. Replaced an earlier 9.4 sail-force estimate.</td></tr>
-                        <tr class="border-t border-stone-300"><td>OdinShipPlus Cargo Ship</td><td class="text-right">8.7<span class="measured-badge">measured</span></td><td>—</td><td>—</td></tr>
-                        <tr class="border-t border-stone-300"><td>OdinShipPlus Fast Ship Skuldelev</td><td class="text-right">12.2<span class="measured-badge">measured</span></td><td>—</td><td>The fastest hull logged.</td></tr>
-                        <tr class="border-t border-stone-300"><td>TheGreatestShips Fast Longship</td><td class="text-right">12.35<span class="measured-badge">measured</span></td><td>34</td><td>Designed to be about the same as the Skuldelev.</td></tr>
-                        <tr class="border-t border-stone-300"><td>TheGreatestShips Cargo Longship</td><td class="text-right">8.58<span class="measured-badge">measured</span></td><td>67</td><td>Designed for about 8.4.</td></tr>
-                        <tr class="border-t border-stone-300"><td>TheGreatestShips Fast Karve</td><td class="text-right">~10 (target)</td><td>—</td><td>Not yet logged long enough at full sail to fit.</td></tr>
+                        <tr class="border-t border-stone-300"><td>Karve <em>(vanilla)</em></td><td class="text-right">—</td><td class="text-right">7.3</td><td>—</td><td>The Karve-sized reference hull.</td></tr>
+                        <tr class="border-t border-stone-300"><td>Longship <em>(vanilla)</em></td><td class="text-right">—</td><td class="text-right">9.65</td><td>260</td><td>1.1% average fit error. Replaced an earlier 9.4 sail-force estimate.</td></tr>
+                        <tr class="border-t border-stone-300"><td>OdinShipPlus Cargo Ship</td><td class="text-right">—</td><td class="text-right">8.7</td><td>—</td><td>—</td></tr>
+                        <tr class="border-t border-stone-300"><td>OdinShipPlus Fast Ship Skuldelev</td><td class="text-right">—</td><td class="text-right">12.2</td><td>—</td><td>The fastest hull logged.</td></tr>
+                        <tr class="border-t border-stone-300"><td>TheGreatestShips Fast Longship</td><td class="text-right">—</td><td class="text-right">12.35</td><td>34</td><td>Designed to be about the same as the Skuldelev.</td></tr>
+                        <tr class="border-t border-stone-300"><td>TheGreatestShips Cargo Longship</td><td class="text-right">—</td><td class="text-right">8.58</td><td>67</td><td>Designed for about 8.4.</td></tr>
+                        <tr class="border-t border-stone-300"><td>TheGreatestShips Fast Karve</td><td class="text-right">~10</td><td class="text-right">—</td><td>—</td><td>Not yet logged long enough at full sail to fit.</td></tr>
                     </tbody>
                 </table>
             </div>
