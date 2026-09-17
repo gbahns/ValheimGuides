@@ -214,7 +214,7 @@
             { source: "Vanilla", name: "Drakkar", category: "Special Ships", width: 1, health: 3000, mass: 3000, sailForce: 0.085, drag: 0.002, rudderSpeed: 0.5, cargoSlots: 32, recipe: "Iron Nails: 100; Ceramic Plate: 30; Fine Wood: 50; Yggdrasil Wood: 25" },
             { source: "OdinShip", name: "Rowing Canoe", category: "Small Boats", health: 500, mass: 500, sailForce: 0, drag: 0.005, rudderSpeed: 1.0, cargoSlots: 4, recipe: "Resin: 8; Wood: 20" },
             { source: "OdinShip", name: "Double Rowing Canoe", category: "Small Boats", health: 500, mass: 600, sailForce: 0, drag: 0.005, rudderSpeed: 1.4, cargoSlots: 4, recipe: "Resin: 10; Wood: 25" },
-            { source: "OdinShip", name: "Little Boat", category: "Small Boats", health: 500, mass: 1000, sailForce: 0.03, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 4, hull: "karve", recipe: "Leather Scraps: 8; Wood: 40" },
+            { source: "OdinShip", name: "Little Boat", category: "Small Boats", measuredSpeed: 7.34, health: 500, mass: 1000, sailForce: 0.03, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 4, hull: "karve", recipe: "Leather Scraps: 8; Wood: 40" },
             { source: "OdinShipPlus", name: "Hercule Fishing Boat", category: "Special Ships", health: 1000, mass: 1000, sailForce: 0.05, drag: 0.001, rudderSpeed: 0.7, cargoSlots: 12, hull: "karve", recipe: "Sail Canvas: 2; Resin Wood: 30; Bronze Nails: 100; Marine Rope: 2" },
             { source: "OdinShipPlus", name: "Goblin Boat", category: "Special Ships", health: 1000, mass: 2000, sailForce: 0.05, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 28, recipe: "Sail Canvas: 5; Caulked Wood: 50; Iron Nails: 120; Marine Rope: 5" },
             { source: "OdinShip", name: "Marchant Ship", category: "Cargo Ships", health: 1000, mass: 2000, sailForce: 0.05, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 21, recipe: "Sail Canvas: 4; Resin Wood: 40; Iron Nails: 100; Marine Rope: 2" },
@@ -327,8 +327,11 @@
         // share of the sail force, with k within ±2% across hundreds of samples.
         // The top speed is √(k × 0.737), 0.737 being the best drive there is
         // (full wind, 64° off the stern). Karve 7.3, Longship 9.65, Cargo Ship
-        // 8.7, Fast Ship Skuldelev 12.2, Fast Karve 8.4 (at its 1.14 speed
-        // setting). The Longship's fit used 260 steady full-sail samples with
+        // 8.7, Fast Ship Skuldelev 12.2, Little Boat 7.34 (same sail force as
+        // the Karve -- matches it almost exactly), Fast Karve 8.4 and, in a
+        // separate later session, 8.51 (both at its 1.14 speed setting; the
+        // 1.37 default hasn't been logged yet). The Longship's fit used 260
+        // steady full-sail samples with
         // 1.1% average error.
         const processShipData = (data) => {
             const shipsWithSails = data.filter(s => s.sailForce > 0);
