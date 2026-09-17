@@ -234,7 +234,7 @@
             // 0.05 x 1.243² / 0.87²). None of these have been logged yet at
             // their 0.9.1 settings, so their speeds are estimated like the
             // Longship's used to be.
-            { source: "TheGreatestShips", name: "Fast Karve", category: "Small Boats", width: 0.85, health: 400, mass: 1000, sailForce: 0.0563, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 2, hull: "karve", recipe: "Fine Wood: 30; Ancient Bark: 20; Bronze Nails: 60; Troll Hide: 8; Resin: 20" },
+            { source: "TheGreatestShips", name: "Fast Karve", category: "Small Boats", measuredSpeed: 10.09, width: 0.85, health: 400, mass: 1000, sailForce: 0.0563, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 2, hull: "karve", recipe: "Fine Wood: 30; Ancient Bark: 20; Bronze Nails: 60; Troll Hide: 8; Resin: 20" },
             { source: "TheGreatestShips", name: "Cargo Longship", category: "Cargo Ships", width: 1.25, health: 1500, mass: 2000, sailForce: 0.0378, drag: 0.001, rudderSpeed: 0.8, cargoSlots: 32, recipe: "Fine Wood: 40; Ancient Bark: 60; Iron Nails: 180; Deer Hide: 10; Core Wood: 30" },
             { source: "TheGreatestShips", name: "Fast Longship", category: "Special Ships", width: 0.85, health: 800, mass: 2000, sailForce: 0.0773, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 12, recipe: "Fine Wood: 40; Ancient Bark: 40; Iron Nails: 100; Linen Thread: 20; Resin: 30" }
         ];
@@ -328,9 +328,10 @@
         // The top speed is √(k × 0.737), 0.737 being the best drive there is
         // (full wind, 64° off the stern). Karve 7.3, Longship 9.65, Cargo Ship
         // 8.7, Fast Ship Skuldelev 12.2, Little Boat 7.34 (same sail force as
-        // the Karve -- matches it almost exactly), Fast Karve 8.4 and, in a
-        // separate later session, 8.51 (both at its 1.14 speed setting; the
-        // 1.37 default hasn't been logged yet). The Longship's fit used 260
+        // the Karve -- matches it almost exactly), Fast Karve 8.4 and 8.51 at
+        // its old 1.14 speed setting, then 10.09 once logged at the current
+        // 1.37 default -- matching the formula's 10.1 prediction almost
+        // exactly. The Longship's fit used 260
         // steady full-sail samples with
         // 1.1% average error.
         const processShipData = (data) => {
