@@ -358,6 +358,26 @@
             });
             return totals;
         }
+        // Short type label for an ingredient within its Wood/Skin/Nails column, so "40 Fine Wood
+        // + 60 Ancient Bark" reads as "40 Fine, 60 Bark" instead of one opaque merged number.
+        // Regular "Wood" gets no label at all (just the bare amount).
+        const SUBTYPE_LABEL = {
+            "Wood": "", "Fine Wood": "Fine", "Core Wood": "Core",
+            "Ancient Bark": "Bark", "Yggdrasil Wood": "Yggdrasil",
+            "Deer Hide": "Deer Hide", "Troll Hide": "Troll Hide", "Leather Scraps": "Leather",
+            "Bronze Nails": "Bronze", "Iron Nails": "Iron",
+        };
+        // [{name,amount}] + a bucket ("Wood"/"Skin"/"Nails") -> "40 Fine, 60 Bark" for that
+        // bucket's ingredients only, in recipe order.
+        function breakdownForCategory(parsed, category) {
+            return parsed
+                .filter(({ name }) => (INGREDIENT_CATEGORY[name] || "Other") === category)
+                .map(({ name, amount }) => {
+                    const label = SUBTYPE_LABEL[name];
+                    return label ? `${amount} ${label}` : `${amount}`;
+                })
+                .join(', ');
+        }
         const activeTiers = new Set(savedState.tiers || []); // empty = show all
 
         const FLAG_LABELS = { unavailable: "Not Available", uninterested: "Not Interested" };
@@ -664,6 +684,10 @@
                     recipeDisplay: formatParsedRecipe(expanded),
                     catResin: cats.Resin, catWood: cats.Wood, catSkin: cats.Skin,
                     catNails: cats.Nails, catOther: cats.Other,
+                    // Sort keys stay the bare numeric totals above; these are what's displayed.
+                    catWoodDisplay: breakdownForCategory(expanded, "Wood"),
+                    catSkinDisplay: breakdownForCategory(expanded, "Skin"),
+                    catNailsDisplay: breakdownForCategory(expanded, "Nails"),
                 };
             });
 
@@ -712,9 +736,9 @@
                     <td class="px-1 py-2 text-center">${ship.width ?? '—'}</td>
                     <td class="px-1 py-2 text-center">${ship.cargoThroughput.toFixed(1)}</td>
                     <td class="px-1 py-2 text-center">${ship.catResin || '—'}</td>
-                    <td class="px-1 py-2 text-center">${ship.catWood || '—'}</td>
-                    <td class="px-1 py-2 text-center">${ship.catSkin || '—'}</td>
-                    <td class="px-1 py-2 text-center">${ship.catNails || '—'}</td>
+                    <td class="px-1 py-2 text-center whitespace-nowrap">${ship.catWoodDisplay || '—'}</td>
+                    <td class="px-1 py-2 text-center whitespace-nowrap">${ship.catSkinDisplay || '—'}</td>
+                    <td class="px-1 py-2 text-center whitespace-nowrap">${ship.catNailsDisplay || '—'}</td>
                     <td class="px-1 py-2 text-center">${ship.catOther || '—'}</td>
                     <td class="px-1 py-2 text-sm">${ship.recipeDisplay}</td>
                 `;
