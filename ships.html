@@ -153,7 +153,7 @@
                         <th class="px-1 py-2 text-center" data-sort="agility"><span title="How quickly the rudder swings, relative to the slowest ship">Agility</span></th>
                         <th class="px-1 py-2 text-center" data-sort="sailForce">Sail Force</th>
                         <th class="px-1 py-2 text-center" data-sort="relativeAccel">Acceleration</th>
-                        <th class="px-1 py-2 text-center" data-sort="topSpeed"><span title="Top speed in m/s. Measured for the Karve and Longship; estimated for the rest from sail force and drag.">Top Speed</span></th>
+                        <th class="px-1 py-2 text-center" data-sort="topSpeed"><span title="Estimated top speed in m/s, from sail force and drag, scaled from the Karve (8.8) or Longship (9.5). Those two reference speeds are not measured in game.">Top Speed</span></th>
                         <th class="px-1 py-2 text-center" data-sort="cargoSlots">Cargo Slots</th>
                         <th class="px-1 py-2 text-center" data-sort="width"><span title="Hull width relative to the vanilla ship it is based on">Width</span></th>
                         <th class="px-1 py-2 text-center" data-sort="cargoThroughput"><span title="Cargo Slots * Top Speed">Cargo Throughput</span></th>
@@ -178,7 +178,7 @@
             </div>
              <div class="text-center text-sm text-gray-500 mt-4">
                 <p>The charts above provide a high-level comparison of the fleet. The Hauling chart shows the trade-off between Top Speed and Cargo Capacity (bubble size shows Cargo Throughput), the Acceleration chart ranks how quickly each sailing ship gets up to speed (its sail force), and the Performance chart blends Top Speed and Acceleration together (bubble size shows Agility) for a fuller picture of how a ship handles.</p>
-                <p>Every stat is the ship's real in-game value, read from Valheim's and OdinShipPlus's own data. Mass is shown for reference only: the game scales every force on a ship by its mass, so a heavier ship is no slower to start, no slower at full sail and no harder to turn. Top speeds were measured for the Karve (8.8) and Longship (9.5); the others are estimated from sail force and drag, scaled from whichever of those two has the more similar hull, so treat them as close rather than exact.</p>
+                <p>Every stat except top speed is the ship's real in-game value, read from Valheim's and OdinShipPlus's own data. Mass is shown for reference only: the game scales every force on a ship by its mass, so a heavier ship is no slower to start, no slower at full sail and no harder to turn. Top speeds are estimates. Within one hull they are exact ratios (the Fast Karve is 1.14 times the Karve), but every figure is scaled from reference speeds for the Karve (8.8) and Longship (9.5) that have not been measured in game, so compare ships across different hulls loosely.</p>
             </div>
         </section>
         
@@ -209,8 +209,8 @@
         // Karve rather than the Longship (see processShipData).
         const shipData = [
             { source: "Vanilla", name: "Raft", category: "Small Boats", width: 1, health: 300, mass: 1000, sailForce: 0.05, drag: 0.005, rudderSpeed: 1.0, cargoSlots: 0, recipe: "Wood: 20; Leather Scraps: 6; Resin: 6" },
-            { source: "Vanilla", name: "Karve", category: "Small Boats", width: 1, measuredSpeed: 8.8, health: 500, mass: 1000, sailForce: 0.03, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 4, hull: "karve", recipe: "Fine Wood: 30; Deer Hide: 10; Resin: 20; Bronze Nails: 80" },
-            { source: "Vanilla", name: "Longship", category: "Special Ships", width: 1, measuredSpeed: 9.5, health: 1000, mass: 2000, sailForce: 0.05, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 18, recipe: "Iron Nails: 100; Deer Hide: 10; Fine Wood: 40; Ancient Bark: 40" },
+            { source: "Vanilla", name: "Karve", category: "Small Boats", width: 1, referenceSpeed: 8.8, health: 500, mass: 1000, sailForce: 0.03, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 4, hull: "karve", recipe: "Fine Wood: 30; Deer Hide: 10; Resin: 20; Bronze Nails: 80" },
+            { source: "Vanilla", name: "Longship", category: "Special Ships", width: 1, referenceSpeed: 9.5, health: 1000, mass: 2000, sailForce: 0.05, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 18, recipe: "Iron Nails: 100; Deer Hide: 10; Fine Wood: 40; Ancient Bark: 40" },
             { source: "Vanilla", name: "Drakkar", category: "Special Ships", width: 1, health: 3000, mass: 3000, sailForce: 0.085, drag: 0.002, rudderSpeed: 0.5, cargoSlots: 32, recipe: "Iron Nails: 100; Ceramic Plate: 30; Fine Wood: 50; Yggdrasil Wood: 25" },
             { source: "OdinShip", name: "Rowing Canoe", category: "Small Boats", health: 500, mass: 500, sailForce: 0, drag: 0.005, rudderSpeed: 1.0, cargoSlots: 4, recipe: "Resin: 8; Wood: 20" },
             { source: "OdinShip", name: "Double Rowing Canoe", category: "Small Boats", health: 500, mass: 600, sailForce: 0, drag: 0.005, rudderSpeed: 1.4, cargoSlots: 4, recipe: "Resin: 10; Wood: 25" },
@@ -315,8 +315,11 @@
         //   acceleration from a standstill ∝ sailForce
         //   top speed ∝ √(sailForce / drag)
         // The constant depends on the hull's shape, so each estimate is scaled
-        // from a ship with a measured speed and a similar hull: the Karve (8.8)
-        // for Karve-sized hulls, the Longship (9.5) for the rest.
+        // from a reference ship with a similar hull: the Karve (8.8) for
+        // Karve-sized hulls, the Longship (9.5) for the rest. Those two speeds
+        // are carried over from this page's first version with no known source
+        // (8.8 was that version's own formula output). Replace them with
+        // in-game measurements when there are some.
         const processShipData = (data) => {
             const shipsWithSails = data.filter(s => s.sailForce > 0);
             const references = {
@@ -330,8 +333,8 @@
                 if (ship.sailForce > 0) {
                     const ref = references[ship.hull === "karve" ? "karve" : "longship"];
                     ship.relativeAccel = ship.sailForce / minAccel;
-                    ship.topSpeed = ship.measuredSpeed ??
-                        ref.measuredSpeed * Math.sqrt((ship.sailForce / ship.drag) / (ref.sailForce / ref.drag));
+                    ship.topSpeed = ship.referenceSpeed ??
+                        ref.referenceSpeed * Math.sqrt((ship.sailForce / ship.drag) / (ref.sailForce / ref.drag));
                 } else {
                     ship.relativeAccel = 0;
                     if (ship.name.includes("Canoe")) {
