@@ -342,13 +342,17 @@
         }
         // Ingredient -> one of five buckets, for the Resin/Wood/Skin/Nails/Other columns.
         // Anything not listed (Bronze, Iron, Silver, Coal, Bone Fragments, Ceramic Plate,
-        // Linen Thread, and -- with the vanilla-equivalent toggle off -- OdinShip's own
-        // crafted materials) falls into "Other".
+        // Linen Thread, and -- with the vanilla-equivalent toggle off -- Resin Wood) falls into
+        // "Other". Sail Canvas, Marine Rope and Caulked Wood are OdinShip's own crafted items,
+        // not vanilla materials, but their dominant ingredient (see VANILLA_EQUIVALENT) puts
+        // them in Skin/Skin/Wood even with the toggle off, so they don't all just pile into
+        // "Other" before being expanded.
         const INGREDIENT_CATEGORY = {
             "Wood": "Wood", "Fine Wood": "Wood", "Core Wood": "Wood",
-            "Ancient Bark": "Wood", "Yggdrasil Wood": "Wood",
+            "Ancient Bark": "Wood", "Yggdrasil Wood": "Wood", "Caulked Wood": "Wood",
             "Resin": "Resin",
             "Deer Hide": "Skin", "Troll Hide": "Skin", "Leather Scraps": "Skin",
+            "Sail Canvas": "Skin", "Marine Rope": "Skin",
             "Bronze Nails": "Nails", "Iron Nails": "Nails",
         };
         function categorizeRecipe(parsed) {
@@ -363,8 +367,9 @@
         // Regular "Wood" gets no label at all (just the bare amount).
         const SUBTYPE_LABEL = {
             "Wood": "", "Fine Wood": "Fine", "Core Wood": "Core",
-            "Ancient Bark": "Bark", "Yggdrasil Wood": "Yggdrasil",
+            "Ancient Bark": "Bark", "Yggdrasil Wood": "Yggdrasil", "Caulked Wood": "Caulked",
             "Deer Hide": "Deer Hide", "Troll Hide": "Troll Hide", "Leather Scraps": "Leather",
+            "Sail Canvas": "Canvas", "Marine Rope": "Rope",
             "Bronze Nails": "Bronze", "Iron Nails": "Iron",
         };
         // [{name,amount}] + a bucket ("Wood"/"Skin"/"Nails") -> "40 Fine, 60 Bark" for that
