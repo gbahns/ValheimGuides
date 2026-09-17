@@ -342,14 +342,15 @@
         }
         // Ingredient -> one of five buckets, for the Resin/Wood/Skin/Nails/Other columns.
         // Anything not listed (Bronze, Iron, Silver, Coal, Bone Fragments, Ceramic Plate,
-        // Linen Thread, and -- with the vanilla-equivalent toggle off -- Resin Wood) falls into
-        // "Other". Sail Canvas, Marine Rope and Caulked Wood are OdinShip's own crafted items,
-        // not vanilla materials, but their dominant ingredient (see VANILLA_EQUIVALENT) puts
-        // them in Skin/Skin/Wood even with the toggle off, so they don't all just pile into
-        // "Other" before being expanded.
+        // Linen Thread) falls into "Other". Sail Canvas, Marine Rope, Caulked Wood and Resin
+        // Wood are OdinShip's own crafted items, not vanilla materials, but their dominant
+        // ingredient (see VANILLA_EQUIVALENT) puts them in Skin/Skin/Wood/Wood even with the
+        // vanilla-equivalent toggle off, so they don't all just pile into "Other" before being
+        // expanded.
         const INGREDIENT_CATEGORY = {
             "Wood": "Wood", "Fine Wood": "Wood", "Core Wood": "Wood",
-            "Ancient Bark": "Wood", "Yggdrasil Wood": "Wood", "Caulked Wood": "Wood",
+            "Ancient Bark": "Wood", "Yggdrasil Wood": "Wood",
+            "Caulked Wood": "Wood", "Resin Wood": "Wood",
             "Resin": "Resin",
             "Deer Hide": "Skin", "Troll Hide": "Skin", "Leather Scraps": "Skin",
             "Sail Canvas": "Skin", "Marine Rope": "Skin",
@@ -367,7 +368,8 @@
         // Regular "Wood" gets no label at all (just the bare amount).
         const SUBTYPE_LABEL = {
             "Wood": "", "Fine Wood": "Fine", "Core Wood": "Core",
-            "Ancient Bark": "Bark", "Yggdrasil Wood": "Yggdrasil", "Caulked Wood": "Caulked",
+            "Ancient Bark": "Bark", "Yggdrasil Wood": "Yggdrasil",
+            "Caulked Wood": "Caulked", "Resin Wood": "Resin Wood",
             "Deer Hide": "Deer Hide", "Troll Hide": "Troll Hide", "Leather Scraps": "Leather",
             "Sail Canvas": "Canvas", "Marine Rope": "Rope",
             "Bronze Nails": "Bronze", "Iron Nails": "Iron",
