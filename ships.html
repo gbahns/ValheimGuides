@@ -155,7 +155,7 @@
                         <th class="px-1 py-2 text-center" data-sort="agility"><span title="How quickly the rudder swings, relative to the slowest ship">Agility</span></th>
                         <th class="px-1 py-2 text-center" data-sort="sailForce">Sail Force</th>
                         <th class="px-1 py-2 text-center" data-sort="relativeAccel">Acceleration</th>
-                        <th class="px-1 py-2 text-center" data-sort="topSpeed"><span title="Top speed in m/s in full wind at the best angle (64° off the stern). ✓ marks speeds worked out from logged sailing; the rest are estimated from sail force and drag.">Top Speed</span></th>
+                        <th class="px-1 py-2 text-center" data-sort="topSpeed"><span title="Top speed in m/s in full wind at the best angle (64° off the stern). ✓ marks a speed worked out from logged sailing, shown over what the sail-force formula predicts (est.) so you can see how close the two are; ships with no log show the estimate alone.">Top Speed</span></th>
                         <th class="px-1 py-2 text-center" data-sort="cargoSlots">Cargo Slots</th>
                         <th class="px-1 py-2 text-center" data-sort="width"><span title="Hull width relative to the vanilla ship it is based on">Width</span></th>
                         <th class="px-1 py-2 text-center" data-sort="length"><span title="Bow-to-stern length relative to the vanilla ship it is based on">Length</span></th>
@@ -227,7 +227,7 @@
             { source: "OdinShip", name: "Cargo Ship", category: "Cargo Ships", measuredSpeed: 8.7, health: 1000, mass: 2000, sailForce: 0.04, drag: 0.001, rudderSpeed: 0.8, cargoSlots: 64, recipe: "Sail Canvas: 4; Resin Wood: 40; Iron Nails: 100; Marine Rope: 2" },
             { source: "OdinShip", name: "Big Cargo Ship", category: "Cargo Ships", health: 1500, mass: 2000, sailForce: 0.04, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 64, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 150; Marine Rope: 4" },
             { source: "OdinShipPlus", name: "Huge Cargo Ship", category: "Cargo Ships", health: 1500, mass: 2000, sailForce: 0.04, drag: 0.001, rudderSpeed: 0.8, cargoSlots: 128, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 150; Marine Rope: 6" },
-            { source: "OdinShipPlus", name: "Animal Transport Ship", category: "Cargo Ships", health: 1500, mass: 2000, sailForce: 0.04, drag: 0.001, rudderSpeed: 0.8, cargoSlots: 64, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 150; Marine Rope: 6" },
+            { source: "OdinShipPlus", name: "Animal Transport Ship", category: "Cargo Ships", measuredSpeed: 9.05, health: 1500, mass: 2000, sailForce: 0.04, drag: 0.001, rudderSpeed: 0.8, cargoSlots: 64, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 150; Marine Rope: 6" },
             { source: "OdinShipPlus", name: "Cargo Caravel", category: "Cargo Ships", health: 1500, mass: 3000, sailForce: 0.08, drag: 0.002, rudderSpeed: 0.5, cargoSlots: 64, recipe: "Sail Canvas: 5; Caulked Wood: 60; Iron Nails: 120; Marine Rope: 4" },
             { source: "OdinShip", name: "War Ship", category: "War Ships", health: 1000, mass: 2000, sailForce: 0.06, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 24, recipe: "Sail Canvas: 4; Caulked Wood: 50; Iron Nails: 120; Marine Rope: 2" },
             { source: "OdinShipPlus", name: "War Ship Skuldelev", category: "War Ships", health: 1000, mass: 2500, sailForce: 0.06, drag: 0.001, rudderSpeed: 1.0, cargoSlots: 28, recipe: "Sail Canvas: 4; Caulked Wood: 60; Iron Nails: 160; Marine Rope: 4" },
@@ -442,9 +442,12 @@
                     const ref = references[ship.hull === "karve" ? "karve" : "longship"];
                     ship.relativeAccel = ship.sailForce / minAccel;
                     const refSpeed = ref.measuredSpeed ?? ref.referenceSpeed;
+                    // Always worked out, even for logged ships, so the table can show how close
+                    // the sail-force formula gets to the real number. For the two reference
+                    // hulls it's their own measured speed by definition.
+                    ship.topSpeedTheory = refSpeed * Math.sqrt((ship.sailForce / ship.drag) / (ref.sailForce / ref.drag));
                     ship.topSpeedMeasured = ship.measuredSpeed != null;
-                    ship.topSpeed = ship.measuredSpeed ?? ship.referenceSpeed ??
-                        refSpeed * Math.sqrt((ship.sailForce / ship.drag) / (ref.sailForce / ref.drag));
+                    ship.topSpeed = ship.measuredSpeed ?? ship.referenceSpeed ?? ship.topSpeedTheory;
                 } else {
                     ship.relativeAccel = 0;
                     if (ship.name.includes("Canoe")) {
@@ -777,7 +780,9 @@
                     <td class="px-1 py-2 text-center">${ship.agility.toFixed(1)}</td>
                     <td class="px-1 py-2 text-center">${ship.sailForce}</td>
                     <td class="px-1 py-2 text-center">${ship.relativeAccel.toFixed(1)}</td>
-                    <td class="px-1 py-2 text-center">${ship.topSpeed.toFixed(1)}${ship.topSpeedMeasured ? ' <span title="Worked out from logged sailing">✓</span>' : ''}</td>
+                    <td class="px-1 py-2 text-center whitespace-nowrap">${ship.topSpeedMeasured
+                        ? `${ship.topSpeed.toFixed(1)} <span title="Worked out from logged sailing">✓</span><div class="text-xs text-stone-500" title="What the sail-force formula predicts">est. ${ship.topSpeedTheory.toFixed(1)}</div>`
+                        : `${ship.topSpeed.toFixed(1)}${ship.topSpeedTheory != null ? '<div class="text-xs text-stone-500">est. only</div>' : ''}`}</td>
                     <td class="px-1 py-2 text-center">${ship.cargoSlots}</td>
                     <td class="px-1 py-2 text-center">${ship.width ?? '—'}</td>
                     <td class="px-1 py-2 text-center">${ship.length ?? '—'}</td>
