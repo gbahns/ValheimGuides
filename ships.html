@@ -164,7 +164,7 @@
                         <th class="px-1 py-2 text-center" rowspan="2" data-sort="catWood">Wood</th>
                         <th class="px-1 py-2 text-center" rowspan="2" data-sort="catSkin">Skin</th>
                         <th class="px-1 py-2 text-center" rowspan="2" data-sort="catNails"><span title="Bronze and Iron Nails, plus other iron hardware: Chain">Nails</span></th>
-                        <th class="px-1 py-2 text-center" rowspan="2" data-sort="weight"><span title="Total weight of the recipe's vanilla materials, from the item prefabs -- what you carry to the Workbench. Always in vanilla terms, whatever the toggle.">Weight</span></th>
+                        <th class="px-1 py-2 text-center" rowspan="2" data-sort="weight"><span title="Total weight of the recipe as shown, from the item prefabs: OdinShip's crafted materials with Show Vanilla Equivalent off, the raw vanilla materials they're made from with it on.">Weight</span></th>
                     </tr>
                     <tr>
                         <th class="px-1 pt-0 pb-1 leading-tight text-center" data-sort="topSpeedTheory">Theoretical</th>
@@ -379,10 +379,13 @@
             "Deer Hide": 1, "Troll Hide": 2, "Leather Scraps": 0.5, "Lox Pelt": 1, "Wolf Pelt": 1,
             "Linen Thread": 2, "Ceramic Plate": 2,
             "Bronze Nails": 0.5, "Iron Nails": 0.5, "Chain": 2,
+            // OdinShip's crafted materials, from its bundle.  Crafting lightens some of them a
+            // lot: Caulked Wood is 2 against the 4.3 of the fine wood, resin and coal it takes.
+            "Sail Canvas": 5, "Marine Rope": 2, "Resin Wood": 2, "Caulked Wood": 2,
         };
-        // Total weight of a recipe's vanilla materials.  Always the expanded (vanilla-equivalent)
-        // recipe: OdinShip's crafted materials carry no weight of their own in its code, and for
-        // this mod's ships the raw materials are what you actually haul to the Workbench.
+        // Total weight of the recipe as currently shown: the crafted materials with the
+        // vanilla-equivalent toggle off, the raw vanilla ones with it on -- what you'd carry to
+        // the build site versus to the Carpenter's Table.
         function recipeWeight(parsed) {
             return parsed.reduce((sum, { name, amount }) => sum + amount * (ITEM_WEIGHT[name] ?? 0), 0);
         }
@@ -758,7 +761,7 @@
                 const cats = categorizeRecipe(expanded);
                 return {
                     ...ship,
-                    weight: recipeWeight(expandRecipe(parsed, true)),
+                    weight: recipeWeight(expanded),
                     catResin: cats.Resin, catWood: cats.Wood, catSkin: cats.Skin, catNails: cats.Nails,
                     // Sort keys stay the bare numeric totals above; these are what's displayed.
                     catResinDisplay: breakdownForCategory(expanded, "Resin"),
