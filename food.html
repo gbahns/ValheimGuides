@@ -50,6 +50,7 @@
             background-color: #D2B48C;
             color: #4A3F35;
             font-size: 0.917rem; /* text-sm (14px) + 0.5pt */
+            white-space: nowrap;
             transition: background-color 0.15s, color 0.15s;
         }
         .filter-btn.active, .filter-btn:hover {
@@ -231,6 +232,7 @@
                 <div id="forkFilters" class="flex flex-wrap gap-1"></div>
                 <div id="feastFilters" class="flex flex-wrap gap-1"></div>
                 <div id="hiddenFilters" class="flex flex-wrap gap-1"></div>
+                <div id="totalFilters" class="flex flex-wrap gap-1"></div>
                 <span id="resultCount" class="text-stone-700 text-sm"></span>
             </div>
         </section>
@@ -356,7 +358,17 @@
         // sustained survivability matters, short enough that Heal stays a
         // tiebreaker among close-Total foods rather than dominating the ranking.
         const HEAL_TICKS = 3;
-        FOODS.forEach(f => { f.score = f.total + f.heal * HEAL_TICKS; });
+        // Total is stored as HP + Stamina + Eitr. The "Total" toggle in the filter
+        // bar lets you drop Eitr from it (and therefore from Score) — useful when
+        // you're not running a magic build and Eitr is dead weight on the plate.
+        const TOTAL_STATES = ["Total w/ Eitr", "Total w/o Eitr"];
+        FOODS.forEach(f => { f.fullTotal = f.total; });
+        function recomputeTotals() {
+            FOODS.forEach(f => {
+                f.total = totalState === "Total w/o Eitr" ? f.fullTotal - f.ei : f.fullTotal;
+                f.score = f.total + f.heal * HEAL_TICKS;
+            });
+        }
 
         const BIOMES = [
             { tier:0, label:"All"          },
@@ -389,6 +401,7 @@
                 biomes: [...activeBiomes],
                 forks: [...activeForks],
                 feastState,
+                totalState,
                 flagged: [...flaggedFoods],
                 sortKey,
                 sortDir,
@@ -402,6 +415,9 @@
         const activeForks  = new Set(saved.forks || []);
         // Feast filter is a single tri-state button that cycles through FEAST_STATES on click.
         let feastState  = FEAST_STATES.includes(saved.feastState) ? saved.feastState : "Include Feasts";
+        // Total column toggle: whether Eitr counts toward Total (and Score).
+        let totalState  = TOTAL_STATES.includes(saved.totalState) ? saved.totalState : "Total w/ Eitr";
+        recomputeTotals();
         // Foods the player has flagged (via right-click / long-press context menu) as
         // unavailable or suboptimal. Keyed by name -> reason ("unavailable" |
         // "suboptimal"). Removed from the list by default; the "Show Flagged" toggle
@@ -488,6 +504,26 @@
         });
         hiddenBtn.style.minWidth = hiddenBtnMaxWidth + 'px';
 
+        const totalRow = document.getElementById('totalFilters');
+        const totalBtn = document.createElement('button');
+        totalBtn.className = 'filter-btn px-3 py-1 rounded active';
+        totalBtn.title = 'Toggle whether Eitr is included in the Total and Score columns';
+        totalBtn.onclick = () => {
+            totalState = TOTAL_STATES[(TOTAL_STATES.indexOf(totalState) + 1) % TOTAL_STATES.length];
+            recomputeTotals();
+            refreshFilters();
+            saveState();
+            render();
+        };
+        totalRow.appendChild(totalBtn);
+        // Fix the button's width to its longest label so it doesn't resize as it toggles.
+        let totalBtnMaxWidth = 0;
+        TOTAL_STATES.forEach(label => {
+            totalBtn.textContent = label;
+            totalBtnMaxWidth = Math.max(totalBtnMaxWidth, totalBtn.offsetWidth);
+        });
+        totalBtn.style.minWidth = totalBtnMaxWidth + 'px';
+
         // Fix the result-count width too, so its changing digit count doesn't
         // reflow/shift the filter buttons in this space-between row. The widest
         // it can ever render is "Showing <total> of <total> foods" (filtered
@@ -509,6 +545,7 @@
                 b.classList.toggle('active', isActive);
             });
             feastBtn.textContent = feastState;
+            totalBtn.textContent = totalState;
             hiddenBtn.textContent = flaggedFoods.size === 0
                 ? 'No Flagged Foods'
                 : `${showHidden ? 'Showing' : 'Show'} Flagged (${flaggedFoods.size})`;
