@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-09-27 11:24",
+    "generated":  "2026-09-27 11:45",
     "server":  {
                    "name":  "Bahnsheim (DatHost)",
                    "world":  "DeepNorth",
@@ -19,7 +19,7 @@
                      "description":  "Craft an Armory Rack to save, store and instantly recall named gear sets - armor, weapons, cape, utility and hotbar - without rummaging through chests every time you switch tasks.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/Armory",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/Armory/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/Armory/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/Armory"
                  },
                  {
                      "id":  "TastyChickenLegs-AutomaticFuel",
@@ -45,7 +45,7 @@
                      "description":  "Automatically store and deposit items from your inventory or ground into nearby chests and containers. Chest management, hotkey support, quick stack, auto-pickup, favorites, ItemDrawers, backpacks, WardIsLove, ward protection.",
                      "website":  "https://discord.gg/pdHgy6Bsng",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/Azumatt/AzuAutoStore/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/Azumatt/AzuAutoStore/"
+                     "hexium":  "https://valheim.hexium.gg/mods/Azumatt/AzuAutoStore"
                  },
                  {
                      "id":  "Azumatt-AzuClock",
@@ -58,7 +58,7 @@
                      "description":  "Simple clock for in-game time. Weather and forecast. Easy configuration.",
                      "website":  "https://discord.gg/pdHgy6Bsng",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/Azumatt/AzuClock/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/Azumatt/AzuClock/"
+                     "hexium":  "https://valheim.hexium.gg/mods/Azumatt/AzuClock"
                  },
                  {
                      "id":  "Azumatt-AzuCraftyBoxes",
@@ -71,7 +71,7 @@
                      "description":  "AzuCraftyBoxes is a Valheim mod that allows players to access and use resources from nearby containers when crafting and building, based on a configurable range and item restrictions. Restrictions are controlled by the yaml file Azumatt.AzuCraftyBoxes.yml",
                      "website":  "https://discord.gg/pdHgy6Bsng",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/Azumatt/AzuCraftyBoxes/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/Azumatt/AzuCraftyBoxes/"
+                     "hexium":  "https://valheim.hexium.gg/mods/Azumatt/AzuCraftyBoxes"
                  },
                  {
                      "id":  "Azumatt-AzuExtendedPlayerInventory",
@@ -84,7 +84,7 @@
                      "description":  "AzuEPI (Extended Player Inventory) is a comprehensive inventory expansion mod that adds more rows to inventory, equipment slots, quick slots, vanity customization, and loadout management to Valheim. Controller friendly.",
                      "website":  "https://discord.gg/pdHgy6Bsng",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/Azumatt/AzuExtendedPlayerInventory/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/Azumatt/AzuExtendedPlayerInventory/"
+                     "hexium":  "https://valheim.hexium.gg/mods/Azumatt/AzuExtendedPlayerInventory"
                  },
                  {
                      "id":  "Azumatt-AzuHoverStats",
@@ -97,7 +97,7 @@
                      "description":  "It shows information on things when you hover over them. What else is there to say?",
                      "website":  "https://discord.gg/pdHgy6Bsng",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/Azumatt/AzuHoverStats/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/Azumatt/AzuHoverStats/"
+                     "hexium":  "https://valheim.hexium.gg/mods/Azumatt/AzuHoverStats"
                  },
                  {
                      "id":  "TastyChickenLegs-BetterCarts",
@@ -149,7 +149,7 @@
                      "description":  "Logs ship speed, wind, and heading to CSV while you sail, plus a live HUD - empirical data for comparing ship speeds instead of guesswork.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/CaptainsLog",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/CaptainsLog/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/CaptainsLog/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/CaptainsLog"
                  },
                  {
                      "id":  "DeathMonger-Comfortometer",
@@ -162,14 +162,14 @@
                      "description":  "A compact HUD panel that stays up while you move: every piece giving you comfort, its distance, duplicates in range, and what you just walked out of range of, in red.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/Comfortometer",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/Comfortometer/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/Comfortometer/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/Comfortometer"
                  },
                  {
                      "id":  "ComfyMods-ComfyAutoRepair",
                      "name":  "ComfyAutoRepair",
                      "author":  "ComfyMods",
                      "version":  "1.1.0",
-                     "side":  "unknown",
+                     "side":  "client",
                      "mine":  false,
                      "onServer":  false,
                      "description":  "Interact with a crafting station to auto-repair all items in your inventory.",
@@ -188,7 +188,7 @@
                      "description":  "Shared config synchronization and server policy library for Valheim mods. Installed as a dependency and compatible with Jotunn and ServerSync.",
                      "website":  "https://github.com/shudnal/ConditionalConfigSync",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/ConditionalConfigSync/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/shudnal/ConditionalConfigSync/"
+                     "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConditionalConfigSync"
                  },
                  {
                      "id":  "shudnal-ConfigurationManager",
@@ -201,7 +201,7 @@
                      "description":  "Localized, recolored, refined. Split view mode. Config files editor. Setting edit window. Changed values are highlighted. Prevent user input or pause the game while window is open. Window scale depends on game scale.",
                      "website":  "https://github.com/shudnal/ConfigurationManager",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/ConfigurationManager/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/shudnal/ConfigurationManager/"
+                     "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConfigurationManager"
                  },
                  {
                      "id":  "DeathMonger-DiagnoseServerLag",
@@ -214,7 +214,7 @@
                      "description":  "Names the cause of lag instead of guessing. Measures your client and the server once a second and tells you which it is: starved server, saturated link, packet loss, object churn, world loading, or your own machine.",
                      "website":  "https://github.com/gbahns/ValheimMods",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/DiagnoseServerLag/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/DiagnoseServerLag/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/DiagnoseServerLag"
                  },
                  {
                      "id":  "DeathMonger-DistanceFromWorldCenter",
@@ -227,7 +227,7 @@
                      "description":  "Always-on HUD widget showing your horizontal distance from the world center (0,0), with optional X/Z coordinates.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/DistanceFromWorldCenter",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/DistanceFromWorldCenter/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/DistanceFromWorldCenter/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/DistanceFromWorldCenter"
                  },
                  {
                      "id":  "Searica-DodgeShortcut",
@@ -247,7 +247,7 @@
                      "name":  "DontWastePotions",
                      "author":  "sephalon",
                      "version":  "1.0.0",
-                     "side":  "unknown",
+                     "side":  "client",
                      "mine":  false,
                      "onServer":  false,
                      "description":  "Prevents drinking potions when you are at max of the stat the potion gives",
@@ -266,7 +266,7 @@
                      "description":  "Your stats on one key press, with the game paused while you read. Scoreboard of every player, including ones who are offline: kills, deaths, K/D, bosses, time played and best skill.",
                      "website":  "https://github.com/gbahns/ValheimMods",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/DudeWhatAreMyStats/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/DudeWhatAreMyStats/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/DudeWhatAreMyStats"
                  },
                  {
                      "id":  "DeathMonger-ForsakenShrines",
@@ -279,7 +279,7 @@
                      "description":  "Build shrines to the Forsaken bosses. Each shrine remotely channels its boss\u0027s guardian power once you mount the boss\u0027s trophy on it, to switch forsaken powers without having to return to the sacrificial stones at the world center.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/ForsakenShrines",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/ForsakenShrines/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/ForsakenShrines/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/ForsakenShrines"
                  },
                  {
                      "id":  "DeathMonger-GrabMaterials",
@@ -292,7 +292,7 @@
                      "description":  "Grab materials from nearby chests needed to build things out in the world, e.g. grab materials for a workbench, for portal, for a longship, for exploring (workbench, and portal), etc.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/GrabMaterials",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/GrabMaterials/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/GrabMaterials/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/GrabMaterials"
                  },
                  {
                      "id":  "LTmadness-GumshoeTimerSuite",
@@ -318,7 +318,7 @@
                      "description":  "A Heads Up Display compass with map pins and dynamic markers for Ships, Carts and Portals",
                      "website":  "https://www.nexusmods.com/valheim/mods/2674/",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/Neobotics/HUDCompass/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/Neobotics/HUDCompass/"
+                     "hexium":  "https://valheim.hexium.gg/mods/Neobotics/HUDCompass"
                  },
                  {
                      "id":  "DeathMonger-Hungry_Viking",
@@ -331,7 +331,7 @@
                      "description":  "Visual warnings for hunger, smoke, and poison — screen vignettes and on-screen labels that escalate in urgency so you never miss a critical status.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/HungryViking",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/Hungry_Viking/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/Hungry_Viking/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/Hungry_Viking"
                  },
                  {
                      "id":  "ValheimModding-Jotunn",
@@ -344,7 +344,7 @@
                      "description":  "Jötunn (/ˈjɔːtʊn/, \u0027giant\u0027), the Valheim Library was created with the goal of making the lives of mod developers easier. It enables you to create mods for Valheim using an abstracted API so you can focus on the actual content creation.",
                      "website":  "https://github.com/Valheim-Modding/Jotunn",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/ValheimModding/Jotunn/"
+                     "hexium":  "https://valheim.hexium.gg/mods/ValheimModding/Jotunn"
                  },
                  {
                      "id":  "ValheimModding-JsonDotNET",
@@ -357,7 +357,7 @@
                      "description":  "Shared version 13.0.3 of Json.NET from Newtonsoft, net45 package for use in Valheim mods. Maintained by the ValheimModding team.",
                      "website":  "https://github.com/Valheim-Modding/CommonPackages",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/ValheimModding/JsonDotNET/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/ValheimModding/JsonDotNET/"
+                     "hexium":  "https://valheim.hexium.gg/mods/ValheimModding/JsonDotNET"
                  },
                  {
                      "id":  "shudnal-MyLittleUI",
@@ -370,7 +370,7 @@
                      "description":  "Bunch of little UI tweaks. Tooltips for production timers, player status, items. Custom chest names, buff list, multicraft, weather forecast, crafting sorting, filtering and so on.",
                      "website":  "https://github.com/shudnal/MyLittleUI",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/MyLittleUI/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/shudnal/MyLittleUI/"
+                     "hexium":  "https://valheim.hexium.gg/mods/shudnal/MyLittleUI"
                  },
                  {
                      "id":  "blacks7ar-NoTreeStump",
@@ -383,7 +383,7 @@
                      "description":  "A simple commissioned mod that removes the stump from all trees when cutted down.",
                      "website":  "https://www.nexusmods.com/valheim/mods/2583?tab=bugs",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/blacks7ar/NoTreeStump/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/blacks7ar/NoTreeStump/"
+                     "hexium":  "https://valheim.hexium.gg/mods/blacks7ar/NoTreeStump"
                  },
                  {
                      "id":  "DeathMonger-One_Click_Launch",
@@ -396,7 +396,7 @@
                      "description":  "One click from the main menu back into the game you were playing. Remembers each character with the world or server they were actually played in.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/OneClickLaunch",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/One_Click_Launch/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/One_Click_Launch/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/One_Click_Launch"
                  },
                  {
                      "id":  "Crystal-Pathfinder",
@@ -422,7 +422,7 @@
                      "description":  "Pause a server-hosted game: the world pauses when every player online has asked for a pause (the ESC menu, or a mod that pauses for an open map or panel), and an admin can pause the whole server for everyone with a key.",
                      "website":  "https://github.com/gbahns/ValheimMods",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/PauseMyServer/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/PauseMyServer/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/PauseMyServer"
                  },
                  {
                      "id":  "KuliTeam-PeekaChest",
@@ -461,7 +461,7 @@
                      "description":  "Adjust the volume and activation range of portals or silence them completely",
                      "website":  "https://www.nexusmods.com/valheim/mods/1981/",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/Neobotics/QuietPortals/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/Neobotics/QuietPortals/"
+                     "hexium":  "https://valheim.hexium.gg/mods/Neobotics/QuietPortals"
                  },
                  {
                      "id":  "Azumatt-Recycle_N_Reclaim",
@@ -474,7 +474,7 @@
                      "description":  "A mod that allows you to recycle items back into resources used to make them. Adds a \u0027Reclaim\u0027 tab/button to the crafting menu. Additionally can be used inside of your inventory directly.",
                      "website":  "https://discord.gg/pdHgy6Bsng",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/Azumatt/Recycle_N_Reclaim/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/Azumatt/Recycle_N_Reclaim/"
+                     "hexium":  "https://valheim.hexium.gg/mods/Azumatt/Recycle_N_Reclaim"
                  },
                  {
                      "id":  "Azumatt-RepairStation",
@@ -487,7 +487,7 @@
                      "description":  "Simple station to repair your shit. All at once or one at a time. Make it free, or cost {x} amount of {x} item. Just interact with this shit.",
                      "website":  "https://discord.gg/pdHgy6Bsng",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/Azumatt/RepairStation/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/Azumatt/RepairStation/"
+                     "hexium":  "https://valheim.hexium.gg/mods/Azumatt/RepairStation"
                  },
                  {
                      "id":  "JereKuusela-Ruler",
@@ -500,7 +500,7 @@
                      "description":  "Adds a simple ruler for measuring distances.",
                      "website":  "https://github.com/JereKuusela/valheim-ruler",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/JereKuusela/Ruler/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/JereKuusela/Ruler/"
+                     "hexium":  "https://valheim.hexium.gg/mods/JereKuusela/Ruler"
                  },
                  {
                      "id":  "DeathMonger-SmartSilencer",
@@ -513,7 +513,7 @@
                      "description":  "Auto-mutes Valheim while music or a video plays in another program, or while the game is not the window in front. Each trigger has its own switch.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/SmartSilencer",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/SmartSilencer/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/SmartSilencer/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/SmartSilencer"
                  },
                  {
                      "id":  "DeathMonger-SpreadTheLoad",
@@ -539,7 +539,7 @@
                      "description":  "Shared markers that stay erased, a table that only carries exploration, and a pocket map that records only what you actually found.",
                      "website":  "https://github.com/gbahns/ValheimMods",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/TheGreatestMap/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/TheGreatestMap/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/TheGreatestMap"
                  },
                  {
                      "id":  "DeathMonger-TheGreatestPortal",
@@ -552,7 +552,7 @@
                      "description":  "Pick each portal\u0027s destination from a list or on the map, set a default for new portals, mark favorites, or leave it open and choose where to go when you step in.",
                      "website":  "https://github.com/gbahns/ValheimMods",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/TheGreatestPortal/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/TheGreatestPortal/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/TheGreatestPortal"
                  },
                  {
                      "id":  "DeathMonger-TheGreatestShips",
@@ -565,7 +565,7 @@
                      "description":  "Eight ships on Valheim\u0027s own hulls: a Fast Karve and Fast Longship, three cargo tiers (Knarr, Busse, Big Busse) and three Byrdings with a fenced, gated pen for livestock. Speeds from logged sailing; recipes, health and hull size server-synced.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/TheGreatestShips",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/TheGreatestShips/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/TheGreatestShips/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/TheGreatestShips"
                  },
                  {
                      "id":  "DeathMonger-TheObituaries",
@@ -578,7 +578,7 @@
                      "description":  "Announces every player death to the whole server in Quake style: \u0027Greg was railed by a Deathsquito\u0027, \u0027Marco sank like a rock\u0027, \u0027Anna does a back flip into the lava\u0027. Client-side; the server needs nothing.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/TheObituaries",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/TheObituaries/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/TheObituaries/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/TheObituaries"
                  },
                  {
                      "id":  "Azumatt-Unshamed",
@@ -591,7 +591,7 @@
                      "description":  "Valheim 1.0 blocks achievements for anyone running mods. This unblocks them, and gives back the ones you already earned. No free unlocks.",
                      "website":  "https://discord.gg/pdHgy6Bsng",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/Azumatt/Unshamed/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/Azumatt/Unshamed/"
+                     "hexium":  "https://valheim.hexium.gg/mods/Azumatt/Unshamed"
                  },
                  {
                      "id":  "Stonaar-ValheimSkipIntro",
@@ -617,7 +617,7 @@
                      "description":  "Hover a crafting station\u0027s level number to see which upgrades you haven\u0027t built yet but could, with their materials.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/WhatsMyWorkbenchMissing",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/WhatsMyWorkbenchMissing/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/DeathMonger/WhatsMyWorkbenchMissing/"
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/WhatsMyWorkbenchMissing"
                  },
                  {
                      "id":  "ValheimModding-YamlDotNet",
@@ -630,7 +630,7 @@
                      "description":  "Shared version 16.3.0 of YamlDotNet from Antoine Aubry and contributors, net47 package for use in Valheim mods. Maintained by the ValheimModding team.",
                      "website":  "https://github.com/Valheim-Modding/CommonPackages",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/ValheimModding/YamlDotNet/",
-                     "hexium":  "https://valheim.hexium.gg/c/valheim/p/ValheimModding/YamlDotNet/"
+                     "hexium":  "https://valheim.hexium.gg/mods/ValheimModding/YamlDotNet"
                  }
              ]
 }

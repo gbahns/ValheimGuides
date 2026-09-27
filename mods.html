@@ -33,7 +33,6 @@
         .mod-links a:hover { border-color: var(--kb-stone); }
         .pill { display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
                 padding: 0.1rem 0.5rem; border-radius: 999px; border: 1px solid var(--kb-tan); color: var(--kb-stone-light); }
-        .pill.mine { border-color: var(--kb-accent); color: var(--kb-accent); }
         .pill.server { background: var(--kb-stone); color: var(--kb-parchment); border-color: var(--kb-stone); }
         .pill.off { border-style: dashed; }
         .tools { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; justify-content: center; margin: 1.25rem 0 0.5rem; }
@@ -44,31 +43,42 @@
         .view-toggle button { padding: 0.4rem 0.8rem; background: #fff8; font-weight: 600; font-size: 0.9rem; }
         .view-toggle button + button { border-left: 1px solid var(--kb-tan); }
         .view-toggle button.active { background: var(--kb-stone); color: var(--kb-parchment); }
-        .mod-table-wrap { background: var(--kb-parchment-light); border: 1px solid var(--kb-tan); border-radius: 0.5rem; overflow-x: auto;
+        .mod-table-wrap { background: #FFFBF2; border: 1px solid var(--kb-tan); border-radius: 0.5rem; overflow-x: auto;
                           box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-        .mod-table { width: 100%; background: #fff; font-size: 0.9rem; line-height: 1.35; border-collapse: collapse; }
+        .mod-table { width: 100%; background: #FFFBF2; /* a shade lighter than the parchment page */ font-size: 0.9rem; line-height: 1.35; border-collapse: collapse; }
         .mod-table thead th { background: var(--kb-stone); color: var(--kb-parchment-light); font-weight: 700; text-align: left; white-space: nowrap; }
         .mod-table th.sortable { cursor: pointer; user-select: none; }
         .mod-table th.sortable:hover { color: var(--kb-tan); }
         .mod-table th .sort-indicator { font-size: 0.75em; opacity: 0.6; margin-left: 0.25em; }
-        .mod-table td, .mod-table th { padding: 0.35rem 0.6rem; vertical-align: top; }
+        .mod-table td, .mod-table th { padding: 0.3rem 0.5rem; vertical-align: top; }
         .mod-table tbody tr { border-top: 1px solid rgba(210, 180, 140, 0.45); }
+        .mod-table tbody tr { cursor: pointer; }
         .mod-table tbody tr:hover { background: rgba(210, 180, 140, 0.2); }
         .mod-table td.nowrap { white-space: nowrap; }
-        .mod-table td.mod-cell-name { font-family: var(--kb-serif); font-size: 1.1rem; font-weight: 700; white-space: nowrap; }
+        .mod-table td.mod-cell-name { font-family: var(--kb-serif); font-size: 1.1rem; font-weight: 700; line-height: 1.2; }
         .mod-table td.mod-cell-name a { color: var(--kb-stone); text-decoration: none; }
         .mod-table td.mod-cell-name a:hover { color: var(--kb-accent); }
-        .mod-table td.mod-cell-desc { min-width: 22rem; }
-        .mod-table td.mod-cell-desc .mod-note { margin-top: 0.2rem; }
-        .mod-table .mod-links { margin-top: 0; padding-top: 0; flex-wrap: nowrap; }
+        /* One line per mod: the description takes whatever width is left and truncates. Click the row for the rest. */
+        .mod-table td.mod-cell-desc { width: 100%; max-width: 0; min-width: 16rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .mod-table .pill { white-space: nowrap; }
+        .mod-dialog { background: var(--kb-parchment-light); color: var(--kb-stone); border: 1px solid var(--kb-tan); border-radius: 0.6rem;
+                      padding: 1.25rem 1.5rem 1.4rem; width: min(40rem, calc(100vw - 2rem)); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+        .mod-dialog::backdrop { background: rgba(74, 63, 53, 0.45); }
+        .mod-dialog .mod-name { font-size: 1.6rem; padding-right: 2rem; }
+        .mod-dialog .mod-meta { margin: 0.35rem 0 0.75rem; }
+        .mod-dialog .mod-desc { font-size: 1rem; line-height: 1.5; }
+        .mod-dialog .mod-note { margin-top: 0.6rem; }
+        .mod-dialog .mod-links { margin-top: 1rem; font-size: 0.9rem; }
+        .mod-dialog .mod-close { position: absolute; top: 0.5rem; right: 0.75rem; font-size: 1.5rem; line-height: 1; color: var(--kb-stone-light); padding: 0.2rem 0.4rem; }
+        .mod-dialog .mod-close:hover { color: var(--kb-accent); }
+        #page { max-width: 96rem; }
         .stamp { text-align: center; color: var(--kb-stone-light); font-size: 0.85rem; margin: 2.5rem 0 1rem; }
         .empty { color: var(--kb-stone-light); font-style: italic; }
     </style>
 </head>
 <body>
 
-    <div class="container mx-auto max-w-6xl px-4 py-8">
+    <div id="page" class="container mx-auto px-4 py-8">
         <header class="text-center mb-4">
             <h1 class="text-4xl md:text-6xl valheim-title">Our Mods</h1>
             <p class="lead mt-3">The mod set we play with, what each one does, and which side it runs on.
@@ -90,6 +100,7 @@
         <main id="mods"><p class="empty text-center mt-8">Loading the mod list...</p></main>
 
         <p class="stamp" id="stamp"></p>
+        <dialog id="modDialog" class="mod-dialog" aria-label="Mod details"></dialog>
     </div>
 
 <script>
@@ -111,7 +122,7 @@ const GROUPS = [
 let data = null, notes = {}, filter = 'all';
 // View (cards or table) and table sort are remembered across visits.
 const VIEW_KEY = 'mods.view', SORT_KEY = 'mods.sort';
-let view = 'cards', sortKey = 'name', sortDir = 1;
+let view = 'table', sortKey = 'name', sortDir = 1;
 try {
   const v = localStorage.getItem(VIEW_KEY); if (v === 'cards' || v === 'table') view = v;
   const so = JSON.parse(localStorage.getItem(SORT_KEY) || 'null'); if (so && so.key) { sortKey = so.key; sortDir = so.dir === -1 ? -1 : 1; }
@@ -137,7 +148,6 @@ function card(m){
     +   '<span>' + esc(m.author) + '</span>'
     +   (m.version ? '<span>v' + esc(m.version) + '</span>' : '')
     +   (s.label ? '<span class="pill' + (s.group === 'server' ? ' server' : '') + '">' + esc(s.label) + '</span>' : '')
-    +   (m.mine ? '<span class="pill mine">ours</span>' : '')
     +   (s.group !== 'server' && m.side !== 'client' ? '<span class="pill' + (m.onServer ? '' : ' off') + '">' + (m.onServer ? 'on the server' : 'not on the server') + '</span>' : '')
     + '</div>'
     + (m.description ? '<p class="mod-desc">' + esc(m.description) + '</p>' : '')
@@ -159,10 +169,8 @@ const COLS = [
   { key: 'author',   label: 'Author' },
   { key: 'version',  label: 'Version' },
   { key: 'side',     label: 'Side' },
-  { key: 'mine',     label: 'Ours' },
-  { key: 'onServer', label: 'On the server' },
-  { key: 'desc',     label: 'Description' },
-  { key: null,       label: 'Links' }
+  { key: 'onServer', label: 'Server' },
+  { key: null,       label: 'Description' }
 ];
 
 // The value a column sorts by; strings compare case-insensitively, booleans put "yes" first.
@@ -172,9 +180,7 @@ function sortValue(m, key){
     case 'author':   return String(m.author || '').toLowerCase();
     case 'version':  return String(m.version || '');
     case 'side':     return (SIDE[m.side] || SIDE.unknown).label;
-    case 'mine':     return m.mine ? 0 : 1;
     case 'onServer': return m.onServer ? 0 : 1;
-    case 'desc':     return String(m.description || '').toLowerCase();
     default:         return '';
   }
 }
@@ -203,19 +209,17 @@ function tableRow(m){
   const s = SIDE[m.side] || SIDE.unknown;
   const n = notes[m.id] || {};
   const home = m.website || m.thunderstore || m.hexium;
-  const links = modLinks(m);
+  const hover = [m.description, n.note].filter(Boolean).join('\n\n');
   const serverCell = s.group === 'server' ? '<span class="pill server">server only</span>'
     : m.side === 'client' ? '<span class="text-sm" style="color:var(--kb-stone-light)">n/a</span>'
     : '<span class="pill' + (m.onServer ? '' : ' off') + '">' + (m.onServer ? 'yes' : 'no') + '</span>';
-  return '<tr>'
+  return '<tr data-id="' + esc(m.id) + '">'
     + '<td class="mod-cell-name">' + (home ? '<a href="' + esc(home) + '" target="_blank" rel="noopener">' : '') + esc(m.name.replace(/_/g, ' ')) + (home ? '</a>' : '') + '</td>'
-    + '<td class="nowrap">' + esc(m.author) + '</td>'
-    + '<td class="nowrap">' + (m.version ? 'v' + esc(m.version) : '') + '</td>'
+    + '<td>' + esc(m.author) + '</td>'
+    + '<td class="nowrap">' + esc(m.version || '') + '</td>'
     + '<td class="nowrap">' + (s.label ? '<span class="pill' + (s.group === 'server' ? ' server' : '') + '">' + esc(s.label) + '</span>' : '') + '</td>'
-    + '<td class="nowrap">' + (m.mine ? '<span class="pill mine">ours</span>' : '') + '</td>'
     + '<td class="nowrap">' + serverCell + '</td>'
-    + '<td class="mod-cell-desc">' + (m.description ? esc(m.description) : '') + (n.note ? '<div class="mod-note">' + esc(n.note) + '</div>' : '') + '</td>'
-    + '<td class="nowrap">' + (links.length ? '<div class="mod-links">' + links.join('') + '</div>' : '') + '</td>'
+    + '<td class="mod-cell-desc" title="' + esc(hover) + '">' + (n.note ? '<span class="mod-note">' + esc(n.note) + '</span> ' : '') + esc(m.description || '') + '</td>'
     + '</tr>';
 }
 
@@ -225,6 +229,13 @@ function table(rows){
     : '<th>' + c.label + '</th>').join('');
   return '<div class="mod-table-wrap"><table class="mod-table"><thead><tr>' + head + '</tr></thead><tbody>'
     + sortMods(rows).map(tableRow).join('') + '</tbody></table></div>';
+}
+
+function showDetails(m){
+  const dlg = document.getElementById('modDialog');
+  dlg.innerHTML = '<button class="mod-close" type="button" aria-label="Close">\u00d7</button>' + card(m).replace('<article class="mod-card">', '<div>').replace(/<\/article>$/, '</div>');
+  dlg.querySelector('.mod-close').addEventListener('click', () => dlg.close());
+  dlg.showModal();
 }
 
 function render(){
@@ -269,6 +280,12 @@ setView(view);
 
 // Column headers are re-rendered with the table, so listen on the container.
 document.getElementById('mods').addEventListener('click', e => {
+  const row = e.target.closest('tr[data-id]');
+  if (row && !e.target.closest('a')) {
+    const m = (data.mods || []).find(x => x.id === row.dataset.id);
+    if (m) showDetails(m);
+    return;
+  }
   const th = e.target.closest('th.sortable');
   if (!th) return;
   const key = th.dataset.key;
@@ -276,6 +293,8 @@ document.getElementById('mods').addEventListener('click', e => {
   try { localStorage.setItem(SORT_KEY, JSON.stringify({ key: sortKey, dir: sortDir })); } catch (e) {}
   render();
 });
+// Clicking the dimmed backdrop closes the popup (Escape already does).
+document.getElementById('modDialog').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.close(); });
 load();
 </script>
 </body>
