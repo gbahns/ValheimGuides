@@ -10,6 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="shared/styles.css">
     <script src="shared/chrome.js" defer></script>
+    <!-- The data, as scripts rather than fetched JSON, so the page also works opened as a file. -->
+    <script src="data/modset.js"></script>
+    <script src="data/modset.notes.js"></script>
     <style>
         body { background: var(--kb-parchment); color: var(--kb-stone); font-family: 'Inter', sans-serif; }
         .valheim-title { font-family: var(--kb-serif); color: var(--kb-stone); }
@@ -37,6 +40,28 @@
         .tools input { border: 1px solid var(--kb-tan); border-radius: 0.4rem; padding: 0.45rem 0.7rem; min-width: 16rem; background: #fff; }
         .filter-btn { border: 1px solid var(--kb-tan); border-radius: 0.4rem; padding: 0.4rem 0.8rem; background: #fff8; font-weight: 600; font-size: 0.9rem; }
         .filter-btn.active { background: var(--kb-stone); color: var(--kb-parchment); border-color: var(--kb-stone); }
+        .view-toggle { display: inline-flex; border: 1px solid var(--kb-tan); border-radius: 0.4rem; overflow: hidden; }
+        .view-toggle button { padding: 0.4rem 0.8rem; background: #fff8; font-weight: 600; font-size: 0.9rem; }
+        .view-toggle button + button { border-left: 1px solid var(--kb-tan); }
+        .view-toggle button.active { background: var(--kb-stone); color: var(--kb-parchment); }
+        .mod-table-wrap { background: var(--kb-parchment-light); border: 1px solid var(--kb-tan); border-radius: 0.5rem; overflow-x: auto;
+                          box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .mod-table { width: 100%; background: #fff; font-size: 0.9rem; line-height: 1.35; border-collapse: collapse; }
+        .mod-table thead th { background: var(--kb-stone); color: var(--kb-parchment-light); font-weight: 700; text-align: left; white-space: nowrap; }
+        .mod-table th.sortable { cursor: pointer; user-select: none; }
+        .mod-table th.sortable:hover { color: var(--kb-tan); }
+        .mod-table th .sort-indicator { font-size: 0.75em; opacity: 0.6; margin-left: 0.25em; }
+        .mod-table td, .mod-table th { padding: 0.35rem 0.6rem; vertical-align: top; }
+        .mod-table tbody tr { border-top: 1px solid rgba(210, 180, 140, 0.45); }
+        .mod-table tbody tr:hover { background: rgba(210, 180, 140, 0.2); }
+        .mod-table td.nowrap { white-space: nowrap; }
+        .mod-table td.mod-cell-name { font-family: var(--kb-serif); font-size: 1.1rem; font-weight: 700; white-space: nowrap; }
+        .mod-table td.mod-cell-name a { color: var(--kb-stone); text-decoration: none; }
+        .mod-table td.mod-cell-name a:hover { color: var(--kb-accent); }
+        .mod-table td.mod-cell-desc { min-width: 22rem; }
+        .mod-table td.mod-cell-desc .mod-note { margin-top: 0.2rem; }
+        .mod-table .mod-links { margin-top: 0; padding-top: 0; flex-wrap: nowrap; }
+        .mod-table .pill { white-space: nowrap; }
         .stamp { text-align: center; color: var(--kb-stone-light); font-size: 0.85rem; margin: 2.5rem 0 1rem; }
         .empty { color: var(--kb-stone-light); font-style: italic; }
     </style>
@@ -56,6 +81,10 @@
             <button class="filter-btn active" data-f="all">All</button>
             <button class="filter-btn" data-f="mine">Ours</button>
             <button class="filter-btn" data-f="server">On the server</button>
+            <div class="view-toggle" role="group" aria-label="View">
+                <button data-v="cards" class="active" aria-pressed="true">Cards</button>
+                <button data-v="table" aria-pressed="false">Table</button>
+            </div>
         </div>
 
         <main id="mods"><p class="empty text-center mt-8">Loading the mod list...</p></main>
@@ -64,10 +93,10 @@
     </div>
 
 <script>
-// Data-driven: data/modset.json is generated from the same sources the dev
-// dashboard reads (the reference Gale profile, the mods repo, and what the
-// server is running), and data/modset.notes.json is an optional hand-written
-// overlay keyed by mod id: { "Author-Name": { "note": "...", "hide": true } }.
+// Data-driven: data/modset.js (and .json, the same data) is generated from the
+// sources the dev dashboard reads - the reference Gale profile, the mods repo,
+// and what the server is running. data/modset.notes.js is an optional
+// hand-written overlay keyed by mod id: { "Author-Name": { "note": "...", "hide": true } }.
 const SIDE = {
   'client':          { group: 'players', label: 'client' },
   'both':            { group: 'players', label: 'client + server' },
@@ -80,19 +109,20 @@ const GROUPS = [
   { key: 'server',  title: 'Server only',        note: 'These run only on the server. Nothing to install on your side.' }
 ];
 let data = null, notes = {}, filter = 'all';
+// View (cards or table) and table sort are remembered across visits.
+const VIEW_KEY = 'mods.view', SORT_KEY = 'mods.sort';
+let view = 'cards', sortKey = 'name', sortDir = 1;
+try {
+  const v = localStorage.getItem(VIEW_KEY); if (v === 'cards' || v === 'table') view = v;
+  const so = JSON.parse(localStorage.getItem(SORT_KEY) || 'null'); if (so && so.key) { sortKey = so.key; sortDir = so.dir === -1 ? -1 : 1; }
+} catch (e) {}
 
 function esc(v){ return String(v == null ? '' : v).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c])); }
 
-async function load(){
-  try {
-    const r = await fetch('data/modset.json', { cache: 'no-store' });
-    if (!r.ok) throw new Error(r.status);
-    data = await r.json();
-  } catch (e) {
-    document.getElementById('mods').innerHTML = '<p class="empty text-center mt-8">The mod list is not available right now.</p>';
-    return;
-  }
-  try { const n = await fetch('data/modset.notes.json', { cache: 'no-store' }); if (n.ok) notes = await n.json(); } catch (e) { notes = {}; }
+function load(){
+  data = window.MODSET || null;
+  notes = window.MODSET_NOTES || {};
+  if (!data) { document.getElementById('mods').innerHTML = '<p class="empty text-center mt-8">The mod list is not available right now.</p>'; return; }
   render();
 }
 
@@ -100,10 +130,7 @@ function card(m){
   const s = SIDE[m.side] || SIDE.unknown;
   const n = notes[m.id] || {};
   const home = m.website || m.thunderstore || m.hexium;
-  const links = [];
-  if (m.thunderstore) links.push('<a href="' + esc(m.thunderstore) + '" target="_blank" rel="noopener">Thunderstore</a>');
-  if (m.hexium)       links.push('<a href="' + esc(m.hexium) + '" target="_blank" rel="noopener">Hexium</a>');
-  if (m.website && m.website !== m.thunderstore && m.website !== m.hexium) links.push('<a href="' + esc(m.website) + '" target="_blank" rel="noopener">Website</a>');
+  const links = modLinks(m);
   return '<article class="mod-card">'
     + '<div class="mod-name">' + (home ? '<a href="' + esc(home) + '" target="_blank" rel="noopener">' : '') + esc(m.name.replace(/_/g, ' ')) + (home ? '</a>' : '') + '</div>'
     + '<div class="mod-meta">'
@@ -119,6 +146,87 @@ function card(m){
     + '</article>';
 }
 
+function modLinks(m){
+  const links = [];
+  if (m.thunderstore) links.push('<a href="' + esc(m.thunderstore) + '" target="_blank" rel="noopener">Thunderstore</a>');
+  if (m.hexium)       links.push('<a href="' + esc(m.hexium) + '" target="_blank" rel="noopener">Hexium</a>');
+  if (m.website && m.website !== m.thunderstore && m.website !== m.hexium) links.push('<a href="' + esc(m.website) + '" target="_blank" rel="noopener">Website</a>');
+  return links;
+}
+
+const COLS = [
+  { key: 'name',     label: 'Mod' },
+  { key: 'author',   label: 'Author' },
+  { key: 'version',  label: 'Version' },
+  { key: 'side',     label: 'Side' },
+  { key: 'mine',     label: 'Ours' },
+  { key: 'onServer', label: 'On the server' },
+  { key: 'desc',     label: 'Description' },
+  { key: null,       label: 'Links' }
+];
+
+// The value a column sorts by; strings compare case-insensitively, booleans put "yes" first.
+function sortValue(m, key){
+  switch (key) {
+    case 'name':     return m.name.replace(/_/g, ' ').toLowerCase();
+    case 'author':   return String(m.author || '').toLowerCase();
+    case 'version':  return String(m.version || '');
+    case 'side':     return (SIDE[m.side] || SIDE.unknown).label;
+    case 'mine':     return m.mine ? 0 : 1;
+    case 'onServer': return m.onServer ? 0 : 1;
+    case 'desc':     return String(m.description || '').toLowerCase();
+    default:         return '';
+  }
+}
+function cmpVersion(a, b){
+  const pa = a.split('.').map(Number), pb = b.split('.').map(Number);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const x = pa[i] || 0, y = pb[i] || 0;
+    if (isNaN(x) || isNaN(y)) return a.localeCompare(b);
+    if (x !== y) return x - y;
+  }
+  return 0;
+}
+function sortMods(rows){
+  return rows.slice().sort((a, b) => {
+    const av = sortValue(a, sortKey), bv = sortValue(b, sortKey);
+    let c;
+    if (sortKey === 'version') c = cmpVersion(av, bv);
+    else if (typeof av === 'number') c = av - bv;
+    else c = String(av).localeCompare(String(bv));
+    if (c === 0) c = sortValue(a, 'name').localeCompare(sortValue(b, 'name'));
+    return c * sortDir;
+  });
+}
+
+function tableRow(m){
+  const s = SIDE[m.side] || SIDE.unknown;
+  const n = notes[m.id] || {};
+  const home = m.website || m.thunderstore || m.hexium;
+  const links = modLinks(m);
+  const serverCell = s.group === 'server' ? '<span class="pill server">server only</span>'
+    : m.side === 'client' ? '<span class="text-sm" style="color:var(--kb-stone-light)">n/a</span>'
+    : '<span class="pill' + (m.onServer ? '' : ' off') + '">' + (m.onServer ? 'yes' : 'no') + '</span>';
+  return '<tr>'
+    + '<td class="mod-cell-name">' + (home ? '<a href="' + esc(home) + '" target="_blank" rel="noopener">' : '') + esc(m.name.replace(/_/g, ' ')) + (home ? '</a>' : '') + '</td>'
+    + '<td class="nowrap">' + esc(m.author) + '</td>'
+    + '<td class="nowrap">' + (m.version ? 'v' + esc(m.version) : '') + '</td>'
+    + '<td class="nowrap">' + (s.label ? '<span class="pill' + (s.group === 'server' ? ' server' : '') + '">' + esc(s.label) + '</span>' : '') + '</td>'
+    + '<td class="nowrap">' + (m.mine ? '<span class="pill mine">ours</span>' : '') + '</td>'
+    + '<td class="nowrap">' + serverCell + '</td>'
+    + '<td class="mod-cell-desc">' + (m.description ? esc(m.description) : '') + (n.note ? '<div class="mod-note">' + esc(n.note) + '</div>' : '') + '</td>'
+    + '<td class="nowrap">' + (links.length ? '<div class="mod-links">' + links.join('') + '</div>' : '') + '</td>'
+    + '</tr>';
+}
+
+function table(rows){
+  const head = COLS.map(c => c.key
+    ? '<th class="sortable" data-key="' + c.key + '">' + c.label + ' <span class="sort-indicator">' + (c.key === sortKey ? (sortDir === 1 ? '\u2191' : '\u2193') : '\u2195') + '</span></th>'
+    : '<th>' + c.label + '</th>').join('');
+  return '<div class="mod-table-wrap"><table class="mod-table"><thead><tr>' + head + '</tr></thead><tbody>'
+    + sortMods(rows).map(tableRow).join('') + '</tbody></table></div>';
+}
+
 function render(){
   const q = (document.getElementById('q').value || '').trim().toLowerCase();
   let mods = (data.mods || []).filter(m => !(notes[m.id] && notes[m.id].hide));
@@ -131,7 +239,7 @@ function render(){
     if (!rows.length) return;
     out.push('<h2 class="group-title">' + g.title + ' <span class="text-base font-normal" style="color:var(--kb-stone-light)">(' + rows.length + ')</span></h2>');
     out.push('<p class="group-note">' + g.note + '</p>');
-    out.push('<div class="mod-grid">' + rows.map(card).join('') + '</div>');
+    out.push(view === 'table' ? table(rows) : '<div class="mod-grid">' + rows.map(card).join('') + '</div>');
   });
   document.getElementById('mods').innerHTML = out.length ? out.join('') : '<p class="empty text-center mt-8">Nothing matches.</p>';
   const sv = data.server || {};
@@ -146,6 +254,28 @@ document.querySelectorAll('.filter-btn').forEach(b => b.addEventListener('click'
   document.querySelectorAll('.filter-btn').forEach(x => x.classList.toggle('active', x === b));
   if (data) render();
 }));
+function setView(v){
+  view = v;
+  try { localStorage.setItem(VIEW_KEY, v); } catch (e) {}
+  document.querySelectorAll('.view-toggle button').forEach(b => {
+    const on = b.dataset.v === v;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+  if (data) render();
+}
+document.querySelectorAll('.view-toggle button').forEach(b => b.addEventListener('click', () => setView(b.dataset.v)));
+setView(view);
+
+// Column headers are re-rendered with the table, so listen on the container.
+document.getElementById('mods').addEventListener('click', e => {
+  const th = e.target.closest('th.sortable');
+  if (!th) return;
+  const key = th.dataset.key;
+  if (key === sortKey) sortDir = -sortDir; else { sortKey = key; sortDir = 1; }
+  try { localStorage.setItem(SORT_KEY, JSON.stringify({ key: sortKey, dir: sortDir })); } catch (e) {}
+  render();
+});
 load();
 </script>
 </body>
