@@ -3,7 +3,9 @@
    Pair with:    <link rel="stylesheet" href="shared/styles.css">
 
    Adding a new page? Add an entry to PAGES below and you're done — every
-   guide picks up the new link on next reload. The data-page attribute is
+   guide picks up the new link on next reload. The site icon (the same
+   scroll as the brand) is injected here too, so no page needs its own
+   <link rel="icon">. The data-page attribute is
    used by the active-highlight logic, so it must match the page filename
    (sans .html) of the corresponding page. */
 
@@ -32,6 +34,14 @@
             </div>
         </header>
     `;
+
+    // Favicons: the SVG for browsers that take it, favicon.ico at the site
+    // root for the rest, and the PNG iOS uses when a page is pinned to a
+    // home screen. All three are renders of the brand's scroll.
+    document.head.insertAdjacentHTML('beforeend',
+        '<link rel="icon" href="shared/icon.svg" type="image/svg+xml">'
+      + '<link rel="icon" href="favicon.ico" sizes="16x16 32x32">'
+      + '<link rel="apple-touch-icon" href="shared/apple-touch-icon.png">');
 
     const inject = () => {
         document.body.insertAdjacentHTML('afterbegin', navHtml);
