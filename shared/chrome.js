@@ -11,7 +11,6 @@
 
 (function () {
     const PAGES = [
-        { page: 'index',     label: 'Home' },
         { page: 'ships',     label: 'Ships' },
         { page: 'sailing-physics', label: 'Sailing Physics' },
         { page: 'weapons',   label: 'Weapons' },

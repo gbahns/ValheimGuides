@@ -38,6 +38,7 @@
                 padding: 0.1rem 0.5rem; border-radius: 999px; border: 1px solid var(--kb-tan); color: var(--kb-stone-light); }
         .pill.server { background: var(--kb-stone); color: var(--kb-parchment); border-color: var(--kb-stone); }
         .pill.off { border-style: dashed; }
+        .pill.required { border-color: var(--kb-accent); color: var(--kb-accent); }
         .tools { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; justify-content: center; }
         .tools input { border: 1px solid var(--kb-tan); border-radius: 0.4rem; padding: 0.4rem 0.7rem; min-width: 13rem; background: #fff; }
         .filter-btn { border: 1px solid var(--kb-tan); border-radius: 0.4rem; padding: 0.4rem 0.8rem; background: #fff8; font-weight: 600; font-size: 0.9rem; }
@@ -128,6 +129,22 @@ try {
   const so = JSON.parse(localStorage.getItem(SORT_KEY) || 'null'); if (so && so.key) { sortKey = so.key; sortDir = so.dir === -1 ? -1 : 1; }
 } catch (e) {}
 
+// What each player has to do about a mod. The side comes from the export; whether the
+// group asks everyone to install a client-side mod is a house rule, so it lives in the
+// overlay as client: "group".
+const CLIENT = {
+  server: { label: 'Server Only',        rank: 3, cls: 'server' },
+  needed: { label: 'Required by Server', rank: 0, cls: 'required' },
+  group:  { label: 'Required by Group',  rank: 1, cls: 'required' },
+  opt:    { label: 'Optional',           rank: 2, cls: '' }
+};
+function clientOf(m){
+  if (m.side === 'server') return CLIENT.server;
+  if (m.side === 'both')   return CLIENT.needed;
+  return ((notes[m.id] || {}).client === 'group') ? CLIENT.group : CLIENT.opt;
+}
+function clientPill(m){ const c = clientOf(m); return '<span class="pill ' + c.cls + '">' + c.label + '</span>'; }
+
 function esc(v){ return String(v == null ? '' : v).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c])); }
 
 function load(){
@@ -148,6 +165,7 @@ function card(m){
     +   '<span>' + esc(m.author) + '</span>'
     +   (m.version ? '<span>v' + esc(m.version) + '</span>' : '')
     +   (s.label ? '<span class="pill' + (s.group === 'server' ? ' server' : '') + '">' + esc(s.label) + '</span>' : '')
+    +   (s.group !== 'server' ? clientPill(m) : '')
     +   (s.group !== 'server' && m.side !== 'client' ? '<span class="pill' + (m.onServer ? '' : ' off') + '">' + (m.onServer ? 'on the server' : 'not on the server') + '</span>' : '')
     + '</div>'
     + (m.description ? '<p class="mod-desc">' + esc(m.description) + '</p>' : '')
@@ -169,6 +187,7 @@ const COLS = [
   { key: 'author',   label: 'Author' },
   { key: 'version',  label: 'Version' },
   { key: 'side',     label: 'Side' },
+  { key: 'client',   label: 'Client' },
   { key: 'onServer', label: 'Server' },
   { key: null,       label: 'Description' }
 ];
@@ -180,6 +199,7 @@ function sortValue(m, key){
     case 'author':   return String(m.author || '').toLowerCase();
     case 'version':  return String(m.version || '');
     case 'side':     return (SIDE[m.side] || SIDE.unknown).label;
+    case 'client':   return clientOf(m).rank;
     case 'onServer': return m.onServer ? 0 : 1;
     default:         return '';
   }
@@ -210,14 +230,14 @@ function tableRow(m){
   const n = notes[m.id] || {};
   const home = m.website || m.thunderstore || m.hexium;
   const hover = [m.description, n.note].filter(Boolean).join('\n\n');
-  const serverCell = s.group === 'server' ? '<span class="pill server">server only</span>'
-    : m.side === 'client' ? '<span class="text-sm" style="color:var(--kb-stone-light)">n/a</span>'
+  const serverCell = m.side === 'client' ? '<span class="text-sm" style="color:var(--kb-stone-light)">n/a</span>'
     : '<span class="pill' + (m.onServer ? '' : ' off') + '">' + (m.onServer ? 'yes' : 'no') + '</span>';
   return '<tr data-id="' + esc(m.id) + '">'
     + '<td class="mod-cell-name">' + (home ? '<a href="' + esc(home) + '" target="_blank" rel="noopener">' : '') + esc(m.name.replace(/_/g, ' ')) + (home ? '</a>' : '') + '</td>'
     + '<td>' + esc(m.author) + '</td>'
     + '<td class="nowrap">' + esc(m.version || '') + '</td>'
     + '<td class="nowrap">' + (s.label ? '<span class="pill' + (s.group === 'server' ? ' server' : '') + '">' + esc(s.label) + '</span>' : '') + '</td>'
+    + '<td class="nowrap">' + clientPill(m) + '</td>'
     + '<td class="nowrap">' + serverCell + '</td>'
     + '<td class="mod-cell-desc" title="' + esc(hover) + '">' + (n.note ? '<span class="mod-note">' + esc(n.note) + '</span> ' : '') + esc(m.description || '') + '</td>'
     + '</tr>';

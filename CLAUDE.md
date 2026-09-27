@@ -19,8 +19,10 @@ links in the nav redirect there.
 - Player-facing fields only. The export deliberately carries no paths, no
   addresses and none of the `why` text from `mods.json`; keep it that way.
 - `data/modset.notes.js` is the hand-written overlay, keyed by mod id
-  (`Author-Name`): `note` adds a sentence under a mod, `hide` drops it. The
-  two shared libraries (JsonDotNET, YamlDotNet) are hidden there.
+  (`Author-Name`): `note` adds a sentence under a mod, `hide` drops it, and
+  `client: "group"` marks a client-side mod the group asks everyone to
+  install (the Client column shows Required by Group instead of Optional).
+  The two shared libraries (JsonDotNET, YamlDotNet) are hidden there.
 - The data is loaded with `<script>` tags, not fetched, on purpose: a page
   opened from `file://` cannot fetch JSON but can load a script, so the page
   previews locally. Keep it that way.

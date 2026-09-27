@@ -18,19 +18,19 @@
     z-index: 100;
     background: var(--kb-stone);
     color: var(--kb-parchment);
-    padding: 0.35rem 1rem;
+    padding: 0.35rem 0.75rem; /* matches the widest page (food) so the brand sits over its table edge */
     border-bottom: 3px solid var(--kb-tan);
     font-family: var(--kb-serif);
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 .kb-nav-inner {
-    max-width: 1280px;
+    max-width: 1776px; /* the food table's 1800px container less its own 12px side padding */
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.5rem 1.75rem;
 }
 .kb-brand {
     font-size: 1.5rem;
