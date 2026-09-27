@@ -17,6 +17,7 @@
         { page: 'fishing',   label: 'Fishing' },
         { page: 'food',      label: 'Food' },
         { page: 'bog-witch', label: 'Bog Witch' },
+        { page: 'mods',      label: 'Mods' },
     ];
 
     const links = PAGES.map(p =>

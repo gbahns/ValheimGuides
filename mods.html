@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valheim Mods</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared/styles.css">
+    <script src="shared/chrome.js" defer></script>
+    <style>
+        body { background: var(--kb-parchment); color: var(--kb-stone); font-family: 'Inter', sans-serif; }
+        .valheim-title { font-family: var(--kb-serif); color: var(--kb-stone); }
+        .lead { color: var(--kb-stone-light); max-width: 52rem; margin: 0 auto; }
+        .group-title { font-family: var(--kb-serif); font-size: 1.75rem; color: var(--kb-stone); margin: 2.25rem 0 0.35rem; }
+        .group-note { color: var(--kb-stone-light); font-size: 0.95rem; margin-bottom: 0.9rem; }
+        .mod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+        .mod-card { background: var(--kb-parchment-light); border: 1px solid var(--kb-tan); border-radius: 0.5rem; padding: 1rem 1.1rem;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.08); display: flex; flex-direction: column; gap: 0.4rem; }
+        .mod-name { font-family: var(--kb-serif); font-size: 1.3rem; font-weight: 700; line-height: 1.2; }
+        .mod-name a { color: var(--kb-stone); text-decoration: none; }
+        .mod-name a:hover { color: var(--kb-accent); }
+        .mod-meta { font-size: 0.85rem; color: var(--kb-stone-light); display: flex; flex-wrap: wrap; gap: 0.35rem 0.75rem; align-items: center; }
+        .mod-desc { font-size: 0.95rem; line-height: 1.45; }
+        .mod-note { font-size: 0.9rem; line-height: 1.4; color: var(--kb-accent); }
+        .mod-links { margin-top: auto; padding-top: 0.35rem; display: flex; gap: 0.5rem; flex-wrap: wrap; font-size: 0.85rem; }
+        .mod-links a { color: var(--kb-stone); border: 1px solid var(--kb-tan); border-radius: 0.3rem; padding: 0.15rem 0.55rem; text-decoration: none; background: #fff8; }
+        .mod-links a:hover { border-color: var(--kb-stone); }
+        .pill { display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+                padding: 0.1rem 0.5rem; border-radius: 999px; border: 1px solid var(--kb-tan); color: var(--kb-stone-light); }
+        .pill.mine { border-color: var(--kb-accent); color: var(--kb-accent); }
+        .pill.server { background: var(--kb-stone); color: var(--kb-parchment); border-color: var(--kb-stone); }
+        .pill.off { border-style: dashed; }
+        .tools { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; justify-content: center; margin: 1.25rem 0 0.5rem; }
+        .tools input { border: 1px solid var(--kb-tan); border-radius: 0.4rem; padding: 0.45rem 0.7rem; min-width: 16rem; background: #fff; }
+        .filter-btn { border: 1px solid var(--kb-tan); border-radius: 0.4rem; padding: 0.4rem 0.8rem; background: #fff8; font-weight: 600; font-size: 0.9rem; }
+        .filter-btn.active { background: var(--kb-stone); color: var(--kb-parchment); border-color: var(--kb-stone); }
+        .stamp { text-align: center; color: var(--kb-stone-light); font-size: 0.85rem; margin: 2.5rem 0 1rem; }
+        .empty { color: var(--kb-stone-light); font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <div class="container mx-auto max-w-6xl px-4 py-8">
+        <header class="text-center mb-4">
+            <h1 class="text-4xl md:text-6xl valheim-title">Our Mods</h1>
+            <p class="lead mt-3">The mod set we play with, what each one does, and which side it runs on.
+               Install the ones under <em>Everyone installs</em> through Gale or Thunderstore Mod Manager and you can join;
+               the server-only ones you never touch.</p>
+        </header>
+
+        <div class="tools">
+            <input id="q" type="search" placeholder="Search mods..." aria-label="Search mods">
+            <button class="filter-btn active" data-f="all">All</button>
+            <button class="filter-btn" data-f="mine">Ours</button>
+            <button class="filter-btn" data-f="server">On the server</button>
+        </div>
+
+        <main id="mods"><p class="empty text-center mt-8">Loading the mod list...</p></main>
+
+        <p class="stamp" id="stamp"></p>
+    </div>
+
+<script>
+// Data-driven: data/modset.json is generated from the same sources the dev
+// dashboard reads (the reference Gale profile, the mods repo, and what the
+// server is running), and data/modset.notes.json is an optional hand-written
+// overlay keyed by mod id: { "Author-Name": { "note": "...", "hide": true } }.
+const SIDE = {
+  'client':          { group: 'players', label: 'client' },
+  'both':            { group: 'players', label: 'client + server' },
+  'optional-server': { group: 'players', label: 'client, server optional' },
+  'server':          { group: 'server',  label: 'server only' },
+  'unknown':         { group: 'players', label: '' }
+};
+const GROUPS = [
+  { key: 'players', title: 'Everyone installs', note: 'These run on your game. Some also run on the server, which is where the shared behaviour comes from.' },
+  { key: 'server',  title: 'Server only',        note: 'These run only on the server. Nothing to install on your side.' }
+];
+let data = null, notes = {}, filter = 'all';
+
+function esc(v){ return String(v == null ? '' : v).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c])); }
+
+async function load(){
+  try {
+    const r = await fetch('data/modset.json', { cache: 'no-store' });
+    if (!r.ok) throw new Error(r.status);
+    data = await r.json();
+  } catch (e) {
+    document.getElementById('mods').innerHTML = '<p class="empty text-center mt-8">The mod list is not available right now.</p>';
+    return;
+  }
+  try { const n = await fetch('data/modset.notes.json', { cache: 'no-store' }); if (n.ok) notes = await n.json(); } catch (e) { notes = {}; }
+  render();
+}
+
+function card(m){
+  const s = SIDE[m.side] || SIDE.unknown;
+  const n = notes[m.id] || {};
+  const home = m.website || m.thunderstore || m.hexium;
+  const links = [];
+  if (m.thunderstore) links.push('<a href="' + esc(m.thunderstore) + '" target="_blank" rel="noopener">Thunderstore</a>');
+  if (m.hexium)       links.push('<a href="' + esc(m.hexium) + '" target="_blank" rel="noopener">Hexium</a>');
+  if (m.website && m.website !== m.thunderstore && m.website !== m.hexium) links.push('<a href="' + esc(m.website) + '" target="_blank" rel="noopener">Website</a>');
+  return '<article class="mod-card">'
+    + '<div class="mod-name">' + (home ? '<a href="' + esc(home) + '" target="_blank" rel="noopener">' : '') + esc(m.name.replace(/_/g, ' ')) + (home ? '</a>' : '') + '</div>'
+    + '<div class="mod-meta">'
+    +   '<span>' + esc(m.author) + '</span>'
+    +   (m.version ? '<span>v' + esc(m.version) + '</span>' : '')
+    +   (s.label ? '<span class="pill' + (s.group === 'server' ? ' server' : '') + '">' + esc(s.label) + '</span>' : '')
+    +   (m.mine ? '<span class="pill mine">ours</span>' : '')
+    +   (s.group !== 'server' && m.side !== 'client' ? '<span class="pill' + (m.onServer ? '' : ' off') + '">' + (m.onServer ? 'on the server' : 'not on the server') + '</span>' : '')
+    + '</div>'
+    + (m.description ? '<p class="mod-desc">' + esc(m.description) + '</p>' : '')
+    + (n.note ? '<p class="mod-note">' + esc(n.note) + '</p>' : '')
+    + (links.length ? '<div class="mod-links">' + links.join('') + '</div>' : '')
+    + '</article>';
+}
+
+function render(){
+  const q = (document.getElementById('q').value || '').trim().toLowerCase();
+  let mods = (data.mods || []).filter(m => !(notes[m.id] && notes[m.id].hide));
+  if (filter === 'mine')   mods = mods.filter(m => m.mine);
+  if (filter === 'server') mods = mods.filter(m => m.onServer);
+  if (q) mods = mods.filter(m => [m.name, m.author, m.description, (notes[m.id] || {}).note].join(' ').toLowerCase().includes(q));
+  const out = [];
+  GROUPS.forEach(g => {
+    const rows = mods.filter(m => (SIDE[m.side] || SIDE.unknown).group === g.key);
+    if (!rows.length) return;
+    out.push('<h2 class="group-title">' + g.title + ' <span class="text-base font-normal" style="color:var(--kb-stone-light)">(' + rows.length + ')</span></h2>');
+    out.push('<p class="group-note">' + g.note + '</p>');
+    out.push('<div class="mod-grid">' + rows.map(card).join('') + '</div>');
+  });
+  document.getElementById('mods').innerHTML = out.length ? out.join('') : '<p class="empty text-center mt-8">Nothing matches.</p>';
+  const sv = data.server || {};
+  document.getElementById('stamp').textContent =
+    'Generated ' + (data.generated || '') + ' from the ' + (data.profile || 'reference') + ' profile'
+    + (sv.name ? ' and the ' + sv.name + ' server' + (sv.world ? ' (world ' + sv.world + ')' : '') : '') + '.';
+}
+
+document.getElementById('q').addEventListener('input', () => { if (data) render(); });
+document.querySelectorAll('.filter-btn').forEach(b => b.addEventListener('click', () => {
+  filter = b.dataset.f;
+  document.querySelectorAll('.filter-btn').forEach(x => x.classList.toggle('active', x === b));
+  if (data) render();
+}));
+load();
+</script>
+</body>
+</html>
