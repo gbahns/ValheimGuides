@@ -33,7 +33,8 @@ links in the nav redirect there.
   `C:\ValheimServer\scripts\valheim.ps1 dev export -Commit`
   regenerates both data files and commits and pushes them if they changed.
 - The page has two views, Table (the default) and Cards, switched with the
-  buttons by the filter bar. The choice and the table sort are remembered in
+  buttons at the right of the title. One flat list; server-only mods sit in
+  it with a "server only" pill. The choice and the table sort are remembered in
   localStorage. In the table each row is one line; clicking a row opens a
   popup with the full card, including the links.
 

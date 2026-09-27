@@ -16,9 +16,12 @@
     <style>
         body { background: var(--kb-parchment); color: var(--kb-stone); font-family: 'Inter', sans-serif; }
         .valheim-title { font-family: var(--kb-serif); color: var(--kb-stone); }
-        .lead { color: var(--kb-stone-light); max-width: 52rem; margin: 0 auto; }
-        .group-title { font-family: var(--kb-serif); font-size: 1.75rem; color: var(--kb-stone); margin: 2.25rem 0 0.35rem; }
-        .group-note { color: var(--kb-stone-light); font-size: 0.95rem; margin-bottom: 0.9rem; }
+        .page-head { position: relative; text-align: center; }
+        /* Filters at the left of the title, the view toggle at its right. Below 1200px they would
+           collide with the title, so the bar drops beneath it instead. */
+        .head-bar { position: absolute; inset: 0; display: flex; justify-content: space-between; align-items: center; pointer-events: none; }
+        .head-bar > * { pointer-events: auto; }
+        @media (max-width: 1200px) { .head-bar { position: static; justify-content: center; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.6rem; } }
         .mod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
         .mod-card { background: var(--kb-parchment-light); border: 1px solid var(--kb-tan); border-radius: 0.5rem; padding: 1rem 1.1rem;
                     box-shadow: 0 1px 3px rgba(0,0,0,0.08); display: flex; flex-direction: column; gap: 0.4rem; }
@@ -35,18 +38,22 @@
                 padding: 0.1rem 0.5rem; border-radius: 999px; border: 1px solid var(--kb-tan); color: var(--kb-stone-light); }
         .pill.server { background: var(--kb-stone); color: var(--kb-parchment); border-color: var(--kb-stone); }
         .pill.off { border-style: dashed; }
-        .tools { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; justify-content: center; margin: 1.25rem 0 0.5rem; }
-        .tools input { border: 1px solid var(--kb-tan); border-radius: 0.4rem; padding: 0.45rem 0.7rem; min-width: 16rem; background: #fff; }
+        .tools { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; justify-content: center; }
+        .tools input { border: 1px solid var(--kb-tan); border-radius: 0.4rem; padding: 0.4rem 0.7rem; min-width: 13rem; background: #fff; }
         .filter-btn { border: 1px solid var(--kb-tan); border-radius: 0.4rem; padding: 0.4rem 0.8rem; background: #fff8; font-weight: 600; font-size: 0.9rem; }
         .filter-btn.active { background: var(--kb-stone); color: var(--kb-parchment); border-color: var(--kb-stone); }
         .view-toggle { display: inline-flex; border: 1px solid var(--kb-tan); border-radius: 0.4rem; overflow: hidden; }
         .view-toggle button { padding: 0.4rem 0.8rem; background: #fff8; font-weight: 600; font-size: 0.9rem; }
         .view-toggle button + button { border-left: 1px solid var(--kb-tan); }
         .view-toggle button.active { background: var(--kb-stone); color: var(--kb-parchment); }
-        .mod-table-wrap { background: #FFFBF2; border: 1px solid var(--kb-tan); border-radius: 0.5rem; overflow-x: auto;
+        .mod-table-wrap { background: #FFFBF2; border: 1px solid var(--kb-tan); border-radius: 0.5rem;
                           box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        @media (max-width: 1100px) { .mod-table-wrap { overflow-x: auto; } .mod-table-wrap .mod-table thead th { position: static; } }
         .mod-table { width: 100%; background: #FFFBF2; /* a shade lighter than the parchment page */ font-size: 0.9rem; line-height: 1.35; border-collapse: collapse; }
-        .mod-table thead th { background: var(--kb-stone); color: var(--kb-parchment-light); font-weight: 700; text-align: left; white-space: nowrap; }
+        .mod-table thead th { background: var(--kb-stone); color: var(--kb-parchment-light); font-weight: 700; text-align: left; white-space: nowrap;
+                              position: sticky; top: var(--nav-h, 0px); z-index: 5; }
+        .mod-table thead th:first-child { border-top-left-radius: 0.5rem; }
+        .mod-table thead th:last-child { border-top-right-radius: 0.5rem; }
         .mod-table th.sortable { cursor: pointer; user-select: none; }
         .mod-table th.sortable:hover { color: var(--kb-tan); }
         .mod-table th .sort-indicator { font-size: 0.75em; opacity: 0.6; margin-left: 0.25em; }
@@ -78,26 +85,23 @@
 </head>
 <body>
 
-    <div id="page" class="container mx-auto px-4 py-8">
-        <header class="text-center mb-4">
+    <div id="page" class="container mx-auto px-4 pt-4 pb-8">
+        <header class="page-head">
             <h1 class="text-4xl md:text-6xl valheim-title">Our Mods</h1>
-            <p class="lead mt-3">The mod set we play with, what each one does, and which side it runs on.
-               Install the ones under <em>Everyone installs</em> through Gale or Thunderstore Mod Manager and you can join;
-               the server-only ones you never touch.</p>
+            <div class="head-bar">
+                <div class="tools">
+                    <input id="q" type="search" placeholder="Search mods..." aria-label="Search mods">
+                    <button class="filter-btn active" data-f="all">All</button>
+                    <button class="filter-btn" data-f="server">On the server</button>
+                </div>
+                <div class="view-toggle" role="group" aria-label="View">
+                    <button data-v="cards" class="active" aria-pressed="true">Cards</button>
+                    <button data-v="table" aria-pressed="false">Table</button>
+                </div>
+            </div>
         </header>
 
-        <div class="tools">
-            <input id="q" type="search" placeholder="Search mods..." aria-label="Search mods">
-            <button class="filter-btn active" data-f="all">All</button>
-            <button class="filter-btn" data-f="mine">Ours</button>
-            <button class="filter-btn" data-f="server">On the server</button>
-            <div class="view-toggle" role="group" aria-label="View">
-                <button data-v="cards" class="active" aria-pressed="true">Cards</button>
-                <button data-v="table" aria-pressed="false">Table</button>
-            </div>
-        </div>
-
-        <main id="mods"><p class="empty text-center mt-8">Loading the mod list...</p></main>
+        <main id="mods" class="mt-3"><p class="empty text-center mt-8">Loading the mod list...</p></main>
 
         <p class="stamp" id="stamp"></p>
         <dialog id="modDialog" class="mod-dialog" aria-label="Mod details"></dialog>
@@ -115,10 +119,6 @@ const SIDE = {
   'server':          { group: 'server',  label: 'server only' },
   'unknown':         { group: 'players', label: '' }
 };
-const GROUPS = [
-  { key: 'players', title: 'Everyone installs', note: 'These run on your game. Some also run on the server, which is where the shared behaviour comes from.' },
-  { key: 'server',  title: 'Server only',        note: 'These run only on the server. Nothing to install on your side.' }
-];
 let data = null, notes = {}, filter = 'all';
 // View (cards or table) and table sort are remembered across visits.
 const VIEW_KEY = 'mods.view', SORT_KEY = 'mods.sort';
@@ -241,18 +241,10 @@ function showDetails(m){
 function render(){
   const q = (document.getElementById('q').value || '').trim().toLowerCase();
   let mods = (data.mods || []).filter(m => !(notes[m.id] && notes[m.id].hide));
-  if (filter === 'mine')   mods = mods.filter(m => m.mine);
   if (filter === 'server') mods = mods.filter(m => m.onServer);
   if (q) mods = mods.filter(m => [m.name, m.author, m.description, (notes[m.id] || {}).note].join(' ').toLowerCase().includes(q));
-  const out = [];
-  GROUPS.forEach(g => {
-    const rows = mods.filter(m => (SIDE[m.side] || SIDE.unknown).group === g.key);
-    if (!rows.length) return;
-    out.push('<h2 class="group-title">' + g.title + ' <span class="text-base font-normal" style="color:var(--kb-stone-light)">(' + rows.length + ')</span></h2>');
-    out.push('<p class="group-note">' + g.note + '</p>');
-    out.push(view === 'table' ? table(rows) : '<div class="mod-grid">' + rows.map(card).join('') + '</div>');
-  });
-  document.getElementById('mods').innerHTML = out.length ? out.join('') : '<p class="empty text-center mt-8">Nothing matches.</p>';
+  document.getElementById('mods').innerHTML = !mods.length ? '<p class="empty text-center mt-8">Nothing matches.</p>'
+    : view === 'table' ? table(mods) : '<div class="mod-grid">' + mods.map(card).join('') + '</div>';
   const sv = data.server || {};
   document.getElementById('stamp').textContent =
     'Generated ' + (data.generated || '') + ' from the ' + (data.profile || 'reference') + ' profile'
@@ -293,6 +285,18 @@ document.getElementById('mods').addEventListener('click', e => {
   try { localStorage.setItem(SORT_KEY, JSON.stringify({ key: sortKey, dir: sortDir })); } catch (e) {}
   render();
 });
+// The nav (from chrome.js) is sticky and its height depends on the viewport width;
+// the table header pins just beneath it, so keep its height in a CSS variable.
+function measureNav(){
+  const nav = document.querySelector('.kb-nav');
+  document.documentElement.style.setProperty('--nav-h', (nav ? nav.offsetHeight : 0) + 'px');
+}
+document.addEventListener('DOMContentLoaded', () => {
+  measureNav();
+  const nav = document.querySelector('.kb-nav');
+  if (nav && window.ResizeObserver) new ResizeObserver(measureNav).observe(nav);
+});
+window.addEventListener('resize', measureNav);
 // Clicking the dimmed backdrop closes the popup (Escape already does).
 document.getElementById('modDialog').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.close(); });
 load();
