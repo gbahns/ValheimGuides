@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-09-28 00:17",
+    "generated":  "2026-09-28 01:28",
     "server":  {
                    "name":  "Bahnsheim (DatHost)",
                    "world":  "DeepNorth",
@@ -525,8 +525,8 @@
                      "onServer":  true,
                      "description":  "Server-side performance optimization for multiplayer: moves object ownership off a struggling client so other players stop inheriting its lag and desync. Valheim never rebalances who simulates what; this does. No client install needed.",
                      "website":  "https://github.com/gbahns/ValheimMods",
-                     "thunderstore":  null,
-                     "hexium":  null
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/SpreadTheLoad/",
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/SpreadTheLoad"
                  },
                  {
                      "id":  "DeathMonger-TheGreatestMap",
