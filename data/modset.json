@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-09-27 20:59",
+    "generated":  "2026-09-28 00:17",
     "server":  {
                    "name":  "Bahnsheim (DatHost)",
                    "world":  "DeepNorth",
@@ -545,7 +545,7 @@
                      "id":  "DeathMonger-TheGreatestPortal",
                      "name":  "TheGreatestPortal",
                      "author":  "DeathMonger",
-                     "version":  "1.0.3",
+                     "version":  "1.0.4",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
@@ -558,7 +558,7 @@
                      "id":  "DeathMonger-TheGreatestShips",
                      "name":  "TheGreatestShips",
                      "author":  "DeathMonger",
-                     "version":  "0.9.4",
+                     "version":  "0.9.5",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
@@ -571,7 +571,7 @@
                      "id":  "DeathMonger-TheObituaries",
                      "name":  "TheObituaries",
                      "author":  "DeathMonger",
-                     "version":  "0.1.0",
+                     "version":  "0.2.0",
                      "side":  "client",
                      "mine":  true,
                      "onServer":  false,
