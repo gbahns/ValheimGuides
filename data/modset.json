@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-09-29 12:04",
+    "generated":  "2026-09-29 18:31",
     "server":  {
                    "name":  "Bahnsheim (DatHost)",
                    "world":  "DeepNorth",
@@ -259,7 +259,7 @@
                      "id":  "DeathMonger-DudeWhatAreMyStats",
                      "name":  "DudeWhatAreMyStats",
                      "author":  "DeathMonger",
-                     "version":  "0.10.0",
+                     "version":  "0.10.1",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
@@ -532,7 +532,7 @@
                      "id":  "DeathMonger-TheGreatestMap",
                      "name":  "TheGreatestMap",
                      "author":  "DeathMonger",
-                     "version":  "1.6.1",
+                     "version":  "1.7.0",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
@@ -571,7 +571,7 @@
                      "id":  "DeathMonger-TheObituaries",
                      "name":  "TheObituaries",
                      "author":  "DeathMonger",
-                     "version":  "0.3.0",
+                     "version":  "0.3.1",
                      "side":  "client",
                      "mine":  true,
                      "onServer":  false,
