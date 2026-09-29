@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-09-28 21:19",
+    "generated":  "2026-09-29 12:01",
     "server":  {
                    "name":  "Bahnsheim (DatHost)",
                    "world":  "DeepNorth",
@@ -77,7 +77,7 @@
                      "id":  "Azumatt-AzuExtendedPlayerInventory",
                      "name":  "AzuExtendedPlayerInventory",
                      "author":  "Azumatt",
-                     "version":  "2.6.0",
+                     "version":  "2.6.1",
                      "side":  "optional-server",
                      "mine":  false,
                      "onServer":  true,
@@ -259,7 +259,7 @@
                      "id":  "DeathMonger-DudeWhatAreMyStats",
                      "name":  "DudeWhatAreMyStats",
                      "author":  "DeathMonger",
-                     "version":  "0.9.0",
+                     "version":  "0.10.0",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
@@ -571,7 +571,7 @@
                      "id":  "DeathMonger-TheObituaries",
                      "name":  "TheObituaries",
                      "author":  "DeathMonger",
-                     "version":  "0.2.0",
+                     "version":  "0.3.0",
                      "side":  "client",
                      "mine":  true,
                      "onServer":  false,
