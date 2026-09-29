@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-09-28 16:52",
+    "generated":  "2026-09-28 21:13",
     "server":  {
                    "name":  "Bahnsheim (DatHost)",
                    "world":  "DeepNorth",
@@ -25,7 +25,7 @@
                      "id":  "TastyChickenLegs-AutomaticFuel",
                      "name":  "AutomaticFuel",
                      "author":  "TastyChickenLegs",
-                     "version":  "1.5.2",
+                     "version":  "1.5.3",
                      "side":  "optional-server",
                      "mine":  false,
                      "onServer":  true,
@@ -532,7 +532,7 @@
                      "id":  "DeathMonger-TheGreatestMap",
                      "name":  "TheGreatestMap",
                      "author":  "DeathMonger",
-                     "version":  "1.5.0",
+                     "version":  "1.6.1",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
