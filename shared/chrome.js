@@ -19,6 +19,7 @@
         { page: 'food',      label: 'Food' },
         { page: 'bog-witch', label: 'Bog Witch' },
         { page: 'mods',      label: 'Mods' },
+        { page: 'hd-mods',   label: 'HD Mods' },
     ];
 
     const links = PAGES.map(p =>

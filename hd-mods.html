@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HD Mods — Valheim Knowledgebase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared/styles.css">
+    <script src="shared/chrome.js" defer></script>
+    <style>
+        body {
+            font-family: 'IM Fell English', serif;
+            background-color: #FDF5E6;
+            color: #4A3F35;
+        }
+        .valheim-title {
+            font-family: 'IM Fell English', serif;
+            font-weight: 700;
+            color: #4A3F35;
+        }
+        .card {
+            background-color: #FAF3E0;
+            border: 1px solid #D2B48C;
+        }
+        a.link { color: #C45A11; text-decoration: underline; text-underline-offset: 2px; }
+        a.link:hover { color: #4A3F35; }
+        code, .mono {
+            font-family: 'Consolas', 'Menlo', monospace;
+            font-size: 0.85em;
+            background: rgba(210,180,140,0.25);
+            padding: 0 0.3em;
+            border-radius: 0.2em;
+            white-space: nowrap;
+        }
+        pre.code-block {
+            font-family: 'Consolas', 'Menlo', monospace;
+            font-size: 0.8rem;
+            background: #2E2620;
+            color: #FAF3E0;
+            padding: 0.9rem 1.1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+        pre.code-block code { background: none; padding: 0; white-space: pre; }
+        .callout {
+            border-left: 4px solid #4A3F35;
+            background: rgba(210,180,140,0.25);
+            padding: 0.75rem 1rem;
+            border-radius: 0 0.4rem 0.4rem 0;
+        }
+        .callout.warn { border-left-color: #C45A11; }
+        table.stat-table {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            width: 100%;
+        }
+        table.stat-table th, table.stat-table td { padding: 0.45rem 0.7rem; vertical-align: top; }
+        table.stat-table thead th { text-align: left; white-space: nowrap; }
+        table.stat-table tbody tr { border-top: 1px solid rgba(210,180,140,0.6); }
+        table.stat-table tbody tr:hover { background: rgba(210,180,140,0.2); }
+        table.stat-table td:first-child, table.stat-table th:first-child { min-width: 16rem; }
+        .pill {
+            display: inline-block; font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 700;
+            letter-spacing: 0.04em; text-transform: uppercase; padding: 0.1rem 0.5rem; border-radius: 999px;
+            border: 1px solid #D2B48C; color: #6B5D4F; white-space: nowrap;
+        }
+        .pill.core { background: #4A3F35; color: #FDF5E6; border-color: #4A3F35; }
+        .pill.rec  { border-color: #C45A11; color: #C45A11; }
+        .pill.ok   { background: rgba(74,124,89,0.15); border-color: #4A7C59; color: #2F5E3F; }
+        .pill.upd  { background: rgba(196,90,17,0.12); border-color: #C45A11; color: #C45A11; }
+        ol.steps { counter-reset: step; list-style: none; padding-left: 0; }
+        ol.steps > li { counter-increment: step; position: relative; padding-left: 2.6rem; margin-bottom: 1rem; }
+        ol.steps > li::before {
+            content: counter(step); position: absolute; left: 0; top: 0.05rem;
+            width: 1.9rem; height: 1.9rem; border-radius: 999px; background: #4A3F35; color: #FDF5E6;
+            font-family: 'IM Fell English', serif; font-weight: 700; display: flex; align-items: center; justify-content: center;
+        }
+        .tree { font-family: 'Consolas', 'Menlo', monospace; font-size: 0.82rem; line-height: 1.55; white-space: pre; }
+    </style>
+</head>
+<body>
+    <main class="mx-auto w-full max-w-[1776px] px-4 py-10">
+
+        <header class="text-center mb-10">
+            <h1 class="valheim-title text-5xl">HD Mods</h1>
+            <p class="text-lg mt-2 text-stone-700">Willybach's and Badger's HD graphics set — what each part does, which parts are optional, and how to install it by hand.</p>
+        </header>
+
+        <section class="card rounded-lg p-6 mb-8">
+            <h2 class="valheim-title text-2xl mb-3">What this is</h2>
+            <p class="mb-3">A set of mods from Nexus that replace Valheim's textures, terrain, shading, sky, portals and map with high-resolution versions while keeping the vanilla look. Two authors make them and they are designed to be used together: <strong>Willybach</strong> paints the textures, <strong>Badger</strong> writes the plugins that load them and the shaders that render them.</p>
+            <p class="mb-3">Everything here is <strong>client-side and purely visual</strong>. Nothing goes on the server, nobody else has to install it, and you can play on Bahnsheim with or without it. Requires about 30&nbsp;GB of disk space and adds at least a minute to your startup time.</p>
+        </section>
+
+        <section class="card rounded-lg p-6 mb-8">
+            <h2 class="valheim-title text-2xl mb-3">The parts</h2>
+            <p class="mb-4">Each part is a download from Nexus that unpacks to a plugin DLL and a data folder, or just a data folder that feeds another part's DLL. The <strong>Core</strong> parts are the set; the rest are optional, and the <em>Recommended</em> ones are what we run.</p>
+            <div class="overflow-x-auto">
+            <table class="stat-table">
+                <thead class="bg-[#4A3F35] text-[#FAF3E0]">
+                    <tr>
+                        <th>Part</th>
+                        <th>Role</th>
+                        <th>What it does</th>
+                        <th>What lands in plugins</th>
+                        <th>Needs</th>
+                        <th>Adds at startup</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a class="link" href="https://www.nexusmods.com/valheim/mods/1030?tab=files" target="_blank" rel="noopener">Willybach's HD Valheim</a><br><span class="text-stone-500 text-xs">HD Texture Pack — HIGHER, MEDIUM or OLDER GPU</span></td>
+                        <td><span class="pill core">Core</span></td>
+                        <td>The main texture pack. Replaces almost every texture in the game with a hand-made HD version in the vanilla color scheme. It comes in three builds; download only the one that matches your card's VRAM, since too big a pack stutters and too small a pack looks little better than vanilla.<ul class="list-disc pl-5 mt-1 space-y-0.5"><li><strong>HIGHER</strong> — 10&nbsp;GB of VRAM or more. The full-resolution pack; the main file on the Nexus page.</li><li><strong>MEDIUM</strong> — 4 to 8&nbsp;GB of VRAM. Most textures at 2K to 4K, a few at 1K. Under optional files.</li><li><strong>OLDER GPU</strong> — 4&nbsp;GB of VRAM or less. The lightest textures and the best frame rate. Under optional files.</li></ul></td>
+                        <td><code>HDValheimTextures.dll</code><br><code>HDValheimTexturesData\</code></td>
+                        <td>—</td>
+                        <td class="whitespace-nowrap">50s</td>
+                    </tr>
+                    <tr>
+                        <td><a class="link" href="https://www.nexusmods.com/valheim/mods/2887" target="_blank" rel="noopener">Badger's HD Terrain</a></td>
+                        <td><span class="pill core">Core</span></td>
+                        <td>HD ground textures and a terrain shader written from scratch: height-map blending, better lighting and weather on the ground, water caustics. On Valheim 1.0 use the 2.2.0 alpha; 2.1.0 breaks the console and chat (see Versions).</td>
+                        <td><code>ValheimHDTerrain.dll</code><br><code>HDTerrainData\</code></td>
+                        <td>—</td>
+                        <td class="whitespace-nowrap">15s</td>
+                    </tr>
+                    <tr>
+                        <td><a class="link" href="https://www.nexusmods.com/valheim/mods/1030?tab=files" target="_blank" rel="noopener">Willybach's HD Terrain Tiles</a><br><span class="text-stone-500 text-xs">file "B" on the HD Valheim page</span></td>
+                        <td><span class="pill rec">Recommended</span></td>
+                        <td>Willybach's ground textures for Badger's terrain shader, so the ground matches the rest of the pack.</td>
+                        <td><code>HDTerrainData\</code> (overwrites Badger's)</td>
+                        <td>Badger's HD Terrain</td>
+                        <td class="whitespace-nowrap">0s</td>
+                    </tr>
+                    <tr>
+                        <td><a class="link" href="https://www.nexusmods.com/valheim/mods/2366" target="_blank" rel="noopener">Badger's Shading Overhaul</a></td>
+                        <td><span class="pill rec">Recommended</span></td>
+                        <td>Smooths the stylized shading on objects so they lose the harsh color banding. Toggle in game with <kbd>Page Down</kbd>.</td>
+                        <td><code>BadgersShadingOverhaul.dll</code></td>
+                        <td>—</td>
+                        <td class="whitespace-nowrap">0s</td>
+                    </tr>
+                    <tr>
+                        <td><a class="link" href="https://www.nexusmods.com/valheim/mods/1594" target="_blank" rel="noopener">Badger's Valheim Skies</a></td>
+                        <td><span class="pill">Optional</span></td>
+                        <td>Swaps the skybox and lets you tune clouds, ground mist and whether Yggdrasil shows. Loads whatever skybox packs you drop in its folder.</td>
+                        <td><code>BadgersValheimSkies.dll</code><br><code>BadgersValheimSkies\</code></td>
+                        <td>—</td>
+                        <td class="whitespace-nowrap">4s</td>
+                    </tr>
+                    <tr>
+                        <td><a class="link" href="https://www.nexusmods.com/valheim/mods/1030?tab=files" target="_blank" rel="noopener">HD Skies — Aurora, Milky Way</a><br><span class="text-stone-500 text-xs">file "D" and an optional file on the HD Valheim page</span></td>
+                        <td><span class="pill">Optional</span></td>
+                        <td>Skybox image packs for Valheim Skies. Aurora comes in 8K and 4K; the Milky Way is 4K.</td>
+                        <td><code>BadgersValheimSkies\Skybox\&lt;name&gt;\</code></td>
+                        <td>Badger's Valheim Skies</td>
+                        <td class="whitespace-nowrap">0s</td>
+                    </tr>
+                    <tr>
+                        <td><a class="link" href="https://www.nexusmods.com/valheim/mods/1030?tab=files" target="_blank" rel="noopener">HD Portals</a><br><span class="text-stone-500 text-xs">"AI Images Version" under optional files on the HD Valheim page; file "C" is the video version</span></td>
+                        <td><span class="pill">Optional</span></td>
+                        <td>Replaces the portal's swirl with a painted scene of the destination biome inside a ring, with a swirl and rotating layers over it. Two builds exist and each has its own DLL and data folder, so never mix them: the AI Images version is 73 stills and loads in no time; the in-game video version shows footage of each biome but decodes 1,920 frames at every launch and adds about two and a half minutes to startup. HD Portal Extras is extra art for the video version only.</td>
+                        <td><code>HDPortalFX.dll</code><br><code>HDPortalFXData\</code></td>
+                        <td>—</td>
+                        <td class="whitespace-nowrap">AI: 1s<br>video: 145s</td>
+                    </tr>
+                    <tr>
+                        <td><a class="link" href="https://www.nexusmods.com/valheim/mods/1030?tab=files" target="_blank" rel="noopener">HD Map in Vanilla Style</a><br><span class="text-stone-500 text-xs">optional file on the HD Valheim page</span></td>
+                        <td><span class="pill">Optional</span></td>
+                        <td>A sharper map texture in the vanilla style.</td>
+                        <td><code>PanocHDMap\</code> (DLL and data inside)</td>
+                        <td>—</td>
+                        <td class="whitespace-nowrap">0s</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="mt-4 text-stone-700">The startup column is the seconds each part adds to the time from launching the game to a logged-in main menu, measured on October 1, 2026 on an NVMe drive with an RTX 4070 SUPER; the same profile without the set takes 25 seconds, with the set about 1 minute 40, or about 4 minutes with the video portals. The MEDIUM and OLDER GPU texture builds should load faster but were not measured, and a hard disk takes longer on every line.</p>
+            <p class="mt-4 text-stone-700">Badger also publishes a <a class="link" href="https://badgerden.co.uk/WillybachHD/HDValheim/" target="_blank" rel="noopener">step-by-step install guide</a> and Willybach an <a class="link" href="https://www.nexusmods.com/valheim/videos/583" target="_blank" rel="noopener">installation video</a> covering the same set.</p>
+        </section>
+
+        <section class="card rounded-lg p-6 mb-8">
+            <h2 class="valheim-title text-2xl mb-3">Installing it in Gale</h2>
+            <p class="mb-4">These mods are only on Nexus, not Thunderstore or Hexium, so Gale cannot install or update them. You download them yourself and unpack them into a profile's plugins folder, where they load alongside everything Gale manages. Every archive is laid out so that its root is the plugins folder: the DLL and its data folder sit at the top level, ready to drop in.</p>
+            <ol class="steps">
+                <li>
+                    <strong>Give them their own profile.</strong> In Gale, duplicate the profile you play with (<em>Default SD</em>) and call the copy something like <em>Default HD</em>. Loading is noticeably slower with the HD set, so keeping it in a separate profile lets you flip back for a quick session. Duplicate inside Gale, not by copying the folder: Gale keeps its profile list in a database, and a folder it did not create is not a profile.
+                </li>
+                <li>
+                    <strong>Download from Nexus.</strong> You need a Nexus account; the files are manual downloads. The HIGHER texture pack is about 5.7&nbsp;GB as a 7z archive. Have <a class="link" href="https://www.7-zip.org/" target="_blank" rel="noopener">7-Zip</a> installed, since the packs come as .7z and .rar, not .zip.
+                </li>
+                <li>
+                    <strong>Unpack each archive straight into the profile's plugins folder.</strong>
+                    <pre class="code-block mt-2"><code>%APPDATA%\com.kesomannen.gale\valheim\profiles\Default HD\BepInEx\plugins</code></pre>
+                    <p class="mt-2">Do not create a sub-folder per mod. The DLLs and data folders must sit directly in <code>plugins</code>, next to Gale's own <code>Author-Mod</code> folders.</p>
+                </li>
+                <li>
+                    <strong>Mind the order for the two overwrites.</strong> Install <em>Badger's HD Terrain</em> before <em>Willybach's HD Terrain Tiles</em>, and say yes when the tiles ask to overwrite files in <code>HDTerrainData</code>. Then put Badger's <code>hdterrain</code> and <code>TerrainConfig.json</code> back from his archive: the tiles archive carries older copies of both and overwrites them, but only the tiles are meant to change. Install <em>Badger's Valheim Skies</em> before any HD Skies pack, so the skybox folders land inside <code>BadgersValheimSkies\Skybox</code>.
+                </li>
+                <li>
+                    <strong>Check the folder.</strong> With everything installed, the plugins folder should contain these, side by side:
+                    <div class="tree mt-2 p-3 rounded bg-[rgba(210,180,140,0.2)]">plugins\
+├─ HDValheimTextures.dll
+├─ HDValheimTexturesData\
+├─ ValheimHDTerrain.dll
+├─ HDTerrainData\
+├─ BadgersShadingOverhaul.dll
+├─ BadgersValheimSkies.dll
+├─ BadgersValheimSkies\          Environment\ and Skybox\ inside
+├─ HDPortalFX.dll
+├─ HDPortalFXData\
+└─ PanocHDMap\                   PanocHDMapEnable.dll and its data inside</div>
+                </li>
+                <li>
+                    <strong>Launch from the new profile and wait at the menu.</strong> The texture pack reads its 2,987 replacement textures from disk every launch, not just the first, and shows "Loading HD Valheim Textures, Please wait..." while it does. On a fast NVMe drive that is about 50 seconds added before the main menu; a hard drive will take longer. Each mod writes its config into <code>BepInEx\config</code> on the first run.
+                </li>
+            </ol>
+            <div class="callout mt-2">
+                <strong>Updating</strong> is the same as installing: download the new archive and unpack it over the old files. Gale's update check will never mention these mods, so look at the Nexus pages now and then. <strong>Removing</strong> the set is deleting the DLLs and data folders listed above from the profile's plugins folder, or just switching Gale back to your other profile.
+            </div>
+        </section>
+
+        <section class="card rounded-lg p-6 mb-8">
+            <h2 class="valheim-title text-2xl mb-3">Settings worth knowing</h2>
+            <p class="mb-3">All of these live in the profile's <code>BepInEx\config</code> folder after the first run.</p>
+            <ul class="list-disc pl-6 space-y-2">
+                <li><strong>Which sky you get</strong> is <code>Current skybox</code> under <code>[SkyBox]</code> in <code>Badgers.ValheimSkies.cfg</code>. It names a folder under <code>BadgersValheimSkies\Skybox</code>, so after installing the Aurora pack set it to the Aurora folder's name. The same file hides or shows Yggdrasil and sets overhead cloud, distant cloud and ground mist density.</li>
+                <li><strong>Shading Overhaul</strong> toggles in game with <kbd>Page Down</kbd> (changeable in <code>BadgersShadingOverhaul.cfg</code>), which is the quickest way to see what it does. The same file has specular intensity, ambient light, color temperature and saturation sliders.</li>
+                <li><strong>HD Terrain</strong> has <code>GrassDrawDistance</code> and <code>GrassAmountModifier</code> in <code>ValheimHDTerrain.cfg</code> if the ground costs too many frames, a water caustics switch, and <kbd>F6</kbd> / <kbd>F8</kbd> to hot-reload textures and the shader. Those two keys are live in game, so if something else uses F6 or F8, rebind them here.</li>
+                <li><strong>HD Portals</strong> is configured in <code>HDPortalFXData\HDPortalFX.json</code>, not a .cfg. The README next to it explains the seven layers; the original is kept as <code>HDPortalFX - ORIGINAL.json</code> if you want to go back. The two builds use different layer formats: in the AI Images version a layer's type set to <code>Invisible</code> hides it, in the video version the word is <code>Disabled</code>.</li>
+            </ul>
+        </section>
+
+        <section class="card rounded-lg p-6 mb-8">
+            <h2 class="valheim-title text-2xl mb-3">Versions</h2>
+            <p class="mb-4">Checked on Nexus on October 1, 2026. "Installed" is what the Gale <em>Default HD Test</em> profile holds as of that date.</p>
+            <div class="overflow-x-auto">
+            <table class="stat-table">
+                <thead class="bg-[#4A3F35] text-[#FAF3E0]">
+                    <tr>
+                        <th>Part</th>
+                        <th>Installed</th>
+                        <th>Latest</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Willybach's HD Valheim — texture pack</td><td>2.0</td><td>2.0 <span class="text-stone-500">(April 22, 2026)</span></td><td><span class="pill ok">Current</span></td></tr>
+                    <tr><td>Willybach's HD Terrain Tiles</td><td>2.0a</td><td>2.0a</td><td><span class="pill ok">Current</span></td></tr>
+                    <tr><td>HD Portals, AI Images version</td><td>1.0</td><td>1.0</td><td><span class="pill ok">Current</span></td></tr>
+                    <tr><td>HD Skies — Aurora / Milky Way</td><td>1.1 / 1.0</td><td>1.1 / 1.0</td><td><span class="pill ok">Current</span></td></tr>
+                    <tr><td>HD Map in Vanilla Style</td><td>1.0</td><td>1.0</td><td><span class="pill ok">Current</span></td></tr>
+                    <tr><td>Badger's HD Terrain</td><td>2.2.0 alpha</td><td>2.1.0 main file; 2.2.0 Deep North <em>alpha</em> under optional files</td><td><span class="pill ok">Current</span></td></tr>
+                    <tr><td>Badger's Shading Overhaul</td><td>0.6.0</td><td>0.6.0 <span class="text-stone-500">(September 10, 2026)</span></td><td><span class="pill ok">Current</span></td></tr>
+                    <tr><td>Badger's Valheim Skies</td><td>0.15.0</td><td>0.15.0 <span class="text-stone-500">(September 10, 2026)</span></td><td><span class="pill ok">Current</span></td></tr>
+                </tbody>
+            </table>
+            </div>
+            <ul class="list-disc pl-6 mt-4 space-y-1 text-stone-700">
+                <li><strong>Deep North is the thing to watch for.</strong> Every part of the set predates the biome except the two 1.0 fixes, so Deep North ground is the Mountain's tiles, the portal stills and textures for its new objects are whatever vanilla has, and HD Terrain's proper split of the biome is still alpha. Check Badger's HD Terrain and Willybach's HD Valheim on Nexus before heading there.</li>
+                <li><strong>Shading Overhaul 0.6.0</strong> is the compatibility fix for Valheim 1.0 and the Deep North. 0.5.0 and earlier predate 1.0.</li>
+                <li><strong>Valheim Skies 0.15.0</strong> folds the old "for Willybach's Aurora" variant into the one download and bundles 24 skyboxes of its own. 0.14.1 was the Aurora-only variant. Willybach's Aurora and Milky Way packs are extra skybox folders for it, not replacements.</li>
+                <li><strong>HD Terrain 2.1.0 does not work on Valheim 1.0.</strong> It was built before 1.0 changed the console-command constructor, so its console patch throws on every launch. That aborts the game's console and chat setup: the console window stays open at the top left showing placeholder lines of "Some text." and "asdasdasdasd", F5 does nothing, and in-game chat never registers. The 2.2.0 alpha is the only build made for 1.0. Badger calls it alpha because its Deep North ground, split from the Mountain's, still has visual bugs.</li>
+            </ul>
+        </section>
+
+        <section class="card rounded-lg p-6 mb-8">
+            <h2 class="valheim-title text-2xl mb-3">If you installed the old way</h2>
+            <p class="mb-3">Before version 2.0, Willybach's pack was installed by overwriting files inside the game folder itself: a new <code>globalgamemanagers.assets</code>, a few hundred bundles under <code>valheim_Data\StreamingAssets</code>, and a BepInEx folder with aedenthorn's CustomGraphicsSettings plugin. Our older notes still describe that method. It is obsolete.</p>
+            <p class="mb-3">Valheim's 1.0 patches replaced those game files with vanilla ones, so nothing from an old install is still in effect. What may be left behind is a <code>BepInEx</code> folder inside the game directory holding only <code>CustomGraphicsSettings.dll</code> and a stray config. The game does not load it, since the mod manager starts the game with its own profile folder, and deleting it is safe but not required. Version 2.0 and everything else on this page goes in the profile's plugins folder, never the game folder.</p>
+        </section>
+
+        <footer class="text-center text-sm text-stone-600 mt-8 pb-4">
+            Nexus pages: <a class="link" href="https://www.nexusmods.com/valheim/mods/1030" target="_blank" rel="noopener">Willybach's HD Valheim</a> ·
+            <a class="link" href="https://www.nexusmods.com/valheim/mods/2887" target="_blank" rel="noopener">Badger's HD Terrain</a> ·
+            <a class="link" href="https://www.nexusmods.com/valheim/mods/2366" target="_blank" rel="noopener">Badger's Shading Overhaul</a> ·
+            <a class="link" href="https://www.nexusmods.com/valheim/mods/1594" target="_blank" rel="noopener">Badger's Valheim Skies</a>
+        </footer>
+
+    </main>
+</body>
+</html>
