@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-10-02 14:33",
+    "generated":  "2026-10-02 21:07",
     "server":  {
                    "name":  "Bahnsheim (DatHost)",
                    "world":  "DeepNorth",
@@ -207,7 +207,7 @@
                      "id":  "DeathMonger-DiagnoseServerLag",
                      "name":  "DiagnoseServerLag",
                      "author":  "DeathMonger",
-                     "version":  "0.10.1",
+                     "version":  "0.10.2",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
@@ -532,7 +532,7 @@
                      "id":  "DeathMonger-TheGreatestMap",
                      "name":  "TheGreatestMap",
                      "author":  "DeathMonger",
-                     "version":  "1.7.2",
+                     "version":  "1.7.3",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
