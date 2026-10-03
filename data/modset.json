@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-10-03 15:02",
+    "generated":  "2026-10-03 15:08",
     "server":  {
                    "name":  "Bahnsheim (DatHost)",
                    "world":  "DeepNorth",
@@ -38,7 +38,7 @@
                      "id":  "Azumatt-AzuAutoStore",
                      "name":  "AzuAutoStore",
                      "author":  "Azumatt",
-                     "version":  "3.1.6",
+                     "version":  "3.1.7",
                      "side":  "optional-server",
                      "mine":  false,
                      "onServer":  true,
@@ -207,7 +207,7 @@
                      "id":  "DeathMonger-DiagnoseServerLag",
                      "name":  "DiagnoseServerLag",
                      "author":  "DeathMonger",
-                     "version":  "0.10.2",
+                     "version":  "0.10.3",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
@@ -532,7 +532,7 @@
                      "id":  "DeathMonger-TheGreatestMap",
                      "name":  "TheGreatestMap",
                      "author":  "DeathMonger",
-                     "version":  "1.7.3",
+                     "version":  "1.7.4",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
