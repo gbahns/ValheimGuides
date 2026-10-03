@@ -1,9 +1,9 @@
 {
-    "generated":  "2026-10-03 17:41",
+    "generated":  "2026-10-03 17:43",
     "server":  {
                    "name":  "Bahnsheim (DatHost)",
                    "world":  "DeepNorth",
-                   "running":  false
+                   "running":  true
                },
     "profile":  "Default SD",
     "count":  48,
@@ -535,7 +535,7 @@
                      "version":  "1.7.5",
                      "side":  "both",
                      "mine":  true,
-                     "onServer":  false,
+                     "onServer":  true,
                      "description":  "Shared markers that stay erased, a table that only carries exploration, and a pocket map that records only what you actually found.",
                      "website":  "https://github.com/gbahns/ValheimMods",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/TheGreatestMap/",
