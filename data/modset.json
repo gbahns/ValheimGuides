@@ -1,9 +1,9 @@
 {
-    "generated":  "2026-10-04 21:05",
+    "generated":  "2026-10-05 01:11",
     "server":  {
                    "name":  "Bahnsheim (DatHost)",
                    "world":  "DeepNorth",
-                   "running":  false
+                   "running":  true
                },
     "profile":  "Default SD",
     "count":  47,
@@ -194,7 +194,7 @@
                      "id":  "DeathMonger-DiagnoseServerLag",
                      "name":  "DiagnoseServerLag",
                      "author":  "DeathMonger",
-                     "version":  "0.10.3",
+                     "version":  "0.10.5",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
@@ -545,7 +545,7 @@
                      "id":  "DeathMonger-TheGreatestShips",
                      "name":  "TheGreatestShips",
                      "author":  "DeathMonger",
-                     "version":  "0.9.7",
+                     "version":  "0.9.9",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
