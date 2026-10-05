@@ -1,12 +1,12 @@
 {
-    "generated":  "2026-10-03 19:17",
+    "generated":  "2026-10-04 20:55",
     "server":  {
                    "name":  "Bahnsheim (DatHost)",
                    "world":  "DeepNorth",
-                   "running":  true
+                   "running":  false
                },
     "profile":  "Default SD",
-    "count":  48,
+    "count":  47,
     "mods":  [
                  {
                      "id":  "DeathMonger-Armory",
@@ -110,19 +110,6 @@
                      "description":  "Quick attach and detach even when not in place.  Configure weight and have up to four buddies push.  Configure damage too.",
                      "website":  "https://discord.gg/PQMXbUS6FH",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/TastyChickenLegs/BetterCarts/",
-                     "hexium":  null
-                 },
-                 {
-                     "id":  "CW_Jesse-BetterNetworking_Valheim",
-                     "name":  "BetterNetworking_Valheim",
-                     "author":  "CW_Jesse",
-                     "version":  "2.3.2",
-                     "side":  "both",
-                     "mine":  false,
-                     "onServer":  true,
-                     "description":  "Improve multiplayer performance using compression, queue size, send rate, and other features.",
-                     "website":  "https://github.com/CW-Jesse/valheim-betternetworking",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/CW_Jesse/BetterNetworking_Valheim/",
                      "hexium":  null
                  },
                  {
@@ -441,7 +428,7 @@
                      "id":  "Advize-PlantEasily",
                      "name":  "PlantEasily",
                      "author":  "Advize",
-                     "version":  "2.2.2",
+                     "version":  "2.3.0",
                      "side":  "client",
                      "mine":  false,
                      "onServer":  false,
@@ -532,7 +519,7 @@
                      "id":  "DeathMonger-TheGreatestMap",
                      "name":  "TheGreatestMap",
                      "author":  "DeathMonger",
-                     "version":  "1.7.5",
+                     "version":  "1.7.6",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
