@@ -1,9 +1,9 @@
 {
-    "generated":  "2026-10-04 20:59",
+    "generated":  "2026-10-04 21:04",
     "server":  {
                    "name":  "Bahnsheim (DatHost)",
                    "world":  "DeepNorth",
-                   "running":  true
+                   "running":  false
                },
     "profile":  "Default SD",
     "count":  47,
@@ -197,7 +197,7 @@
                      "version":  "0.10.3",
                      "side":  "both",
                      "mine":  true,
-                     "onServer":  true,
+                     "onServer":  false,
                      "description":  "Names the cause of lag instead of guessing. Measures your client and the server once a second and tells you which it is: starved server, saturated link, packet loss, object churn, world loading, or your own machine.",
                      "website":  "https://github.com/gbahns/ValheimMods",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/DiagnoseServerLag/",
