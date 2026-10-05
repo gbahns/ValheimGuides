@@ -1,9 +1,9 @@
 {
-    "generated":  "2026-10-05 01:11",
+    "generated":  "2026-10-05 16:56",
     "server":  {
                    "name":  "Bahnsheim (DatHost)",
                    "world":  "DeepNorth",
-                   "running":  true
+                   "running":  false
                },
     "profile":  "Default SD",
     "count":  47,
@@ -194,7 +194,7 @@
                      "id":  "DeathMonger-DiagnoseServerLag",
                      "name":  "DiagnoseServerLag",
                      "author":  "DeathMonger",
-                     "version":  "0.10.5",
+                     "version":  "0.10.6",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
@@ -506,7 +506,7 @@
                      "id":  "DeathMonger-SpreadTheLoad",
                      "name":  "SpreadTheLoad",
                      "author":  "DeathMonger",
-                     "version":  "0.2.1",
+                     "version":  "0.2.2",
                      "side":  "server",
                      "mine":  true,
                      "onServer":  true,
