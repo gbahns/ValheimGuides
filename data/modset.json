@@ -1,12 +1,12 @@
 {
-    "generated":  "2026-10-06 17:59",
+    "generated":  "2026-10-07 20:49",
     "server":  {
                    "name":  "Bahnsheim (DatHost)",
                    "world":  "DeepNorth",
                    "running":  false
                },
     "profile":  "Default SD",
-    "count":  47,
+    "count":  48,
     "mods":  [
                  {
                      "id":  "DeathMonger-Armory",
@@ -181,7 +181,7 @@
                      "id":  "shudnal-ConfigurationManager",
                      "name":  "ConfigurationManager",
                      "author":  "shudnal",
-                     "version":  "1.1.24",
+                     "version":  "1.1.25",
                      "side":  "client",
                      "mine":  false,
                      "onServer":  false,
@@ -389,7 +389,7 @@
                      "id":  "Crystal-Pathfinder",
                      "name":  "Pathfinder",
                      "author":  "Crystal",
-                     "version":  "2.2.3",
+                     "version":  "2.2.5",
                      "side":  "both",
                      "mine":  false,
                      "onServer":  true,
@@ -488,6 +488,19 @@
                      "website":  "https://github.com/JereKuusela/valheim-ruler",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/JereKuusela/Ruler/",
                      "hexium":  "https://valheim.hexium.gg/mods/JereKuusela/Ruler"
+                 },
+                 {
+                     "id":  "GetOffMyLawn-SilenceTameWolfCub",
+                     "name":  "SilenceTameWolfCub",
+                     "author":  "GetOffMyLawn",
+                     "version":  "0.1.0",
+                     "side":  "unknown",
+                     "mine":  false,
+                     "onServer":  false,
+                     "description":  "Inspired by Keezys_Better_Wolves. If tame cubs are detected within 30 meters, all wolf howls are silenced. This simultaneously permits domestic peace and quiet, and allows adult tame wolves to follow you without silencing nearby enemy wolves.",
+                     "website":  "https://github.com/afilbert/valheim-silence-tame-wolfcub-howls-mod",
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/GetOffMyLawn/SilenceTameWolfCub/",
+                     "hexium":  null
                  },
                  {
                      "id":  "DeathMonger-SmartSilencer",
