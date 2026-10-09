@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-10-09 10:17",
+    "generated":  "2026-10-09 10:30",
     "server":  {
                    "name":  "Bahnsheim (DatHost)",
                    "world":  "DeepNorth",
@@ -194,7 +194,7 @@
                      "id":  "DeathMonger-DiagnoseServerLag",
                      "name":  "DiagnoseServerLag",
                      "author":  "DeathMonger",
-                     "version":  "0.10.8",
+                     "version":  "0.10.9",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
@@ -298,7 +298,7 @@
                      "id":  "Neobotics-HUDCompass",
                      "name":  "HUDCompass",
                      "author":  "Neobotics",
-                     "version":  "1.2.0",
+                     "version":  "1.2.1",
                      "side":  "client",
                      "mine":  false,
                      "onServer":  false,
@@ -532,7 +532,7 @@
                      "id":  "DeathMonger-TheGreatestMap",
                      "name":  "TheGreatestMap",
                      "author":  "DeathMonger",
-                     "version":  "1.8.0",
+                     "version":  "1.8.1",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
