@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-10-08 19:36",
+    "generated":  "2026-10-09 10:17",
     "server":  {
                    "name":  "Bahnsheim (DatHost)",
                    "world":  "DeepNorth",
@@ -302,7 +302,7 @@
                      "side":  "client",
                      "mine":  false,
                      "onServer":  false,
-                     "description":  "A Heads Up Display compass with map pins and dynamic markers for Ships, Carts and Portals",
+                     "description":  "A Heads Up Display compass with map pins and dynamic markers for Ships, Carts and Portals. New - custom map names for Ships and Carts",
                      "website":  "https://www.nexusmods.com/valheim/mods/2674/",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/Neobotics/HUDCompass/",
                      "hexium":  "https://valheim.hexium.gg/mods/Neobotics/HUDCompass"
@@ -532,7 +532,7 @@
                      "id":  "DeathMonger-TheGreatestMap",
                      "name":  "TheGreatestMap",
                      "author":  "DeathMonger",
-                     "version":  "1.7.6",
+                     "version":  "1.8.0",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  true,
