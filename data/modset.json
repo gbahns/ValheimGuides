@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-10-13 17:18",
+    "generated":  "2026-10-13 19:22",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -194,7 +194,7 @@
                      "id":  "DeathMonger-DiagnoseServerLag",
                      "name":  "DiagnoseServerLag",
                      "author":  "DeathMonger",
-                     "version":  "0.10.9",
+                     "version":  "0.10.10",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
@@ -363,7 +363,7 @@
                      "id":  "shudnal-MyLittleUI",
                      "name":  "MyLittleUI",
                      "author":  "shudnal",
-                     "version":  "1.2.30",
+                     "version":  "1.2.31",
                      "side":  "client",
                      "mine":  false,
                      "onServer":  false,
