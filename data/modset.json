@@ -1,12 +1,12 @@
 {
-    "generated":  "2026-10-13 20:21",
+    "generated":  "2026-10-13 20:45",
     "server":  {
                    "name":  null,
                    "world":  null,
                    "running":  null
                },
     "profile":  "Default SD",
-    "count":  48,
+    "count":  49,
     "mods":  [
                  {
                      "id":  "DeathMonger-Armory",
@@ -384,6 +384,19 @@
                      "website":  "https://www.nexusmods.com/valheim/mods/2583?tab=bugs",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/blacks7ar/NoTreeStump/",
                      "hexium":  "https://valheim.hexium.gg/mods/blacks7ar/NoTreeStump"
+                 },
+                 {
+                     "id":  "OdinPlus-OdinHorse",
+                     "name":  "OdinHorse",
+                     "author":  "OdinPlus",
+                     "version":  "1.9.1",
+                     "side":  "unknown",
+                     "mine":  false,
+                     "onServer":  false,
+                     "description":  "Horse mount and new items! You can tame it, You can ride it, You can attach the Horse Cart, You can breed it, Add armor to your horse!",
+                     "website":  "https://discord.gg/jkcJCq2sK5",
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/OdinPlus/OdinHorse/",
+                     "hexium":  "https://valheim.hexium.gg/mods/OdinPlus/OdinHorse"
                  },
                  {
                      "id":  "DeathMonger-One_Click_Launch",
