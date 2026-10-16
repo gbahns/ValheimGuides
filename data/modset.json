@@ -1,12 +1,12 @@
 {
-    "generated":  "2026-10-16 15:34",
+    "generated":  "2026-10-16 16:55",
     "server":  {
                    "name":  null,
                    "world":  null,
                    "running":  null
                },
     "profile":  "Default SD",
-    "count":  45,
+    "count":  47,
     "mods":  [
                  {
                      "id":  "DeathMonger-Armory",
@@ -178,6 +178,19 @@
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConfigurationManager"
                  },
                  {
+                     "id":  "DrummerCraig-CreatureBait",
+                     "name":  "CreatureBait",
+                     "author":  "DrummerCraig",
+                     "version":  "0.5.5",
+                     "side":  "both",
+                     "mine":  false,
+                     "onServer":  false,
+                     "description":  "Craft Bait at the Cauldron from trophies and biome foods. Dropped Bait attracts mobs of the trophy\u0027s species. Config options and server authoritative.",
+                     "website":  "https://discord.gg/zUngMHPDsz",
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/DrummerCraig/CreatureBait/",
+                     "hexium":  "https://valheim.hexium.gg/mods/DrummerCraig/CreatureBait"
+                 },
+                 {
                      "id":  "DeathMonger-DiagnoseServerLag",
                      "name":  "DiagnoseServerLag",
                      "author":  "DeathMonger",
@@ -273,7 +286,7 @@
                      "name":  "GraphicsConfigPlus",
                      "author":  "cjayride",
                      "version":  "1.3.1",
-                     "side":  "unknown",
+                     "side":  "client",
                      "mine":  false,
                      "onServer":  false,
                      "description":  "Fork of daccaor/GraphicsConfigPlus for Valheim 1.0. Change graphic settings beyond the in-game options.",
@@ -377,7 +390,7 @@
                      "name":  "OdinHorse",
                      "author":  "OdinPlus",
                      "version":  "1.9.1",
-                     "side":  "unknown",
+                     "side":  "both",
                      "mine":  false,
                      "onServer":  false,
                      "description":  "Horse mount and new items! You can tame it, You can ride it, You can attach the Horse Cart, You can breed it, Add armor to your horse!",
@@ -507,7 +520,7 @@
                      "name":  "SilenceTameWolfCub",
                      "author":  "GetOffMyLawn",
                      "version":  "0.1.0",
-                     "side":  "unknown",
+                     "side":  "client",
                      "mine":  false,
                      "onServer":  false,
                      "description":  "Inspired by Keezys_Better_Wolves. If tame cubs are detected within 30 meters, all wolf howls are silenced. This simultaneously permits domestic peace and quiet, and allows adult tame wolves to follow you without silencing nearby enemy wolves.",
@@ -529,10 +542,23 @@
                      "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/SmartSilencer"
                  },
                  {
+                     "id":  "DeathMonger-TheGreatestMap",
+                     "name":  "TheGreatestMap",
+                     "author":  "DeathMonger",
+                     "version":  "1.9.0",
+                     "side":  "both",
+                     "mine":  true,
+                     "onServer":  false,
+                     "description":  "Shared markers that stay erased, a table that only carries exploration, and a pocket map that records only what you actually found.",
+                     "website":  "https://github.com/gbahns/ValheimMods",
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/TheGreatestMap/",
+                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/TheGreatestMap"
+                 },
+                 {
                      "id":  "DeathMonger-TheGreatestPortal",
                      "name":  "TheGreatestPortal",
                      "author":  "DeathMonger",
-                     "version":  "1.2.1",
+                     "version":  "1.2.2",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
