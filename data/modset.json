@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-10-16 07:22",
+    "generated":  "2026-10-16 15:34",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -181,7 +181,7 @@
                      "id":  "DeathMonger-DiagnoseServerLag",
                      "name":  "DiagnoseServerLag",
                      "author":  "DeathMonger",
-                     "version":  "0.10.13",
+                     "version":  "0.10.14",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
