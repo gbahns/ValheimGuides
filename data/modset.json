@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-10-21 15:47",
+    "generated":  "2026-10-21 16:54",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -532,7 +532,7 @@
                      "id":  "DeathMonger-TheGreatestMap",
                      "name":  "TheGreatestMap",
                      "author":  "DeathMonger",
-                     "version":  "3.1.2",
+                     "version":  "3.2.0",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
