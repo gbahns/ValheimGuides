@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-10-22 15:31",
+    "generated":  "2026-10-22 20:28",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -168,7 +168,7 @@
                      "id":  "shudnal-ConfigurationManager",
                      "name":  "ConfigurationManager",
                      "author":  "shudnal",
-                     "version":  "1.1.25",
+                     "version":  "1.1.26",
                      "side":  "client",
                      "mine":  false,
                      "onServer":  false,
@@ -545,7 +545,7 @@
                      "id":  "DeathMonger-TheGreatestMap",
                      "name":  "TheGreatestMap",
                      "author":  "DeathMonger",
-                     "version":  "4.0.1",
+                     "version":  "4.1.0",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
