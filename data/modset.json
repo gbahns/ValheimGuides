@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-10-23 20:36",
+    "generated":  "2026-10-25 11:17",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -29,7 +29,7 @@
                      "side":  "optional-server",
                      "mine":  false,
                      "onServer":  false,
-                     "description":  "Automatically fuel smelter, kilns, spinning wheels, windmills, ovens, torches and much more.  Stack Smelter and use all ore in Blast Furnaces",
+                     "description":  "Now With Eternal and Pulled fuel. Automatically fuel smelter, kilns, spinning wheels, windmills, ovens, torches and much more.  Stack Smelter and use all ore in Blast Furnaces",
                      "website":  "https://discord.gg/PQMXbUS6FH",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/TastyChickenLegs/AutomaticFuel/",
                      "hexium":  null
