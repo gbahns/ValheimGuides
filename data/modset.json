@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-10-26 17:19",
+    "generated":  "2026-10-26 19:22",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -161,7 +161,7 @@
                      "onServer":  false,
                      "description":  "Shared config synchronization and server policy library for Valheim mods. Installed as a dependency and compatible with Jotunn and ServerSync.",
                      "website":  "https://github.com/shudnal/ConditionalConfigSync",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/ConditionalConfigSync/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConditionalConfigSync"
                  },
                  {
@@ -239,7 +239,7 @@
                      "onServer":  false,
                      "description":  "Prevents drinking potions when you are at max of the stat the potion gives",
                      "website":  "",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/sephalon/DontWastePotions/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -434,7 +434,7 @@
                      "onServer":  false,
                      "description":  "Show a chest\u0027s contents by hovering over it, no need to open it. Inspired by ContentsWithin (thunderstore.io/c/valheim/p/MSchmoecker/ContentsWithin/). Issues/suggestions: comment on my Steam profile with the mod name + issue.",
                      "website":  "https://steamcommunity.com/id/Yumileashen/",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/KuliTeam/PeekaChest/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
