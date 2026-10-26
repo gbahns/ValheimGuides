@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-10-25 21:01",
+    "generated":  "2026-10-26 09:53",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -116,7 +116,7 @@
                      "id":  "ComfyMods-BetterZeeLog",
                      "name":  "BetterZeeLog",
                      "author":  "ComfyMods",
-                     "version":  "1.16.0",
+                     "version":  "1.17.0",
                      "side":  "client",
                      "mine":  false,
                      "onServer":  false,
@@ -174,7 +174,7 @@
                      "onServer":  false,
                      "description":  "Localized, recolored, refined. Split view mode. Config files editor. Setting edit window. Changed values are highlighted. Prevent user input or pause the game while window is open. Window scale depends on game scale.",
                      "website":  "https://github.com/shudnal/ConfigurationManager",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/ConfigurationManager/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConfigurationManager"
                  },
                  {
@@ -194,7 +194,7 @@
                      "id":  "DeathMonger-DiagnoseServerLag",
                      "name":  "DiagnoseServerLag",
                      "author":  "DeathMonger",
-                     "version":  "0.10.18",
+                     "version":  "0.10.19",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
@@ -356,7 +356,7 @@
                      "onServer":  false,
                      "description":  "Bunch of little UI tweaks. Tooltips for production timers, player status, items. Custom chest names, buff list, multicraft, weather forecast, crafting sorting, filtering and so on.",
                      "website":  "https://github.com/shudnal/MyLittleUI",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/MyLittleUI/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/MyLittleUI"
                  },
                  {
@@ -603,7 +603,7 @@
                      "onServer":  false,
                      "description":  "Client-side Valheim plugin that skips the startup cinematic, Coffee Stain and Iron Gate logos, Valheim loading logo and first-start developer intro.*",
                      "website":  "",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Stonaar/ValheimSkipIntro/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
