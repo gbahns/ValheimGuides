@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-10-28 22:04",
+    "generated":  "2026-10-29 08:08",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -19,7 +19,7 @@
                      "description":  "Craft an Armory Rack to save, store and instantly recall named gear sets - armor, weapons, cape, utility and hotbar - without rummaging through chests every time you switch tasks.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/Armory",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/Armory/",
-                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/Armory"
+                     "hexium":  null
                  },
                  {
                      "id":  "TastyChickenLegs-AutomaticFuel",
@@ -136,7 +136,7 @@
                      "description":  "Logs ship speed, wind, and heading to CSV while you sail, plus a live HUD - empirical data for comparing ship speeds instead of guesswork.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/CaptainsLog",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/CaptainsLog/",
-                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/CaptainsLog"
+                     "hexium":  null
                  },
                  {
                      "id":  "ComfyMods-ComfyAutoRepair",
@@ -201,7 +201,7 @@
                      "description":  "Names the cause of lag instead of guessing. Measures your client and the server once a second and tells you which it is: starved server, saturated link, packet loss, object churn, world loading, or your own machine.",
                      "website":  "https://github.com/gbahns/ValheimMods",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/DiagnoseServerLag/",
-                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/DiagnoseServerLag"
+                     "hexium":  null
                  },
                  {
                      "id":  "DeathMonger-DistanceFromWorldCenter",
@@ -214,7 +214,7 @@
                      "description":  "Always-on HUD widget showing your horizontal distance from the world center (0,0), with optional X/Z coordinates.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/DistanceFromWorldCenter",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/DistanceFromWorldCenter/",
-                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/DistanceFromWorldCenter"
+                     "hexium":  null
                  },
                  {
                      "id":  "Searica-DodgeShortcut",
@@ -253,7 +253,7 @@
                      "description":  "Your stats on one key press, with the game paused while you read. Scoreboard of every player, including ones who are offline: kills, deaths, K/D, bosses, time played and best skill.",
                      "website":  "https://github.com/gbahns/ValheimMods",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/DudeWhatAreMyStats/",
-                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/DudeWhatAreMyStats"
+                     "hexium":  null
                  },
                  {
                      "id":  "DeathMonger-ForsakenShrines",
@@ -266,7 +266,7 @@
                      "description":  "Build shrines to the Forsaken bosses. Each shrine remotely channels its boss\u0027s guardian power once you mount the boss\u0027s trophy on it, to switch forsaken powers without having to return to the sacrificial stones at the world center.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/ForsakenShrines",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/ForsakenShrines/",
-                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/ForsakenShrines"
+                     "hexium":  null
                  },
                  {
                      "id":  "DeathMonger-GrabMaterials",
@@ -279,7 +279,7 @@
                      "description":  "Grab materials from nearby chests needed to build things out in the world, e.g. grab materials for a workbench, for portal, for a longship, for exploring (workbench, and portal), etc.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/GrabMaterials",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/GrabMaterials/",
-                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/GrabMaterials"
+                     "hexium":  null
                  },
                  {
                      "id":  "LTmadness-GumshoeTimerSuite",
@@ -305,7 +305,7 @@
                      "description":  "Visual warnings for hunger, smoke, and poison — screen vignettes and on-screen labels that escalate in urgency so you never miss a critical status.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/HungryViking",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/Hungry_Viking/",
-                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/Hungry_Viking"
+                     "hexium":  null
                  },
                  {
                      "id":  "ValheimModding-Jotunn",
@@ -383,7 +383,7 @@
                      "description":  "One click from the main menu back into the game you were playing. Remembers each character with the world or server they were actually played in.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/OneClickLaunch",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/One_Click_Launch/",
-                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/One_Click_Launch"
+                     "hexium":  null
                  },
                  {
                      "id":  "Crystal-Pathfinder",
@@ -409,7 +409,7 @@
                      "description":  "Pause a server-hosted game: the world pauses when every player online has asked for a pause (the ESC menu, or a mod that pauses for an open map or panel), and an admin can pause the whole server for everyone with a key.",
                      "website":  "https://github.com/gbahns/ValheimMods",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/PauseMyServer/",
-                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/PauseMyServer"
+                     "hexium":  null
                  },
                  {
                      "id":  "KuliTeam-PeekaChest",
@@ -526,20 +526,20 @@
                      "description":  "Auto-mutes Valheim while music or a video plays in another program, or while the game is not the window in front. Each trigger has its own switch.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/SmartSilencer",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/SmartSilencer/",
-                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/SmartSilencer"
+                     "hexium":  null
                  },
                  {
                      "id":  "DeathMonger-TheGreatestMap",
                      "name":  "TheGreatestMap",
                      "author":  "DeathMonger",
-                     "version":  "4.5.3",
+                     "version":  "4.6.0",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
                      "description":  "Shared markers that stay erased, a table that only carries exploration, and a pocket map that records only what you actually found.",
                      "website":  "https://github.com/gbahns/ValheimMods",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/TheGreatestMap/",
-                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/TheGreatestMap"
+                     "hexium":  null
                  },
                  {
                      "id":  "DeathMonger-TheGreatestPortal",
@@ -552,7 +552,7 @@
                      "description":  "Pick each portal\u0027s destination from a list or on the map, set a default for new portals, mark favorites, or leave it open and choose where to go when you step in.",
                      "website":  "https://github.com/gbahns/ValheimMods",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/TheGreatestPortal/",
-                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/TheGreatestPortal"
+                     "hexium":  null
                  },
                  {
                      "id":  "DeathMonger-TheObituaries",
@@ -565,7 +565,7 @@
                      "description":  "Announces every player death to the whole server in Quake style: \u0027Greg was railed by a Deathsquito\u0027, \u0027Marco sank like a rock\u0027, \u0027Anna does a back flip into the lava\u0027. Client-side; the server needs nothing.",
                      "website":  "https://github.com/gbahns/ValheimMods/tree/main/TheObituaries",
                      "thunderstore":  "https://thunderstore.io/c/valheim/p/DeathMonger/TheObituaries/",
-                     "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/TheObituaries"
+                     "hexium":  null
                  },
                  {
                      "id":  "Azumatt-Unshamed",
