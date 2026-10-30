@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-10-30 11:26",
+    "generated":  "2026-10-30 11:36",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -109,7 +109,7 @@
                      "onServer":  false,
                      "description":  "Quick attach and detach even when not in place.  Configure weight and have up to four buddies push.  Configure damage too.",
                      "website":  "https://discord.gg/PQMXbUS6FH",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/TastyChickenLegs/BetterCarts/",
                      "hexium":  null
                  },
                  {
@@ -317,7 +317,7 @@
                      "onServer":  false,
                      "description":  "Jötunn (/ˈjɔːtʊn/, \u0027giant\u0027), the Valheim Library was created with the goal of making the lives of mod developers easier. It enables you to create mods for Valheim using an abstracted API so you can focus on the actual content creation.",
                      "website":  "https://github.com/Valheim-Modding/Jotunn",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/",
                      "hexium":  "https://valheim.hexium.gg/mods/ValheimModding/Jotunn"
                  },
                  {
@@ -590,7 +590,7 @@
                      "onServer":  false,
                      "description":  "Client-side Valheim plugin that skips the startup cinematic, Coffee Stain and Iron Gate logos, Valheim loading logo and first-start developer intro.*",
                      "website":  "",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Stonaar/ValheimSkipIntro/",
                      "hexium":  null
                  },
                  {
