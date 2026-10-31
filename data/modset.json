@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-10-30 20:49",
+    "generated":  "2026-10-30 21:16",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -109,7 +109,7 @@
                      "onServer":  false,
                      "description":  "Quick attach and detach even when not in place.  Configure weight and have up to four buddies push.  Configure damage too.",
                      "website":  "https://discord.gg/PQMXbUS6FH",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/TastyChickenLegs/BetterCarts/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -317,7 +317,7 @@
                      "onServer":  false,
                      "description":  "Jötunn (/ˈjɔːtʊn/, \u0027giant\u0027), the Valheim Library was created with the goal of making the lives of mod developers easier. It enables you to create mods for Valheim using an abstracted API so you can focus on the actual content creation.",
                      "website":  "https://github.com/Valheim-Modding/Jotunn",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/ValheimModding/Jotunn"
                  },
                  {
@@ -363,7 +363,7 @@
                      "id":  "OdinPlus-OdinHorse",
                      "name":  "OdinHorse",
                      "author":  "OdinPlus",
-                     "version":  "1.9.3",
+                     "version":  "1.9.4",
                      "side":  "both",
                      "mine":  false,
                      "onServer":  false,
@@ -590,7 +590,7 @@
                      "onServer":  false,
                      "description":  "Client-side Valheim plugin that skips the startup cinematic, Coffee Stain and Iron Gate logos, Valheim loading logo and first-start developer intro.*",
                      "website":  "",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Stonaar/ValheimSkipIntro/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
