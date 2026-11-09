@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-08 11:54",
+    "generated":  "2026-11-09 08:59",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -31,7 +31,7 @@
                      "onServer":  false,
                      "description":  "Now With Eternal Fuel and Pulled fuel PLUS Timed Torches and No Smoke. Automatically fuel smelter, kilns, spinning wheels, windmills, ovens, torches and much more.  Stack Smelter and use all ore in Blast Furnaces",
                      "website":  "https://discord.gg/PQMXbUS6FH",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/TastyChickenLegs/AutomaticFuel/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -44,7 +44,7 @@
                      "onServer":  false,
                      "description":  "Automatically store and deposit items from your inventory or ground into nearby chests and containers. Chest management, hotkey support, quick stack, auto-pickup, favorites, ItemDrawers, backpacks, WardIsLove, ward protection.",
                      "website":  "https://discord.gg/pdHgy6Bsng",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Azumatt/AzuAutoStore/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/Azumatt/AzuAutoStore"
                  },
                  {
@@ -57,7 +57,7 @@
                      "onServer":  false,
                      "description":  "Simple clock for in-game time. Weather and forecast. Easy configuration.",
                      "website":  "https://discord.gg/pdHgy6Bsng",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Azumatt/AzuClock/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/Azumatt/AzuClock"
                  },
                  {
@@ -70,7 +70,7 @@
                      "onServer":  false,
                      "description":  "AzuCraftyBoxes is a Valheim mod that allows players to access and use resources from nearby containers when crafting and building, based on a configurable range and item restrictions. Restrictions are controlled by the yaml file Azumatt.AzuCraftyBoxes.yml",
                      "website":  "https://discord.gg/pdHgy6Bsng",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Azumatt/AzuCraftyBoxes/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/Azumatt/AzuCraftyBoxes"
                  },
                  {
@@ -83,7 +83,7 @@
                      "onServer":  false,
                      "description":  "AzuEPI (Extended Player Inventory) is a comprehensive inventory expansion mod that adds more rows to inventory, equipment slots, quick slots, vanity customization, and loadout management to Valheim. Controller friendly.",
                      "website":  "https://discord.gg/pdHgy6Bsng",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Azumatt/AzuExtendedPlayerInventory/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/Azumatt/AzuExtendedPlayerInventory"
                  },
                  {
@@ -96,7 +96,7 @@
                      "onServer":  false,
                      "description":  "It shows information on things when you hover over them. What else is there to say?",
                      "website":  "https://discord.gg/pdHgy6Bsng",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Azumatt/AzuHoverStats/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/Azumatt/AzuHoverStats"
                  },
                  {
@@ -109,7 +109,7 @@
                      "onServer":  false,
                      "description":  "Quick attach and detach even when not in place.  Configure weight and have up to four buddies push.  Configure damage too.",
                      "website":  "https://discord.gg/PQMXbUS6FH",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/TastyChickenLegs/BetterCarts/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -122,7 +122,7 @@
                      "onServer":  false,
                      "description":  "Logging zees the better way.",
                      "website":  "https://github.com/redseiko/ComfyMods/tree/main/BetterZeeLog",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/ComfyMods/BetterZeeLog/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -148,7 +148,7 @@
                      "onServer":  false,
                      "description":  "Interact with a crafting station to auto-repair all items in your inventory.",
                      "website":  "https://github.com/redseiko/ComfyMods/tree/main/ComfyAutoRepair",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/ComfyMods/ComfyAutoRepair/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -161,7 +161,7 @@
                      "onServer":  false,
                      "description":  "Shared config synchronization and server policy library for Valheim mods. Installed as a dependency and compatible with Jotunn and ServerSync.",
                      "website":  "https://github.com/shudnal/ConditionalConfigSync",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/ConditionalConfigSync/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConditionalConfigSync"
                  },
                  {
@@ -174,7 +174,7 @@
                      "onServer":  false,
                      "description":  "Localized, recolored, refined. Split view mode. Config files editor. Setting edit window. Changed values are highlighted. Prevent user input or pause the game while window is open. Window scale depends on game scale.",
                      "website":  "https://github.com/shudnal/ConfigurationManager",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/ConfigurationManager/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConfigurationManager"
                  },
                  {
@@ -187,7 +187,7 @@
                      "onServer":  false,
                      "description":  "Craft Bait at the Cauldron from trophies and biome foods. Dropped Bait attracts mobs of the trophy\u0027s species. Config options and server authoritative.",
                      "website":  "https://discord.gg/zUngMHPDsz",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/DrummerCraig/CreatureBait/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/DrummerCraig/CreatureBait"
                  },
                  {
@@ -226,7 +226,7 @@
                      "onServer":  false,
                      "description":  "Simple mod to add a configurable dodge button. Allows you to dodge with a single key press.",
                      "website":  "https://discord.gg/sFmGTBYN6n",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Searica/DodgeShortcut/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -239,7 +239,7 @@
                      "onServer":  false,
                      "description":  "Prevents drinking potions when you are at max of the stat the potion gives",
                      "website":  "",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/sephalon/DontWastePotions/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -291,7 +291,7 @@
                      "onServer":  false,
                      "description":  "Add timers to item processors like fermenter, smelter and others",
                      "website":  "https://github.com/LTmadness/GumshoeTimerSuite",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/LTmadness/GumshoeTimerSuite/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -317,7 +317,7 @@
                      "onServer":  false,
                      "description":  "Jötunn (/ˈjɔːtʊn/, \u0027giant\u0027), the Valheim Library was created with the goal of making the lives of mod developers easier. It enables you to create mods for Valheim using an abstracted API so you can focus on the actual content creation.",
                      "website":  "https://github.com/Valheim-Modding/Jotunn",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/ValheimModding/Jotunn"
                  },
                  {
@@ -330,7 +330,7 @@
                      "onServer":  false,
                      "description":  "Shared version 13.0.3 of Json.NET from Newtonsoft, net45 package for use in Valheim mods. Maintained by the ValheimModding team.",
                      "website":  "https://github.com/Valheim-Modding/CommonPackages",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/ValheimModding/JsonDotNET/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/ValheimModding/JsonDotNET"
                  },
                  {
@@ -343,7 +343,7 @@
                      "onServer":  false,
                      "description":  "Bunch of little UI tweaks. Tooltips for production timers, player status, items. Custom chest names, buff list, multicraft, weather forecast, crafting sorting, filtering and so on.",
                      "website":  "https://github.com/shudnal/MyLittleUI",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/MyLittleUI/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/MyLittleUI"
                  },
                  {
@@ -356,7 +356,7 @@
                      "onServer":  false,
                      "description":  "A simple commissioned mod that removes the stump from all trees when cutted down.",
                      "website":  "https://www.nexusmods.com/valheim/mods/2583?tab=bugs",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/blacks7ar/NoTreeStump/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/blacks7ar/NoTreeStump"
                  },
                  {
@@ -369,7 +369,7 @@
                      "onServer":  false,
                      "description":  "Horse mount and new items! You can tame it, You can ride it, You can attach the Horse Cart, You can breed it, Add armor to your horse!",
                      "website":  "https://discord.gg/jkcJCq2sK5",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/OdinPlus/OdinHorse/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/OdinPlus/OdinHorse"
                  },
                  {
@@ -395,7 +395,7 @@
                      "onServer":  false,
                      "description":  "Customizable dynamic map discovery radius based on various visibility factors.",
                      "website":  "https://github.com/CrystalFerrai/ValheimMods",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Crystal/Pathfinder/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -421,7 +421,7 @@
                      "onServer":  false,
                      "description":  "Show a chest\u0027s contents by hovering over it, no need to open it. Inspired by ContentsWithin (thunderstore.io/c/valheim/p/MSchmoecker/ContentsWithin/). Issues/suggestions: comment on my Steam profile with the mod name + issue.",
                      "website":  "https://steamcommunity.com/id/Yumileashen/",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/KuliTeam/PeekaChest/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -434,7 +434,7 @@
                      "onServer":  false,
                      "description":  "Allows you to plant evenly spaced crops, either one at a time or in any amount of rows and columns, with grid snapping features and invalid crop placement prevention. Harvest in bulk and optionally auto replant crops. Configurable and supports gamepad.",
                      "website":  "https://www.nexusmods.com/valheim/mods/2350",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Advize/PlantEasily/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -447,7 +447,7 @@
                      "onServer":  false,
                      "description":  "Adjust the volume and activation range of portals or silence them completely",
                      "website":  "https://www.nexusmods.com/valheim/mods/1981/",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Neobotics/QuietPortals/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/Neobotics/QuietPortals"
                  },
                  {
@@ -460,7 +460,7 @@
                      "onServer":  false,
                      "description":  "A mod that allows you to recycle items back into resources used to make them. Adds a \u0027Reclaim\u0027 tab/button to the crafting menu. Additionally can be used inside of your inventory directly.",
                      "website":  "https://discord.gg/pdHgy6Bsng",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Azumatt/Recycle_N_Reclaim/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/Azumatt/Recycle_N_Reclaim"
                  },
                  {
@@ -473,7 +473,7 @@
                      "onServer":  false,
                      "description":  "Simple station to repair your shit. All at once or one at a time. Make it free, or cost {x} amount of {x} item. Just interact with this shit.",
                      "website":  "https://discord.gg/pdHgy6Bsng",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Azumatt/RepairStation/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/Azumatt/RepairStation"
                  },
                  {
@@ -486,7 +486,7 @@
                      "onServer":  false,
                      "description":  "Adds a simple ruler for measuring distances.",
                      "website":  "https://github.com/JereKuusela/valheim-ruler",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/JereKuusela/Ruler/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/JereKuusela/Ruler"
                  },
                  {
@@ -499,7 +499,7 @@
                      "onServer":  false,
                      "description":  "Inspired by Keezys_Better_Wolves. If tame cubs are detected within 30 meters, all wolf howls are silenced. This simultaneously permits domestic peace and quiet, and allows adult tame wolves to follow you without silencing nearby enemy wolves.",
                      "website":  "https://github.com/afilbert/valheim-silence-tame-wolfcub-howls-mod",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/GetOffMyLawn/SilenceTameWolfCub/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -512,7 +512,7 @@
                      "onServer":  false,
                      "description":  "Adds a Day bed. When everyone naps in one during the day, time skips to nightfall. It refuses at night with jokes. Optional rules for all beds, like sleeping with enemies nearby. Server synced.",
                      "website":  "https://github.com/Ononononoki/SleepThroughDay",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Onononoki/SleepThroughDay/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -590,7 +590,7 @@
                      "onServer":  false,
                      "description":  "Valheim 1.0 blocks achievements for anyone running mods. This unblocks them, and gives back the ones you already earned. No free unlocks.",
                      "website":  "https://discord.gg/pdHgy6Bsng",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Azumatt/Unshamed/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/Azumatt/Unshamed"
                  },
                  {
@@ -603,7 +603,7 @@
                      "onServer":  false,
                      "description":  "Client-side Valheim plugin that skips the startup cinematic, Coffee Stain and Iron Gate logos, Valheim loading logo and first-start developer intro.*",
                      "website":  "",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Stonaar/ValheimSkipIntro/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -616,7 +616,7 @@
                      "onServer":  false,
                      "description":  "Shared version 16.3.0 of YamlDotNet from Antoine Aubry and contributors, net47 package for use in Valheim mods. Maintained by the ValheimModding team.",
                      "website":  "https://github.com/Valheim-Modding/CommonPackages",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/ValheimModding/YamlDotNet/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/ValheimModding/YamlDotNet"
                  }
              ]
