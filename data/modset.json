@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-10 17:23",
+    "generated":  "2026-11-10 17:45",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -512,7 +512,7 @@
                      "onServer":  false,
                      "description":  "Adds a Day bed. When everyone naps in one during the day, time skips to nightfall. It refuses at night with jokes. Optional rules for all beds, like sleeping with enemies nearby. Server synced.",
                      "website":  "https://github.com/Ononononoki/SleepThroughDay",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Onononoki/SleepThroughDay/",
                      "hexium":  null
                  },
                  {
