@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-11 10:20",
+    "generated":  "2026-11-11 13:30",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -161,7 +161,7 @@
                      "onServer":  false,
                      "description":  "Shared config synchronization and server policy library for Valheim mods. Installed as a dependency and compatible with Jotunn and ServerSync.",
                      "website":  "https://github.com/shudnal/ConditionalConfigSync",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/ConditionalConfigSync/",
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConditionalConfigSync"
                  },
                  {
