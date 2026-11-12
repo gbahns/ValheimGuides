@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-11 22:37",
+    "generated":  "2026-11-12 12:12",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -31,7 +31,7 @@
                      "onServer":  false,
                      "description":  "Now With Eternal Fuel and Pulled fuel PLUS Timed Torches and No Smoke. Automatically fuel smelter, kilns, spinning wheels, windmills, ovens, torches and much more.  Stack Smelter and use all ore in Blast Furnaces",
                      "website":  "https://discord.gg/PQMXbUS6FH",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/TastyChickenLegs/AutomaticFuel/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -109,7 +109,7 @@
                      "onServer":  false,
                      "description":  "Quick attach and detach even when not in place.  Configure weight and have up to four buddies push.  Configure damage too.",
                      "website":  "https://discord.gg/PQMXbUS6FH",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/TastyChickenLegs/BetterCarts/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -161,7 +161,7 @@
                      "onServer":  false,
                      "description":  "Shared config synchronization and server policy library for Valheim mods. Installed as a dependency and compatible with Jotunn and ServerSync.",
                      "website":  "https://github.com/shudnal/ConditionalConfigSync",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/ConditionalConfigSync/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConditionalConfigSync"
                  },
                  {
@@ -174,7 +174,7 @@
                      "onServer":  false,
                      "description":  "Localized, recolored, refined. Split view mode. Config files editor. Setting edit window. Changed values are highlighted. Prevent user input or pause the game while window is open. Window scale depends on game scale.",
                      "website":  "https://github.com/shudnal/ConfigurationManager",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/ConfigurationManager/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConfigurationManager"
                  },
                  {
@@ -194,7 +194,7 @@
                      "id":  "DeathMonger-DiagnoseServerLag",
                      "name":  "DiagnoseServerLag",
                      "author":  "DeathMonger",
-                     "version":  "0.10.21",
+                     "version":  "0.10.22",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
@@ -226,7 +226,7 @@
                      "onServer":  false,
                      "description":  "Simple mod to add a configurable dodge button. Allows you to dodge with a single key press.",
                      "website":  "https://discord.gg/sFmGTBYN6n",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Searica/DodgeShortcut/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -239,7 +239,7 @@
                      "onServer":  false,
                      "description":  "Prevents drinking potions when you are at max of the stat the potion gives",
                      "website":  "",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/sephalon/DontWastePotions/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -317,7 +317,7 @@
                      "onServer":  false,
                      "description":  "Jötunn (/ˈjɔːtʊn/, \u0027giant\u0027), the Valheim Library was created with the goal of making the lives of mod developers easier. It enables you to create mods for Valheim using an abstracted API so you can focus on the actual content creation.",
                      "website":  "https://github.com/Valheim-Modding/Jotunn",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/ValheimModding/Jotunn"
                  },
                  {
@@ -330,7 +330,7 @@
                      "onServer":  false,
                      "description":  "Shared version 13.0.3 of Json.NET from Newtonsoft, net45 package for use in Valheim mods. Maintained by the ValheimModding team.",
                      "website":  "https://github.com/Valheim-Modding/CommonPackages",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/ValheimModding/JsonDotNET/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/ValheimModding/JsonDotNET"
                  },
                  {
@@ -343,7 +343,7 @@
                      "onServer":  false,
                      "description":  "Bunch of little UI tweaks. Tooltips for production timers, player status, items. Custom chest names, buff list, multicraft, weather forecast, crafting sorting, filtering and so on.",
                      "website":  "https://github.com/shudnal/MyLittleUI",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/MyLittleUI/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/MyLittleUI"
                  },
                  {
@@ -532,7 +532,7 @@
                      "id":  "DeathMonger-TheGreatestMap",
                      "name":  "TheGreatestMap",
                      "author":  "DeathMonger",
-                     "version":  "4.9.1",
+                     "version":  "4.9.2",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
@@ -545,7 +545,7 @@
                      "id":  "DeathMonger-TheGreatestPortal",
                      "name":  "TheGreatestPortal",
                      "author":  "DeathMonger",
-                     "version":  "1.2.2",
+                     "version":  "1.3.0",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
@@ -603,7 +603,7 @@
                      "onServer":  false,
                      "description":  "Client-side Valheim plugin that skips the startup cinematic, Coffee Stain and Iron Gate logos, Valheim loading logo and first-start developer intro.*",
                      "website":  "",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Stonaar/ValheimSkipIntro/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -616,7 +616,7 @@
                      "onServer":  false,
                      "description":  "Shared version 16.3.0 of YamlDotNet from Antoine Aubry and contributors, net47 package for use in Valheim mods. Maintained by the ValheimModding team.",
                      "website":  "https://github.com/Valheim-Modding/CommonPackages",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/ValheimModding/YamlDotNet/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/ValheimModding/YamlDotNet"
                  }
              ]
