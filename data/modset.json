@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-12 15:43",
+    "generated":  "2026-11-12 15:51",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -12,7 +12,7 @@
                      "id":  "DeathMonger-Armory",
                      "name":  "Armory",
                      "author":  "DeathMonger",
-                     "version":  "2.0.1",
+                     "version":  "2.1.0",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
@@ -161,7 +161,7 @@
                      "onServer":  false,
                      "description":  "Shared config synchronization and server policy library for Valheim mods. Installed as a dependency and compatible with Jotunn and ServerSync.",
                      "website":  "https://github.com/shudnal/ConditionalConfigSync",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/ConditionalConfigSync/",
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConditionalConfigSync"
                  },
                  {
@@ -545,7 +545,7 @@
                      "id":  "DeathMonger-TheGreatestPortal",
                      "name":  "TheGreatestPortal",
                      "author":  "DeathMonger",
-                     "version":  "1.3.0",
+                     "version":  "1.4.0",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
@@ -558,7 +558,7 @@
                      "id":  "DeathMonger-TheGreatestShips",
                      "name":  "TheGreatestShips",
                      "author":  "DeathMonger",
-                     "version":  "0.9.12",
+                     "version":  "0.9.13",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
@@ -603,7 +603,7 @@
                      "onServer":  false,
                      "description":  "Client-side Valheim plugin that skips the startup cinematic, Coffee Stain and Iron Gate logos, Valheim loading logo and first-start developer intro.*",
                      "website":  "",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Stonaar/ValheimSkipIntro/",
                      "hexium":  null
                  },
                  {
