@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-11 22:19",
+    "generated":  "2026-11-11 22:37",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -12,7 +12,7 @@
                      "id":  "DeathMonger-Armory",
                      "name":  "Armory",
                      "author":  "DeathMonger",
-                     "version":  "2.0.0",
+                     "version":  "2.0.1",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
@@ -161,7 +161,7 @@
                      "onServer":  false,
                      "description":  "Shared config synchronization and server policy library for Valheim mods. Installed as a dependency and compatible with Jotunn and ServerSync.",
                      "website":  "https://github.com/shudnal/ConditionalConfigSync",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/ConditionalConfigSync/",
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConditionalConfigSync"
                  },
                  {
@@ -272,7 +272,7 @@
                      "id":  "DeathMonger-GrabMaterials",
                      "name":  "GrabMaterials",
                      "author":  "DeathMonger",
-                     "version":  "2.6.1",
+                     "version":  "2.7.0",
                      "side":  "client",
                      "mine":  true,
                      "onServer":  false,
@@ -343,7 +343,7 @@
                      "onServer":  false,
                      "description":  "Bunch of little UI tweaks. Tooltips for production timers, player status, items. Custom chest names, buff list, multicraft, weather forecast, crafting sorting, filtering and so on.",
                      "website":  "https://github.com/shudnal/MyLittleUI",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/MyLittleUI/",
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/MyLittleUI"
                  },
                  {
