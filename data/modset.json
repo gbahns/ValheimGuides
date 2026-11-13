@@ -1,12 +1,12 @@
 {
-    "generated":  "2026-11-12 15:51",
+    "generated":  "2026-11-12 22:09",
     "server":  {
                    "name":  null,
                    "world":  null,
                    "running":  null
                },
     "profile":  "Default SD",
-    "count":  47,
+    "count":  48,
     "mods":  [
                  {
                      "id":  "DeathMonger-Armory",
@@ -204,6 +204,19 @@
                      "hexium":  "https://valheim.hexium.gg/mods/DeathMonger/DiagnoseServerLag"
                  },
                  {
+                     "id":  "Truncated-DiscoverySync",
+                     "name":  "DiscoverySync",
+                     "author":  "Truncated",
+                     "version":  "1.0.2",
+                     "side":  "both",
+                     "mine":  false,
+                     "onServer":  false,
+                     "description":  "Munin shares item and material discoveries between opted-in characters in a Valheim world. Each character chooses whether to receive updates.",
+                     "website":  "https://valheim.hexium.gg/mods/Truncated/DiscoverySync",
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Truncated/DiscoverySync/",
+                     "hexium":  "https://valheim.hexium.gg/mods/Truncated/DiscoverySync"
+                 },
+                 {
                      "id":  "DeathMonger-DistanceFromWorldCenter",
                      "name":  "DistanceFromWorldCenter",
                      "author":  "DeathMonger",
@@ -272,7 +285,7 @@
                      "id":  "DeathMonger-GrabMaterials",
                      "name":  "GrabMaterials",
                      "author":  "DeathMonger",
-                     "version":  "2.7.0",
+                     "version":  "2.8.0",
                      "side":  "client",
                      "mine":  true,
                      "onServer":  false,
@@ -545,7 +558,7 @@
                      "id":  "DeathMonger-TheGreatestPortal",
                      "name":  "TheGreatestPortal",
                      "author":  "DeathMonger",
-                     "version":  "1.4.0",
+                     "version":  "1.5.0",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
