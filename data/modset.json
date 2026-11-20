@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-20 11:56",
+    "generated":  "2026-11-20 16:27",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -187,7 +187,7 @@
                      "onServer":  false,
                      "description":  "Localized, recolored, refined. Split view mode. Config files editor. Setting edit window. Changed values are highlighted. Prevent user input or pause the game while window is open. Window scale depends on game scale.",
                      "website":  "https://github.com/shudnal/ConfigurationManager",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/ConfigurationManager/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConfigurationManager"
                  },
                  {
@@ -369,7 +369,7 @@
                      "onServer":  false,
                      "description":  "Bunch of little UI tweaks. Tooltips for production timers, player status, items. Custom chest names, buff list, multicraft, weather forecast, crafting sorting, filtering and so on.",
                      "website":  "https://github.com/shudnal/MyLittleUI",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/MyLittleUI/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/MyLittleUI"
                  },
                  {
@@ -629,7 +629,7 @@
                      "onServer":  false,
                      "description":  "Client-side Valheim plugin that skips the startup cinematic, Coffee Stain and Iron Gate logos, Valheim loading logo and first-start developer intro.*",
                      "website":  "",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Stonaar/ValheimSkipIntro/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -642,7 +642,7 @@
                      "onServer":  false,
                      "description":  "Shared version 16.3.0 of YamlDotNet from Antoine Aubry and contributors, net47 package for use in Valheim mods. Maintained by the ValheimModding team.",
                      "website":  "https://github.com/Valheim-Modding/CommonPackages",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/ValheimModding/YamlDotNet/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/ValheimModding/YamlDotNet"
                  }
              ]
