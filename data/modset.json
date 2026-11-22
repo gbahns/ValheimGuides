@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-22 16:29",
+    "generated":  "2026-11-22 16:51",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -44,7 +44,7 @@
                      "onServer":  false,
                      "description":  "Now With Eternal Fuel and Pulled fuel PLUS Timed Torches and No Smoke. Automatically fuel smelter, kilns, spinning wheels, windmills, ovens, torches and much more.  Stack Smelter and use all ore in Blast Furnaces",
                      "website":  "https://discord.gg/PQMXbUS6FH",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/TastyChickenLegs/AutomaticFuel/",
                      "hexium":  null
                  },
                  {
@@ -174,7 +174,7 @@
                      "onServer":  false,
                      "description":  "Shared config synchronization and server policy library for Valheim mods. Installed as a dependency and compatible with Jotunn and ServerSync.",
                      "website":  "https://github.com/shudnal/ConditionalConfigSync",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/ConditionalConfigSync/",
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConditionalConfigSync"
                  },
                  {
