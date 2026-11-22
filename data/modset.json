@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-22 13:18",
+    "generated":  "2026-11-22 13:45",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -629,7 +629,7 @@
                      "onServer":  false,
                      "description":  "Client-side Valheim plugin that skips the startup cinematic, Coffee Stain and Iron Gate logos, Valheim loading logo and first-start developer intro.*",
                      "website":  "",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Stonaar/ValheimSkipIntro/",
                      "hexium":  null
                  },
                  {
