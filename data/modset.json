@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-22 14:39",
+    "generated":  "2026-11-22 16:29",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -174,7 +174,7 @@
                      "onServer":  false,
                      "description":  "Shared config synchronization and server policy library for Valheim mods. Installed as a dependency and compatible with Jotunn and ServerSync.",
                      "website":  "https://github.com/shudnal/ConditionalConfigSync",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/ConditionalConfigSync/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConditionalConfigSync"
                  },
                  {
@@ -187,7 +187,7 @@
                      "onServer":  false,
                      "description":  "Localized, recolored, refined. Split view mode. Config files editor. Setting edit window. Changed values are highlighted. Prevent user input or pause the game while window is open. Window scale depends on game scale.",
                      "website":  "https://github.com/shudnal/ConfigurationManager",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/ConfigurationManager/",
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConfigurationManager"
                  },
                  {
