@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-22 21:10",
+    "generated":  "2026-11-23 00:17",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -265,7 +265,7 @@
                      "onServer":  false,
                      "description":  "Prevents drinking potions when you are at max of the stat the potion gives",
                      "website":  "",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/sephalon/DontWastePotions/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -369,7 +369,7 @@
                      "onServer":  false,
                      "description":  "Bunch of little UI tweaks. Tooltips for production timers, player status, items. Custom chest names, buff list, multicraft, weather forecast, crafting sorting, filtering and so on.",
                      "website":  "https://github.com/shudnal/MyLittleUI",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/MyLittleUI/",
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/MyLittleUI"
                  },
                  {
@@ -558,7 +558,7 @@
                      "id":  "DeathMonger-TheGreatestMap",
                      "name":  "TheGreatestMap",
                      "author":  "DeathMonger",
-                     "version":  "4.12.1",
+                     "version":  "4.13.0",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
@@ -629,7 +629,7 @@
                      "onServer":  false,
                      "description":  "Client-side Valheim plugin that skips the startup cinematic, Coffee Stain and Iron Gate logos, Valheim loading logo and first-start developer intro.*",
                      "website":  "",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Stonaar/ValheimSkipIntro/",
                      "hexium":  null
                  },
                  {
