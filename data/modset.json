@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-25 16:12",
+    "generated":  "2026-11-25 16:20",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -265,7 +265,7 @@
                      "onServer":  false,
                      "description":  "Prevents drinking potions when you are at max of the stat the potion gives",
                      "website":  "",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/sephalon/DontWastePotions/",
                      "hexium":  null
                  },
                  {
@@ -369,7 +369,7 @@
                      "onServer":  false,
                      "description":  "Bunch of little UI tweaks. Tooltips for production timers, player status, items. Custom chest names, buff list, multicraft, weather forecast, crafting sorting, filtering and so on.",
                      "website":  "https://github.com/shudnal/MyLittleUI",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/MyLittleUI/",
+                     "thunderstore":  null,
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/MyLittleUI"
                  },
                  {
@@ -642,7 +642,7 @@
                      "onServer":  false,
                      "description":  "Client-side Valheim plugin that skips the startup cinematic, Coffee Stain and Iron Gate logos, Valheim loading logo and first-start developer intro.*",
                      "website":  "",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Stonaar/ValheimSkipIntro/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
