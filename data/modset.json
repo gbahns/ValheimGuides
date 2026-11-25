@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-25 14:10",
+    "generated":  "2026-11-25 15:21",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -174,7 +174,7 @@
                      "onServer":  false,
                      "description":  "Shared config synchronization and server policy library for Valheim mods. Installed as a dependency and compatible with Jotunn and ServerSync.",
                      "website":  "https://github.com/shudnal/ConditionalConfigSync",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/ConditionalConfigSync/",
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/ConditionalConfigSync"
                  },
                  {
@@ -265,7 +265,7 @@
                      "onServer":  false,
                      "description":  "Prevents drinking potions when you are at max of the stat the potion gives",
                      "website":  "",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/sephalon/DontWastePotions/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
