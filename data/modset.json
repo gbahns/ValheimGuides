@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-25 16:20",
+    "generated":  "2026-11-25 16:31",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -265,7 +265,7 @@
                      "onServer":  false,
                      "description":  "Prevents drinking potions when you are at max of the stat the potion gives",
                      "website":  "",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/sephalon/DontWastePotions/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -369,7 +369,7 @@
                      "onServer":  false,
                      "description":  "Bunch of little UI tweaks. Tooltips for production timers, player status, items. Custom chest names, buff list, multicraft, weather forecast, crafting sorting, filtering and so on.",
                      "website":  "https://github.com/shudnal/MyLittleUI",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/shudnal/MyLittleUI/",
                      "hexium":  "https://valheim.hexium.gg/mods/shudnal/MyLittleUI"
                  },
                  {
@@ -551,7 +551,7 @@
                      "onServer":  false,
                      "description":  "Adds a Day bed. When everyone naps in one during the day, time skips to nightfall. It refuses at night with jokes. Optional rules for all beds, like sleeping with enemies nearby. Server synced.",
                      "website":  "https://github.com/Ononononoki/SleepThroughDay",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Onononoki/SleepThroughDay/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -642,7 +642,7 @@
                      "onServer":  false,
                      "description":  "Client-side Valheim plugin that skips the startup cinematic, Coffee Stain and Iron Gate logos, Valheim loading logo and first-start developer intro.*",
                      "website":  "",
-                     "thunderstore":  null,
+                     "thunderstore":  "https://thunderstore.io/c/valheim/p/Stonaar/ValheimSkipIntro/",
                      "hexium":  null
                  },
                  {
