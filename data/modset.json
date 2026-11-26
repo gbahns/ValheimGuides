@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-25 21:00",
+    "generated":  "2026-11-25 21:16",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -265,7 +265,7 @@
                      "onServer":  false,
                      "description":  "Prevents drinking potions when you are at max of the stat the potion gives",
                      "website":  "",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/sephalon/DontWastePotions/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
