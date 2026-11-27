@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-26 13:11",
+    "generated":  "2026-11-27 09:30",
     "server":  {
                    "name":  null,
                    "world":  null,
@@ -44,7 +44,7 @@
                      "onServer":  false,
                      "description":  "Now With Eternal Fuel and Pulled fuel PLUS Timed Torches and No Smoke. Automatically fuel smelter, kilns, spinning wheels, windmills, ovens, torches and much more.  Stack Smelter and use all ore in Blast Furnaces",
                      "website":  "https://discord.gg/PQMXbUS6FH",
-                     "thunderstore":  "https://thunderstore.io/c/valheim/p/TastyChickenLegs/AutomaticFuel/",
+                     "thunderstore":  null,
                      "hexium":  null
                  },
                  {
@@ -337,7 +337,7 @@
                      "id":  "ValheimModding-Jotunn",
                      "name":  "Jotunn",
                      "author":  "ValheimModding",
-                     "version":  "2.30.2",
+                     "version":  "2.30.3",
                      "side":  "both",
                      "mine":  false,
                      "onServer":  false,
@@ -558,7 +558,7 @@
                      "id":  "DeathMonger-SmartSilencer",
                      "name":  "SmartSilencer",
                      "author":  "DeathMonger",
-                     "version":  "1.2.1",
+                     "version":  "1.3.0",
                      "side":  "client",
                      "mine":  true,
                      "onServer":  false,
@@ -571,7 +571,7 @@
                      "id":  "DeathMonger-TheGreatestMap",
                      "name":  "TheGreatestMap",
                      "author":  "DeathMonger",
-                     "version":  "4.17.0",
+                     "version":  "4.17.1",
                      "side":  "both",
                      "mine":  true,
                      "onServer":  false,
